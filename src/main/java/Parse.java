@@ -8,7 +8,7 @@ public class Parse{
   }
 
   void error(){
-    System.out.println("Parse error\n");
+    System.out.println("Parse error");
     System.exit(0);
   }
 
@@ -153,6 +153,8 @@ public class Parse{
         }
         E();
         break;
+      default:
+        error();
     }
   }
 
@@ -163,7 +165,7 @@ public class Parse{
     if(p.token_class.index < p.token_class.input.length()){
       p.error();
     }
-    System.out.println("Program parsed successfully\n");
+    System.out.println("Program parsed successfully");
   }
 }
 
