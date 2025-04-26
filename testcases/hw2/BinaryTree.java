@@ -38,7 +38,7 @@ class BT {
 
 	return 0 ;
     }
-
+	
 }
 
 class Tree{
@@ -50,7 +50,7 @@ class Tree{
     Tree my_null ;
 
     // Initialize a node with a key value and no children
-    public boolean Init(int v_key){
+    public boolean Init(int v_key, int z, int z){
 	key = v_key ;
 	has_left = false ;
 	has_right = false ;
@@ -107,12 +107,12 @@ class Tree{
     // This method compares two integers and
     // returns true if they are equal and false
     // otherwise
-    public boolean Compare(int num1 , int num2){
+    public boolean Compare(int num1, int num2){
 	boolean ntb ;
 	int nti ;
 
 	ntb = false ;
-	nti = num2 + 1 ;
+	nti = num2 + 1 ; // stawp
 	if (num1 < num2) ntb = false ;
 	else if (!(num1 < nti)) ntb = false ;
 	else ntb = true ;
@@ -189,8 +189,7 @@ class Tree{
 		    else cont = false ;
 		else { 
 		    if (is_root) 
-			if ((!current_node.GetHas_Right()) && 
-			    (!current_node.GetHas_Left()) )
+			if ((!current_node.GetHas_Right()) && (!current_node.GetHas_Left()) )
 			    ntb = true ;
 			else 
 			    ntb = this.Remove(parent_node,current_node); 

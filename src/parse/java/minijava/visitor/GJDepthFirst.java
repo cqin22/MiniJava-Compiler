@@ -13,6 +13,7 @@ import java.util.Enumeration;
  * order.  Your visitors may extend this class.
  */
 public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
+
    //
    // Auto class visitors--probably don't need to be overridden.
    //

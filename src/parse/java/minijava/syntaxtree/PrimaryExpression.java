@@ -20,7 +20,7 @@ import minijava.visitor.Visitor;
  *       | AllocationExpression()
  *       | NotExpression()
  *       | BracketExpression()
- */
+ */   
 public class PrimaryExpression implements Node {
    public NodeChoice f0;
 

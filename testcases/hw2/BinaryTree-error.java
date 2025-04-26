@@ -71,10 +71,11 @@ class BBS{
 	return 0 ;
     }
     
-    // Initialize array of integers
+    // Initialize array of integers	
     public int Init(int sz){
 	size = sz ;
 	number = new int[sz] ;
+	System.out.println(99999);
 	
 	number[0] = 20 ;
 	number[1] = 7  ; 
@@ -87,7 +88,7 @@ class BBS{
 	number[8] = 19 ; 
 	number[9] = 5  ;
 	
-	return false ;	//TE
+	return 1;	//TE
     }
 
 }

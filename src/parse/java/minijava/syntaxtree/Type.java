@@ -17,7 +17,7 @@ import minijava.visitor.Visitor;
  *       | Identifier()
  */
 public class Type implements Node {
-   public NodeChoice f0;
+public NodeChoice f0;
 
    public Type(NodeChoice n0) {
       f0 = n0;
