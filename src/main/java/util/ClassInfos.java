@@ -5,12 +5,20 @@ import java.util.Map;
 import minijava.syntaxtree.*;
 
 public class ClassInfos{
-    HashMap<String, MethodInfos> methods;
-    SymbolTable symbolTable;
+    public HashMap<String, MethodInfos> methods;
+    public SymbolTable symbolTable;
+    public String parentClass;
+    public String className;
     
     public ClassInfos(){
         methods = new HashMap<>();
         symbolTable = new SymbolTable();
+    }
+
+    public ClassInfos(String pc){
+        methods = new HashMap<>();
+        symbolTable = new SymbolTable();
+        parentClass = pc;
     }
 
     public SymbolTable getSymbolTable(){

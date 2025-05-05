@@ -336,7 +336,7 @@ class Visitor {
 	int nti ;
 
 	if (n.GetHas_Right()){
-	    r = n.GetRight() ; //TE
+	    // r = n.GetRight() ; //TE
 	    nti = r.accept(this) ; }
 	else nti = 0 ;
 

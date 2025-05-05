@@ -7,8 +7,10 @@ import minijava.visitor.*;
 import util.*;
 
 public class FirstPass extends GJVoidDepthFirst<ClassTable> {
+  String currentClass;
+  String currentMethod;
     private void error(){
-        System.out.print("Type error");
+        System.out.println("Type error");
         System.exit(0);
     }
 
@@ -37,7 +39,7 @@ public class FirstPass extends GJVoidDepthFirst<ClassTable> {
   public void visit(MainClass n, ClassTable c){
     c.addClass(n.f1.f0.toString());
 
-    c.print();
+    // c.print();
     
     n.f0.accept(this, c);
     n.f1.accept(this, c);
@@ -71,6 +73,7 @@ public class FirstPass extends GJVoidDepthFirst<ClassTable> {
   @Override
   public void visit(ClassDeclaration n, ClassTable c){
     String className = n.f1.f0.toString();
+    currentClass = className;
     c.addClass(className);
     for(int i = 0; i < n.f4.size(); i++){
         MethodDeclaration method = (MethodDeclaration) n.f4.elementAt(i);
@@ -78,12 +81,60 @@ public class FirstPass extends GJVoidDepthFirst<ClassTable> {
     }
     
     // all the methods are added at this 
-    c.print();
+    // c.print();
     n.f0.accept(this, c);
     n.f1.accept(this, c);
     n.f2.accept(this, c);
     n.f3.accept(this, c);
     n.f4.accept(this, c);
     n.f5.accept(this, c);
+  }
+
+  /**
+   * Grammar production:
+   * f0 -> "class"
+   * f1 -> Identifier()
+   * f2 -> "extends"
+   * f3 -> Identifier()
+   * f4 -> "{"
+   * f5 -> ( VarDeclaration() )*
+   * f6 -> ( MethodDeclaration() )*
+   * f7 -> "}"
+   */
+  @Override
+  public void visit(ClassExtendsDeclaration n, ClassTable c){
+    String className = n.f1.f0.toString();
+    String parentClass = n.f3.f0.toString();
+    currentClass = className;
+    c.addClass(className, parentClass);
+    for(int i = 0; i < n.f6.size(); i++){
+        MethodDeclaration method = (MethodDeclaration) n.f6.elementAt(i);
+        c.addMethodToClass(method.f2.f0.toString(), method.f1, className);
+    }
+
+    n.f0.accept(this, c);
+    n.f1.accept(this, c);
+    n.f2.accept(this, c);
+    n.f3.accept(this, c);
+    n.f4.accept(this, c);
+    n.f5.accept(this, c);
+    n.f6.accept(this, c);
+    n.f7.accept(this, c);
+  }
+
+  @Override
+  public void visit(MethodDeclaration n, ClassTable c){
+    // all the methods are added at this 
+    // c.print();
+    String methodName = n.f2.f0.toString();
+    currentMethod = methodName;
+
+    FormalParameterList formalParameterList;
+    if(n.f4.present()){
+      formalParameterList = (FormalParameterList) n.f4.node;
+      c.getClassInfo(currentClass).getMethodInfo(methodName).formalParameterList = formalParameterList;
+    }
+
+    n.f4.accept(this, c);
   }
 }

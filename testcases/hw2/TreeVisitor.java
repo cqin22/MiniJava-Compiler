@@ -328,7 +328,7 @@ class Tree{
 
   
 
-class Visitor {
+class Visitor{
     Tree l ;
     Tree r ;
 

@@ -34,4 +34,3 @@ public class TypeDeclaration implements Node {
       v.visit(this,argu);
    }
 }
-

@@ -50,7 +50,7 @@ class Tree{
     Tree my_null ;
 
     // Initialize a node with a key value and no children
-    public boolean Init(int v_key, int z, int z){
+    public boolean Init(int v_key){
 	key = v_key ;
 	has_left = false ;
 	has_right = false ;
