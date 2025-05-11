@@ -1,6 +1,9 @@
 import java.io.InputStream;
 import java.util.Map;
 
+import org.w3c.dom.traversal.NodeFilter;
+
+import IR.syntaxtree.Add;
 import minijava.MiniJavaParser;
 import minijava.syntaxtree.*;
 import minijava.visitor.*;
@@ -78,6 +81,11 @@ public class FirstPass extends GJVoidDepthFirst<ClassTable> {
     for(int i = 0; i < n.f4.size(); i++){
         MethodDeclaration method = (MethodDeclaration) n.f4.elementAt(i);
         c.addMethodToClass(method.f2.f0.toString(), method.f1, className);
+    }
+
+    for(int i = 0; i < n.f3.size(); i++){
+      VarDeclaration varDecl = (VarDeclaration) n.f4.elementAt(i);
+      c.addFieldToClass(varDecl.f1.toString(), className);
     }
     
     // all the methods are added at this 

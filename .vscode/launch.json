@@ -6,23 +6,16 @@
   "configurations": [
     {
       "type": "java",
-      "name": "J2S",
-      "request": "launch",
-      "mainClass": "J2S",
-      "projectName": "cs132"
-    },
-    {
-      "type": "java",
       "name": "Current File",
       "request": "launch",
       "mainClass": "${file}"
     },
     {
       "type": "java",
-      "name": "Typecheck",
+      "name": "J2S",
       "request": "launch",
-      "mainClass": "Typecheck",
-      "args": "< testcases/hw2/BinaryTree.java"
+      "mainClass": "J2S",
+      "args": "< testcases/hw3/4-Vars.java"
     }
   ]
 }

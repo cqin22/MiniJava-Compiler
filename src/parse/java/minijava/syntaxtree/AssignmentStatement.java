@@ -15,7 +15,7 @@ import minijava.visitor.Visitor;
  * f1 -> "="
  * f2 -> Expression()
  * f3 -> ";"
- */
+ */   
 public class AssignmentStatement implements Node {
    public Identifier f0;
    public NodeToken f1;

@@ -1,8 +1,12 @@
+import java.beans.ParameterDescriptor;
 import java.io.InputStream;
 import java.net.IDN;
 import java.util.*;
 
+import org.w3c.dom.traversal.NodeFilter;
+
 import IR.token.Identifier;
+import IR.token.FunctionName;
 
 import minijava.*;
 import minijava.visitor.*;
@@ -16,20 +20,20 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     private List<FunctionDecl> functions = new ArrayList<>();
     private List<Instruction> instrs = new ArrayList<>();
     private Map<String, Identifier> varMap = new HashMap<>();
+    private Map<Identifier, Integer> numMap = new HashMap<>();
+    private Map<Identifier, Integer> typeMap = new HashMap<>();
     private int tempCounter = 0;
+    private int paramTempCounter = 0;
+    private int arrayTempCounter = 0;
     private ClassTable classTable;
+    private String currentClass;
+    private String currentMethod;
 
     public J2S(ClassTable ct){
         classTable = ct;
     }
 
-    private Identifier newTemp(){
-        return new Identifier("v" + (tempCounter++));
-    }
-
-    //TODO: paste in all the visits
-
-   /**
+    /**
     * f0 -> MainClass()
     * f1 -> ( TypeDeclaration() )*
     * f2 -> <EOF>
@@ -42,19 +46,471 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     }
 
     /**
+    * f0 -> "class"
+    * f1 -> Identifier()
+    * f2 -> "{"
+    * f3 -> "public"
+    * f4 -> "static"
+    * f5 -> "void"
+    * f6 -> "main"
+    * f7 -> "("
+    * f8 -> "String"
+    * f9 -> "["
+    * f10 -> "]"
+    * f11 -> Identifier()
+    * f12 -> ")"
+    * f13 -> "{"
+    * f14 -> ( VarDeclaration() )*
+    * f15 -> ( Statement() )*
+    * f16 -> "}"
+    * f17 -> "}"
+    */
+    @Override
+    public Identifier visit(MainClass n){
+        // create vmts
+        instrs.clear();
+        for(Map.Entry<String, ClassInfos> entry: classTable.classes.entrySet()){
+            String className = entry.getKey();
+
+            //fill vtable
+            Identifier vtable = newTempCustom("vmt_" + className);
+            int allocSize = classTable.getClassInfo(className).methods.size() * AllocationConstants.INTBYTES;
+            Identifier allocSizeId = newTemp();
+            instrs.add(new Move_Id_Integer(allocSizeId, allocSize));
+            instrs.add(new Alloc(vtable, allocSizeId));
+            int i = 0;
+            for(HashMap.Entry<String, MethodInfos> methodName : classTable.getClassInfo(className).methods.entrySet()){
+                Identifier methodID = newTemp();
+                instrs.add(new Move_Id_FuncName(methodID, new FunctionName(className + "_" + methodName.getKey())));
+                instrs.add(new Store(vtable, i * AllocationConstants.FOUR_OFFSET, methodID));
+                i++;
+            }
+
+            classTable.getClassInfo(className).vTableName = vtable;
+        }
+
+        // broken
+        // String functionInitName = "init_vmts";
+        // Identifier returnValue = newTemp();
+        // instrs.add(new Move_Id_Integer(returnValue, AllocationConstants.DEFAULTRETURN));
+        // sparrow.Block block = new sparrow.Block(new ArrayList<>(instrs), returnValue);
+        // functions.add(new FunctionDecl(new FunctionName(functionInitName), new ArrayList<>(), block));
+
+        // instrs.clear();
+        
+        // instrs.add(new Call(newTemp(), new Identifier(functionInitName), new ArrayList<>()));
+        n.f0.accept(this);
+        n.f1.accept(this);
+        n.f2.accept(this);
+        n.f3.accept(this);
+        n.f4.accept(this);
+        n.f5.accept(this);
+        n.f6.accept(this);
+        n.f7.accept(this);
+        n.f8.accept(this);
+        n.f9.accept(this);
+        n.f10.accept(this);
+        n.f11.accept(this);
+        n.f12.accept(this);
+        n.f13.accept(this);
+        n.f14.accept(this);
+        n.f15.accept(this);
+        n.f16.accept(this);
+        n.f17.accept(this);
+
+        Identifier returnValueMain = newTemp();
+        instrs.add(new Move_Id_Integer(returnValueMain, AllocationConstants.DEFAULTRETURN));
+        sparrow.Block block = new sparrow.Block(new ArrayList<>(instrs), returnValueMain);
+        functions.add(new FunctionDecl(new FunctionName("main"), new ArrayList<>(), block));
+        
+        return null;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> "class"
+     * f1 -> Identifier()
+     * f2 -> "{"
+     * f3 -> ( VarDeclaration() )*
+     * f4 -> ( MethodDeclaration() )*
+     * f5 -> "}"
+     */
+    @Override
+    public Identifier visit(ClassDeclaration n){
+        String className = n.f1.f0.toString();
+        currentClass = className;
+        // TODO: Methods
+        n.f0.accept(this);
+        n.f1.accept(this);
+        n.f2.accept(this);
+        n.f3.accept(this);
+        n.f4.accept(this);
+        n.f5.accept(this);
+
+        return null;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> "public"
+     * f1 -> Type()
+     * f2 -> Identifier()
+     * f3 -> "("
+     * f4 -> ( FormalParameterList() )?
+     * f5 -> ")"
+     * f6 -> "{"
+     * f7 -> ( VarDeclaration() )*
+     * f8 -> ( Statement() )*
+     * f9 -> "return"
+     * f10 -> Expression()
+     * f11 -> ";"
+     * f12 -> "}"
+     */
+    @Override
+    public Identifier visit(MethodDeclaration n){
+        instrs.clear();
+        varMap.clear();
+        String methodName = n.f2.f0.toString();
+        currentMethod = methodName;
+
+        n.f1.accept(this);
+        n.f2.accept(this);
+        n.f3.accept(this);
+        n.f4.accept(this);
+
+        String VMTFunctionName = currentClass + "_" + currentMethod;
+
+        // this + formal parameter list
+        ArrayList<Identifier> parameters = new ArrayList<>();
+        Identifier thisId = new Identifier("this");
+        parameters.add(thisId);
+        varMap.put("this", thisId);
+
+        FormalParameterList formalParameterList;
+        if(n.f4.present()){
+            formalParameterList = (FormalParameterList) n.f4.node;
+            FormalParameter formalParameter = formalParameterList.f0;
+            Identifier formalParameterId = newParamTemp();
+            parameters.add(formalParameterId);
+            varMap.put(formalParameter.f1.f0.toString(), formalParameterId);
+
+            NodeListOptional formalParameterRestList = formalParameterList.f1;
+            if(formalParameterRestList.present()){
+                for(int i = 0; i < formalParameterRestList.size(); i++){
+                    FormalParameterRest formalParameterRest = (FormalParameterRest) formalParameterRestList.elementAt(i);
+                    formalParameter = formalParameterRest.f1;
+                    formalParameterId = newParamTemp();
+                    parameters.add(formalParameterId);
+                    varMap.put(formalParameter.f1.f0.toString(), formalParameterId);
+                }
+            }
+        }
+
+        n.f5.accept(this);
+        n.f6.accept(this);
+        n.f7.accept(this);
+        n.f8.accept(this);
+        n.f9.accept(this);
+        Identifier returnId = n.f10.accept(this);
+        n.f11.accept(this);
+        n.f12.accept(this);
+
+        sparrow.Block block = new sparrow.Block(new ArrayList<>(instrs), returnId);
+
+        FunctionDecl f = new FunctionDecl(new FunctionName(VMTFunctionName), parameters, block);
+        functions.add(f);
+
+        return null;
+    }
+
+    // STATEMENTS
+
+    /**
+     * Grammar production:
+     * f0 -> Identifier()
+     * f1 -> "="
+     * f2 -> Expression()
+     * f3 -> ";"
+     */
+    @Override
+    public Identifier visit(AssignmentStatement n){
+        Identifier lhs = n.f0.accept(this);
+        
+        Identifier rhs = n.f2.accept(this);
+
+        instrs.add(new Move_Id_Id(varMap.get(lhs.toString()), rhs));
+
+        return null;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> "System.out.println"
+     * f1 -> "("
+     * f2 -> Expression()
+     * f3 -> ")"
+     * f4 -> ";"
+     */
+    @Override
+    public Identifier visit(PrintStatement n){
+        Identifier lhs = n.f2.accept(this);
+        instrs.add(new Print(lhs));
+        return null;
+    }
+
+    // EXPRESSIONS
+    /**
+     * Grammar production:
+     * f0 -> PrimaryExpression()
+     * f1 -> "."
+     * f2 -> Identifier()
+     * f3 -> "("
+     * f4 -> ( ExpressionList() )?
+     * f5 -> ")"
+     */
+    @Override
+    public Identifier visit(MessageSend n){
+        Identifier className = n.f0.accept(this);
+        if(className.toString().equals("this")){
+            className = new Identifier(currentClass);
+        }
+        n.f1.accept(this);
+        n.f2.accept(this);
+        n.f3.accept(this);
+        n.f4.accept(this);
+        n.f5.accept(this);
+
+        String methodName = n.f2.f0.toString();
+
+        Identifier loadedCall = newTemp();
+        // determine which offset the method is
+        int index = 0;
+        for(String key: classTable.getClassInfo(className.toString()).methods.keySet()){
+            if(key.equals(methodName)){
+                break;
+            }
+            index++;
+        }
+
+        Identifier returnResult = newTemp();
+        String vTable = classTable.getClassInfo(className.toString()).vTableName.toString();
+        Identifier vTableId = new Identifier(vTable);
+        Identifier classObjectAddress = varMap.get(className.toString()); //todo what if tha varmap has two classes
+        if(n.f0.accept(this).toString().equals("this")){
+            classObjectAddress = n.f0.accept(this);
+        }
+
+        instrs.add(new Load(vTableId, classObjectAddress, AllocationConstants.ZERO));
+        instrs.add(new Load(loadedCall, new Identifier(vTable), index * AllocationConstants.FOUR_OFFSET));
+
+        ArrayList<Identifier> parameters = new ArrayList<>();
+        if (classObjectAddress != null) {
+            parameters.add(classObjectAddress);
+        }
+
+        //add parameters
+        if(n.f4.present()){
+            ExpressionList expressionList = (ExpressionList) n.f4.node;
+            Identifier expressionVar = expressionList.f0.accept(this);
+            
+            parameters.add(varMap.get(expressionVar.toString()));
+            if(expressionList.f1.present()){
+                for(int i = 0; i < expressionList.f1.size(); i ++){
+                    ExpressionRest expressionRest = (ExpressionRest) expressionList.f1.elementAt(i);
+                    Identifier expressionRestVar = expressionRest.f1.accept(this);
+                    parameters.add(varMap.get(expressionRestVar.toString()));
+                }
+            }
+        }
+
+        instrs.add(new Call(returnResult, loadedCall, parameters));
+
+        varMap.put(returnResult.toString(), returnResult);
+        return returnResult;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> "this"
+     */
+    @Override
+    public Identifier visit(ThisExpression n){
+        Identifier thisId =  new Identifier("this");
+        varMap.put("this", thisId);
+        return thisId;
+    }
+
+
+    /**
+     * Grammar production:
+     * f0 -> "new"
+     * f1 -> "int"
+     * f2 -> "["
+     * f3 -> Expression()
+     * f4 -> "]"
+     */
+    @Override
+    public Identifier visit(ArrayAllocationExpression n){
+        Identifier length = n.f3.accept(this);
+        int allocationSize = AllocationConstants.FOUR_OFFSET * numMap.get(length)+ AllocationConstants.FOUR_OFFSET;
+
+        Identifier newVar = newTemp();
+        instrs.add(new Move_Id_Integer(newVar, allocationSize));
+        varMap.put(newVar.toString(), newVar);
+        
+        Identifier newArray = newArrayTemp();
+
+        instrs.add(new Alloc(newArray, newVar));
+
+        instrs.add(new Store(newArray, AllocationConstants.ZERO, length));
+
+        return newArray;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> Type()
+     * f1 -> Identifier()
+     * f2 -> ";"
+     */
+    @Override
+    public Identifier visit(VarDeclaration n){
+        int type = n.f0.f0.which;
+
+        // var declaration
+        Identifier variableName = n.f1.accept(this);
+        Identifier localVariableId = newTemp();
+        varMap.put(variableName.toString(), localVariableId);
+        typeMap.put(variableName, type);
+
+        // all types are init to 0, which is null in sparrow
+        instrs.add(new Move_Id_Integer(localVariableId, AllocationConstants.ZERO));
+
+        return null;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> "new"
+     * f1 -> Identifier()
+     * f2 -> "("
+     * f3 -> ")"
+     */
+    @Override
+    public Identifier visit(AllocationExpression n){
+        Identifier classObjectAddress = newTemp();
+        int numberOfVTable = 1;
+        String className = n.f1.f0.toString();
+        ClassInfos classInfos = classTable.getClassInfo(className);
+        int allocationSize = (classInfos.getNumberOfFields() + numberOfVTable) * AllocationConstants.INTBYTES; // number of fields + vtable
+        Identifier allocationSizeTemp = newTemp();
+        instrs.add(new Move_Id_Integer(allocationSizeTemp, allocationSize));
+        instrs.add(new Alloc(classObjectAddress, allocationSizeTemp));
+        
+        // init fields
+        
+        for(int i = 0; i < classInfos.getNumberOfFields(); i++){
+            instrs.add(new Store(classObjectAddress, i * AllocationConstants.INTBYTES, AllocationConstants.ZERO_ID));
+        }
+
+        // store vtable
+        instrs.add(new Store(classObjectAddress, AllocationConstants.ZERO, classInfos.vTableName));
+        
+        varMap.put(className, classObjectAddress);
+        return new Identifier(className);
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> PrimaryExpression()
+     * f1 -> "+"
+     * f2 -> PrimaryExpression()
+     */
+    @Override
+    public Identifier visit(PlusExpression n){
+        Identifier lhs = n.f0.accept(this);
+        Identifier rhs = n.f2.accept(this);
+        Identifier result = newTemp();
+
+        instrs.add(new Add(result, varMap.get(lhs.toString()), varMap.get(rhs.toString())));
+        varMap.put(result.toString(), result);
+        return result;
+    }
+
+    /**
     * f0 -> <INTEGER_LITERAL>
     */
     @Override
     public Identifier visit(IntegerLiteral n){
         Identifier newVar = newTemp();
         instrs.add(new Move_Id_Integer(newVar, Integer.parseInt(n.f0.toString())));
+        varMap.put(newVar.toString(), newVar);
+        numMap.put(newVar, Integer.parseInt(n.f0.toString()));
         return newVar;
     }
 
+    /**
+     * Grammar production:
+     * f0 -> <IDENTIFIER>
+     */
+    @Override
+    public Identifier visit(minijava.syntaxtree.Identifier n){
+        return new Identifier(n.f0.toString());
+    }
 
+    /**
+     * Grammar production:
+     * f0 -> IntegerLiteral()
+     *       | TrueLiteral()
+     *       | FalseLiteral()
+     *       | Identifier()
+     *       | ThisExpression()
+     *       | ArrayAllocationExpression()
+     *       | AllocationExpression()
+     *       | NotExpression()
+     *       | BracketExpression()
+     */
+    @Override
+    public Identifier visit(PrimaryExpression n){
+        return n.f0.accept(this);
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> AndExpression()
+     *       | CompareExpression()
+     *       | PlusExpression()
+     *       | MinusExpression()
+     *       | TimesExpression()
+     *       | ArrayLookup()
+     *       | ArrayLength()
+     *       | MessageSend()
+     *       | PrimaryExpression()
+     */
+    @Override
+    public Identifier visit(Expression n){
+        Identifier id = n.f0.accept(this);
+        return varMap.get(id.toString());
+    }
 
     public List<FunctionDecl> getFunctions(){
         return functions;
+    }
+
+    private Identifier newTemp(){
+        return new Identifier("v" + (tempCounter++));
+    }
+
+    private Identifier newArrayTemp(){
+        return new Identifier("array" + (arrayTempCounter++));
+    }
+
+    private Identifier newParamTemp(){
+        return new Identifier("param" + (paramTempCounter++));
+    }
+
+    private Identifier newTempCustom(String s){
+        return new Identifier(s);
     }
 
     public static void main(String[] args) throws Exception {

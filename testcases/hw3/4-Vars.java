@@ -8,6 +8,8 @@ class A {
 	public int run() {
 		int a;
 		int b;
+		a = 1;
+		b = 2;
 		a = this.helper(12);
 		b = this.helper(15);
 		return a + b;

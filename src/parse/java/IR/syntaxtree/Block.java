@@ -29,7 +29,7 @@ public class Block implements Node {
    public Block(NodeListOptional n0, Identifier n1) {
       f0 = n0;
       f1 = new NodeToken("return");
-      f2 = n1;
+      f2 = n1; 
    }
 
    public void accept(Visitor v) {

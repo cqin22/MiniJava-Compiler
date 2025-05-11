@@ -47,8 +47,13 @@ public class ClassTable {
         classes.put(className, c);
     }
 
+    // not modular. give to classInfos
     public void addMethodToClass(String methodName, Type returnType, String className){
         classes.get(className).addMethod(methodName, returnType);
+    }
+
+    public void addFieldToClass(String variableName, String className){
+        classes.get(className).addField(variableName);
     }
 
     public boolean classExists(String className){
