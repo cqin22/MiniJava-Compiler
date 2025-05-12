@@ -84,7 +84,7 @@ public class FirstPass extends GJVoidDepthFirst<ClassTable> {
     }
 
     for(int i = 0; i < n.f3.size(); i++){
-      VarDeclaration varDecl = (VarDeclaration) n.f4.elementAt(i);
+      VarDeclaration varDecl = (VarDeclaration) n.f3.elementAt(i);
       c.addFieldToClass(varDecl.f1.toString(), className);
     }
     

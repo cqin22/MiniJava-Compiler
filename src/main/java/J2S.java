@@ -19,15 +19,21 @@ import util.*;
 public class J2S extends GJNoArguDepthFirst<Identifier>{
     private List<FunctionDecl> functions = new ArrayList<>();
     private List<Instruction> instrs = new ArrayList<>();
+    private List<Instruction> tempInstrs = new ArrayList<>();
     private Map<String, Identifier> varMap = new HashMap<>();
+    private Map<String, Identifier> fieldMap = new HashMap<>();
     private Map<Identifier, Integer> numMap = new HashMap<>();
-    private Map<Identifier, Integer> typeMap = new HashMap<>();
+    private Map<String, Integer> typeMap = new HashMap<>();
+    private Map<String, Integer> arrayLengthMap = new HashMap<>();
+    private Map<String, Identifier> arrayIdMap = new HashMap<>();
+    private Map<String, String> id_to_class = new HashMap<>();
     private int tempCounter = 0;
     private int paramTempCounter = 0;
     private int arrayTempCounter = 0;
     private ClassTable classTable;
     private String currentClass;
     private String currentMethod;
+    private boolean errorExists = false;
 
     public J2S(ClassTable ct){
         classTable = ct;
@@ -139,14 +145,28 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     public Identifier visit(ClassDeclaration n){
         String className = n.f1.f0.toString();
         currentClass = className;
-        // TODO: Methods
-        n.f0.accept(this);
+
+        // n.f0.accept(this);
         n.f1.accept(this);
-        n.f2.accept(this);
+
+        // add fields to map
+        for(int i = 0; i < n.f3.size(); i++){
+            VarDeclaration field = (VarDeclaration) n.f3.elementAt(i); 
+            Identifier fieldId = newTemp();
+
+            // tempInstrs.add(new Move_Id_Integer(fieldId, AllocationConstants.ZERO));
+            fieldMap.put(field.f1.f0.toString(), fieldId);
+        }
+
+        //puts fields into its class object address
+
+        // TODO: Methods
+        // n.f2.accept(this);
         n.f3.accept(this);
         n.f4.accept(this);
-        n.f5.accept(this);
+        // n.f5.accept(this);
 
+        fieldMap.clear();
         return null;
     }
 
@@ -170,6 +190,12 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     public Identifier visit(MethodDeclaration n){
         instrs.clear();
         varMap.clear();
+
+        // instrs.addAll(tempInstrs);
+
+        // copy classes fields into var Map since those shouldn't have been deleted in the first place :(
+        varMap.putAll(fieldMap);
+
         String methodName = n.f2.f0.toString();
         currentMethod = methodName;
 
@@ -238,6 +264,8 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         
         Identifier rhs = n.f2.accept(this);
 
+        varMap.put(varMap.get(lhs.toString()).toString(), rhs);
+
         instrs.add(new Move_Id_Id(varMap.get(lhs.toString()), rhs));
 
         return null;
@@ -271,9 +299,17 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     @Override
     public Identifier visit(MessageSend n){
         Identifier className = n.f0.accept(this);
+        Identifier classObjectAddress = varMap.get(className.toString()); //todo what if tha varmap has two classes
+
+        // TODO: new A.run() vs a.run()???
+        if(!classTable.classExists(className.toString())){
+            className = new Identifier(id_to_class.get(className.toString()));
+        }
+
         if(className.toString().equals("this")){
             className = new Identifier(currentClass);
         }
+
         n.f1.accept(this);
         n.f2.accept(this);
         n.f3.accept(this);
@@ -285,6 +321,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         Identifier loadedCall = newTemp();
         // determine which offset the method is
         int index = 0;
+        
         for(String key: classTable.getClassInfo(className.toString()).methods.keySet()){
             if(key.equals(methodName)){
                 break;
@@ -295,7 +332,6 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         Identifier returnResult = newTemp();
         String vTable = classTable.getClassInfo(className.toString()).vTableName.toString();
         Identifier vTableId = new Identifier(vTable);
-        Identifier classObjectAddress = varMap.get(className.toString()); //todo what if tha varmap has two classes
         if(n.f0.accept(this).toString().equals("this")){
             classObjectAddress = n.f0.accept(this);
         }
@@ -358,13 +394,42 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         instrs.add(new Move_Id_Integer(newVar, allocationSize));
         varMap.put(newVar.toString(), newVar);
         
-        Identifier newArray = newArrayTemp();
+        Identifier newArrayId = newTemp();
+        varMap.put(newArrayId.toString(), newArrayId);
 
-        instrs.add(new Alloc(newArray, newVar));
+        instrs.add(new Alloc(newArrayId, newVar));
 
-        instrs.add(new Store(newArray, AllocationConstants.ZERO, length));
+        instrs.add(new Store(newArrayId, AllocationConstants.ZERO, length));
 
-        return newArray;
+        arrayLengthMap.put(newArrayId.toString(), numMap.get(length));
+
+        return newArrayId;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> PrimaryExpression()
+     * f1 -> "["
+     * f2 -> PrimaryExpression()
+     * f3 -> "]"
+     */
+    @Override
+    public Identifier visit(ArrayLookup n){
+        Identifier arrayId = n.f0.accept(this);
+        Identifier indexId = n.f2.accept(this);
+        int index = numMap.get(indexId);
+
+        Identifier loaded = newTemp();
+        if(index < 0 || index >= arrayLengthMap.get(varMap.get(varMap.get(arrayId.toString()).toString()).toString())){
+            instrs.add(new ErrorMessage("\"array index out of bounds\""));  // Add to IR
+            errorExists = true;
+        } 
+
+        instrs.add(new Load(loaded, varMap.get(arrayId.toString()), AllocationConstants.FOUR_OFFSET * index + AllocationConstants.FOUR_OFFSET));
+        
+        varMap.put(loaded.toString(), loaded);
+        
+        return loaded;
     }
 
     /**
@@ -381,7 +446,12 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         Identifier variableName = n.f1.accept(this);
         Identifier localVariableId = newTemp();
         varMap.put(variableName.toString(), localVariableId);
-        typeMap.put(variableName, type);
+        typeMap.put(variableName.toString(), type);
+
+        if(type == TypeConstants.IDENTIFIER){
+            minijava.syntaxtree.Identifier className = (minijava.syntaxtree.Identifier) n.f0.f0.choice;
+            id_to_class.put(variableName.toString(), className.f0.toString());
+        }
 
         // all types are init to 0, which is null in sparrow
         instrs.add(new Move_Id_Integer(localVariableId, AllocationConstants.ZERO));
@@ -407,10 +477,11 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         instrs.add(new Move_Id_Integer(allocationSizeTemp, allocationSize));
         instrs.add(new Alloc(classObjectAddress, allocationSizeTemp));
         
-        // init fields
-        
+        // TODO: init fields
         for(int i = 0; i < classInfos.getNumberOfFields(); i++){
-            instrs.add(new Store(classObjectAddress, i * AllocationConstants.INTBYTES, AllocationConstants.ZERO_ID));
+            Identifier zero = newTemp();
+            instrs.add(new Move_Id_Integer(zero, AllocationConstants.ZERO));
+            instrs.add(new Store(classObjectAddress, i * AllocationConstants.INTBYTES + AllocationConstants.INTBYTES, zero));
         }
 
         // store vtable
@@ -501,10 +572,6 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         return new Identifier("v" + (tempCounter++));
     }
 
-    private Identifier newArrayTemp(){
-        return new Identifier("array" + (arrayTempCounter++));
-    }
-
     private Identifier newParamTemp(){
         return new Identifier("param" + (paramTempCounter++));
     }
@@ -523,7 +590,14 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         root.accept(firstPass, classTable);
 
         J2S j2s = new J2S(classTable);
-        root.accept(j2s);
+        
+        try{
+            root.accept(j2s);
+        }
+        catch (TranslationError e) {
+            System.err.println("⚠️ Translation error: " + e.getMessage());
+        }
+
 
         Program sparrowProgram = new Program(j2s.getFunctions());
 
