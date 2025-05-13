@@ -6,16 +6,32 @@ class Test {
 
 class BT {
     A once;
-    public int Start(){
-        once = new A();
+    boolean a;
+    // what if int b is here
+    public boolean Start(){
+        boolean b;
+        b = true;
+        a = false;
+        if(b && !a)
+        {
+            System.out.println(9);
+        }
+        else{   
+            System.out.println(8);
 
-        System.out.println(once.Upon());
-        return 1;
+        }
+
+        return false;
     }
+
+    public int End(){
+        return 9;
+    }
+
 }
 
 class A {
-    public int Upon(){
-        return 2;
+    public boolean Upon(boolean a){
+        return a;
     }
 }

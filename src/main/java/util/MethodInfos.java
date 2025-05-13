@@ -6,7 +6,7 @@ import minijava.syntaxtree.*;
 
 public class MethodInfos{
     public SymbolTable symbolTable;
-    Type returnType;
+    public Type returnType;
     public FormalParameterList formalParameterList;
 
     public MethodInfos(Type rt) {

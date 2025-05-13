@@ -3,9 +3,13 @@ import java.io.InputStream;
 import java.net.IDN;
 import java.util.*;
 
+import javax.imageio.stream.FileCacheImageOutputStream;
+
 import org.w3c.dom.traversal.NodeFilter;
 
+import IR.syntaxtree.If;
 import IR.token.Identifier;
+import IR.token.Label;
 import IR.token.FunctionName;
 
 import minijava.*;
@@ -21,12 +25,17 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     private List<Instruction> instrs = new ArrayList<>();
     private List<Instruction> tempInstrs = new ArrayList<>();
     private Map<String, Identifier> varMap = new HashMap<>();
-    private Map<String, Identifier> fieldMap = new HashMap<>();
+    private LinkedHashMap<String, Identifier> fieldMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Identifier> localVarMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Identifier> formalParameterMap = new LinkedHashMap<>();
     private Map<Identifier, Integer> numMap = new HashMap<>();
     private Map<String, Integer> typeMap = new HashMap<>();
     private Map<String, Integer> arrayLengthMap = new HashMap<>();
     private Map<String, Identifier> arrayIdMap = new HashMap<>();
     private Map<String, String> id_to_class = new HashMap<>();
+    private int elseLabelCounter = 0;
+    private int loopLabelCounter = 0;
+    private int endLabelCounter = 0;
     private int tempCounter = 0;
     private int paramTempCounter = 0;
     private int arrayTempCounter = 0;
@@ -50,6 +59,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         n.f1.accept(this);
         return null;
     }
+    
 
     /**
     * f0 -> "class"
@@ -75,25 +85,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     public Identifier visit(MainClass n){
         // create vmts
         instrs.clear();
-        for(Map.Entry<String, ClassInfos> entry: classTable.classes.entrySet()){
-            String className = entry.getKey();
-
-            //fill vtable
-            Identifier vtable = newTempCustom("vmt_" + className);
-            int allocSize = classTable.getClassInfo(className).methods.size() * AllocationConstants.INTBYTES;
-            Identifier allocSizeId = newTemp();
-            instrs.add(new Move_Id_Integer(allocSizeId, allocSize));
-            instrs.add(new Alloc(vtable, allocSizeId));
-            int i = 0;
-            for(HashMap.Entry<String, MethodInfos> methodName : classTable.getClassInfo(className).methods.entrySet()){
-                Identifier methodID = newTemp();
-                instrs.add(new Move_Id_FuncName(methodID, new FunctionName(className + "_" + methodName.getKey())));
-                instrs.add(new Store(vtable, i * AllocationConstants.FOUR_OFFSET, methodID));
-                i++;
-            }
-
-            classTable.getClassInfo(className).vTableName = vtable;
-        }
+        create_vtables();
 
         // broken
         // String functionInitName = "init_vmts";
@@ -188,13 +180,23 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
      */
     @Override
     public Identifier visit(MethodDeclaration n){
+        System.err.println(currentMethod);
         instrs.clear();
         varMap.clear();
+        localVarMap.clear();
+        create_vtables();
 
         // instrs.addAll(tempInstrs);
+        // Initialize fields from parent classes and current class
+        for (Map.Entry<String, Identifier> field : fieldMap.entrySet()) {
+            Identifier fieldId = newTemp();
+            instrs.add(new Move_Id_Integer(fieldId, AllocationConstants.ZERO));
+            localVarMap.put(field.getKey(), fieldId);
+        }
 
         // copy classes fields into var Map since those shouldn't have been deleted in the first place :(
         varMap.putAll(fieldMap);
+        varMap.putAll(localVarMap);
 
         String methodName = n.f2.f0.toString();
         currentMethod = methodName;
@@ -219,17 +221,36 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
             Identifier formalParameterId = newParamTemp();
             parameters.add(formalParameterId);
             varMap.put(formalParameter.f1.f0.toString(), formalParameterId);
+            if(formalParameter.f0.f0.which == TypeConstants.IDENTIFIER){
+                minijava.syntaxtree.Identifier node = (minijava.syntaxtree.Identifier) formalParameter.f0.f0.choice;
+                id_to_class.put(formalParameter.f1.f0.toString(), node.f0.toString());
+            }
+            formalParameterMap.put(formalParameter.f1.f0.toString(), formalParameterId);
 
             NodeListOptional formalParameterRestList = formalParameterList.f1;
             if(formalParameterRestList.present()){
-                for(int i = 0; i < formalParameterRestList.size(); i++){
-                    FormalParameterRest formalParameterRest = (FormalParameterRest) formalParameterRestList.elementAt(i);
-                    formalParameter = formalParameterRest.f1;
-                    formalParameterId = newParamTemp();
-                    parameters.add(formalParameterId);
-                    varMap.put(formalParameter.f1.f0.toString(), formalParameterId);
+            for(int i = 0; i < formalParameterRestList.size(); i++){
+                FormalParameterRest formalParameterRest = (FormalParameterRest) formalParameterRestList.elementAt(i);
+                formalParameter = formalParameterRest.f1;
+                formalParameterId = newParamTemp();
+                parameters.add(formalParameterId);
+                varMap.put(formalParameter.f1.f0.toString(), formalParameterId);
+                if(formalParameter.f0.f0.which == TypeConstants.IDENTIFIER){
+                    minijava.syntaxtree.Identifier node = (minijava.syntaxtree.Identifier) formalParameter.f0.f0.choice;
+                    id_to_class.put(formalParameter.f1.f0.toString(), node.f0.toString());
                 }
+                formalParameterMap.put(formalParameter.f1.f0.toString(), formalParameterId);
             }
+            }
+        }
+
+        // store local variables into localVarMap
+        for (int i = 0; i < n.f7.size(); i++) {
+            VarDeclaration varDecl = (VarDeclaration) n.f7.elementAt(i);
+            Identifier varId = varDecl.f1.accept(this);
+            Identifier localVarId = newTemp();
+            localVarMap.put(varId.toString(), localVarId);
+            instrs.add(new Move_Id_Integer(localVarId, AllocationConstants.ZERO)); // Initialize to 0
         }
 
         n.f5.accept(this);
@@ -266,7 +287,23 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
 
         varMap.put(varMap.get(lhs.toString()).toString(), rhs);
 
-        instrs.add(new Move_Id_Id(varMap.get(lhs.toString()), rhs));
+        // if()
+        if(localVarMap.containsKey(lhs.toString())){
+            instrs.add(new Move_Id_Id(localVarMap.get(lhs.toString()), rhs));
+        }
+        else if(formalParameterMap.containsKey(lhs.toString())){
+            instrs.add(new Move_Id_Id(formalParameterMap.get(lhs.toString()), rhs));
+        }
+        else{
+            int i =0;
+            for(Map.Entry<String, Identifier> entry : fieldMap.entrySet()){
+                if(entry.getKey().equals(lhs.toString())){
+                    break;
+                }
+                i++;
+            }
+            instrs.add(new Store(new Identifier("this"), i * AllocationConstants.FOUR_OFFSET + AllocationConstants.FOUR_OFFSET, rhs));
+        }
 
         return null;
     }
@@ -286,7 +323,72 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         return null;
     }
 
+    /**
+     * Grammar production:
+     * f0 -> "if"
+     * f1 -> "("
+     * f2 -> Expression()
+     * f3 -> ")"
+     * f4 -> Statement()
+     * f5 -> "else"
+     * f6 -> Statement()
+     */
+    @Override
+    public Identifier visit(IfStatement n){
+        Identifier condition = n.f2.accept(this);
+        Label elseLabel = newElseLabel();
+        Label endLabel = newEndLabel();
+
+        //if
+        instrs.add(new IfGoto(condition, elseLabel));
+
+        //then
+        n.f4.accept(this);
+        instrs.add(new Goto(endLabel));
+
+        //else
+        instrs.add(new LabelInstr(elseLabel));
+        n.f6.accept(this);
+
+        //end
+        instrs.add(new LabelInstr(endLabel));
+
+        return null;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> "while"
+     * f1 -> "("
+     * f2 -> Expression()
+     * f3 -> ")"
+     * f4 -> Statement()
+     */
+    @Override
+    public Identifier visit(WhileStatement n){
+        Label loop = newLoopLabel();
+        Label end = newEndLabel();
+        
+        //while
+        instrs.add(new LabelInstr(loop));
+
+        Identifier condition = n.f2.accept(this);
+        instrs.add(new IfGoto(condition, end));
+
+        n.f4.accept(this);
+
+        //repeat
+        instrs.add(new Goto(loop));
+
+        //end
+        instrs.add(new LabelInstr(end));
+        return null;
+    }
+
+
     // EXPRESSIONS
+    
+
     /**
      * Grammar production:
      * f0 -> PrimaryExpression()
@@ -299,16 +401,41 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     @Override
     public Identifier visit(MessageSend n){
         Identifier className = n.f0.accept(this);
-        Identifier classObjectAddress = varMap.get(className.toString()); //todo what if tha varmap has two classes
-
-        // TODO: new A.run() vs a.run()???
-        if(!classTable.classExists(className.toString())){
-            className = new Identifier(id_to_class.get(className.toString()));
+        Identifier classObjectAddress;
+        // if(id_to_class.containsKey(className.toString())){
+        //     classObjectAddress = className;
+        //     className = new Identifier(id_to_class.get(className.toString()));
+        // }
+        if(className.toString().charAt(0) == 'p'){
+            System.err.println("found p");
+        }
+        if(localVarMap.containsKey(className.toString())){
+            classObjectAddress = localVarMap.get(className.toString()); //todo what if tha varmap has two classes
+        }
+        else if(fieldMap.containsKey(className.toString())){
+            classObjectAddress = newTemp();
+            int i =0;
+            for(Map.Entry<String, Identifier> entry : fieldMap.entrySet()){
+                if(entry.getKey().equals(className.toString())){
+                    break;
+                }
+                i++;
+            }
+            instrs.add(new Load(classObjectAddress, new Identifier("this"), i * AllocationConstants.FOUR_OFFSET + AllocationConstants.FOUR_OFFSET));
+        }
+        else{
+            classObjectAddress = varMap.get(className.toString());
         }
 
+        // TODO: new A.run() vs a.run()???
         if(className.toString().equals("this")){
             className = new Identifier(currentClass);
         }
+        else if(!classTable.classExists(className.toString())){
+            className = new Identifier(id_to_class.get(className.toString()));
+        }
+
+
 
         n.f1.accept(this);
         n.f2.accept(this);
@@ -321,6 +448,10 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         Identifier loadedCall = newTemp();
         // determine which offset the method is
         int index = 0;
+
+        if(className.toString().equals("this")){
+            className = new Identifier(currentClass);
+        }
         
         for(String key: classTable.getClassInfo(className.toString()).methods.keySet()){
             if(key.equals(methodName)){
@@ -330,14 +461,19 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         }
 
         Identifier returnResult = newTemp();
+
+
         String vTable = classTable.getClassInfo(className.toString()).vTableName.toString();
-        Identifier vTableId = new Identifier(vTable);
+        Identifier vTableId = newTemp();
+        // instrs.add(new Move_Id_Id(vTableId, new Identifier(vTable))); no need because dynamic now
+
+        // if "this" is the caller
         if(n.f0.accept(this).toString().equals("this")){
             classObjectAddress = n.f0.accept(this);
         }
 
         instrs.add(new Load(vTableId, classObjectAddress, AllocationConstants.ZERO));
-        instrs.add(new Load(loadedCall, new Identifier(vTable), index * AllocationConstants.FOUR_OFFSET));
+        instrs.add(new Load(loadedCall, vTableId, index * AllocationConstants.FOUR_OFFSET));
 
         ArrayList<Identifier> parameters = new ArrayList<>();
         if (classObjectAddress != null) {
@@ -362,6 +498,18 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         instrs.add(new Call(returnResult, loadedCall, parameters));
 
         varMap.put(returnResult.toString(), returnResult);
+
+        minijava.syntaxtree.Identifier id;
+        if(classTable.getClassInfo(className.toString()).methods.get(methodName).returnType.f0.which == TypeConstants.IDENTIFIER){
+            id = (minijava.syntaxtree.Identifier) classTable.getClassInfo(className.toString()).methods.get(methodName).returnType.f0.choice;
+            String retType = id.f0.toString();
+            if (classTable.classExists(retType)) {
+                id_to_class.put(returnResult.toString(), retType); 
+            }
+        }
+
+
+
         return returnResult;
     }
 
@@ -444,7 +592,13 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
 
         // var declaration
         Identifier variableName = n.f1.accept(this);
-        Identifier localVariableId = newTemp();
+        Identifier localVariableId;
+        if(localVarMap.containsKey(variableName.toString())){
+            localVariableId = localVarMap.get(variableName.toString());
+        }
+        else{
+            localVariableId = newTemp();
+        }
         varMap.put(variableName.toString(), localVariableId);
         typeMap.put(variableName.toString(), type);
 
@@ -468,7 +622,9 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
      */
     @Override
     public Identifier visit(AllocationExpression n){
+        
         Identifier classObjectAddress = newTemp();
+        
         int numberOfVTable = 1;
         String className = n.f1.f0.toString();
         ClassInfos classInfos = classTable.getClassInfo(className);
@@ -522,6 +678,36 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
 
     /**
      * Grammar production:
+     * f0 -> "true"
+     */
+    @Override
+    public Identifier visit(TrueLiteral n){
+        int boolNum = 1;
+        Identifier newVar = newTemp();
+        instrs.add(new Move_Id_Integer(newVar, boolNum));
+        varMap.put(newVar.toString(), newVar);
+        numMap.put(newVar, boolNum);
+        return newVar;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> "false"
+     */ 
+    @Override
+    public Identifier visit(FalseLiteral n){
+        int boolNum = 0;
+        Identifier newVar = newTemp();
+        instrs.add(new Move_Id_Integer(newVar, boolNum));
+        varMap.put(newVar.toString(), newVar);
+        numMap.put(newVar, boolNum);
+        return newVar;
+    }
+
+
+
+    /**
+     * Grammar production:
      * f0 -> <IDENTIFIER>
      */
     @Override
@@ -548,20 +734,140 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
 
     /**
      * Grammar production:
+     * f0 -> PrimaryExpression()
+     * f1 -> "<"
+     * f2 -> PrimaryExpression()
+     */
+    @Override
+    public Identifier visit(CompareExpression n){
+        Identifier lhs = n.f0.accept(this);
+        Identifier rhs = n.f2.accept(this);
+
+        Identifier lhsId;
+        
+        Identifier rhsId;
+
+        if(localVarMap.containsKey(lhs.toString())){
+            lhsId = localVarMap.get(lhs.toString());
+        }
+        else if(fieldMap.containsKey(lhs.toString())){
+            lhsId = fieldMap.get(lhs.toString());
+        }
+        else{
+            lhsId = varMap.get(lhs.toString());
+        }
+
+        if(localVarMap.containsKey(rhs.toString())){
+            rhsId = localVarMap.get(rhs.toString());
+        }
+        else if(fieldMap.containsKey(rhs.toString())){
+            rhsId = fieldMap.get(rhs.toString());
+        }
+        else{
+            rhsId = varMap.get(rhs.toString());
+        }
+
+        Identifier result = newTemp();
+        instrs.add(new LessThan(result, lhsId, rhsId));
+        varMap.put(result.toString(), result);
+
+        return result;
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> PrimaryExpression()
+     * f1 -> "&&"
+     * f2 -> PrimaryExpression()
+     */
+    @Override
+    public Identifier visit(AndExpression n){
+        Identifier first = n.f0.accept(this);
+        
+        Identifier result = newTemp();
+        Label failed = newEndLabel(); //L_false
+        Label passed = newEndLabel(); //L_true
+        Label meetUp = newEndLabel(); //L_true
+        
+        // if first is false
+        instrs.add(new IfGoto(varMap.get(first.toString()), failed));
+
+        Identifier second = n.f2.accept(this);
+
+        instrs.add(new IfGoto(varMap.get(second.toString()), failed));
+
+        instrs.add(new Goto(passed));
+        
+        instrs.add(new LabelInstr(failed));
+        instrs.add(new Move_Id_Integer(result, AllocationConstants.ZERO));
+        instrs.add(new Goto(meetUp));
+
+        instrs.add(new LabelInstr(passed));
+        instrs.add(new Move_Id_Integer(result, AllocationConstants.ONE));
+
+        instrs.add(new LabelInstr(meetUp));
+
+        varMap.put(result.toString(), result);
+        return result;
+    }
+
+
+    /**
+     * Grammar production:
+     * f0 -> "!"
+     * f1 -> Expression()
+     */
+    @Override
+    public Identifier visit(NotExpression n){
+        Identifier condition = n.f1.accept(this);
+        
+        Identifier result = newTemp();
+        Label failed = newEndLabel(); //L_false
+        Label passed = newEndLabel(); //L_true
+        Label meetUp = newEndLabel(); //L_true
+        
+        // if condition is false
+        instrs.add(new IfGoto(condition, failed));
+        instrs.add(new Move_Id_Integer(result, AllocationConstants.ZERO));
+        instrs.add(new Goto(meetUp));
+
+        instrs.add(new LabelInstr(failed));
+        instrs.add(new Move_Id_Integer(result, AllocationConstants.ONE));
+        instrs.add(new Goto(meetUp));
+
+        instrs.add(new LabelInstr(meetUp));
+        varMap.put(result.toString(), result);
+        return result;
+    }
+
+    /**
+     * Grammar production:
      * f0 -> AndExpression()
      *       | CompareExpression()
      *       | PlusExpression()
      *       | MinusExpression()
      *       | TimesExpression()
      *       | ArrayLookup()
-     *       | ArrayLength()
-     *       | MessageSend()
+     *       | ArrayLength() TODO: 
+     *       | MessageSend() 
      *       | PrimaryExpression()
      */
     @Override
     public Identifier visit(Expression n){
         Identifier id = n.f0.accept(this);
         return varMap.get(id.toString());
+    }
+
+    /**
+     * Grammar production:
+     * f0 -> "("
+     * f1 -> Expression()
+     * f2 -> ")"
+     */
+    @Override
+    public Identifier visit(BracketExpression n){
+        Identifier result = n.f1.accept(this);
+        return result;
     }
 
     public List<FunctionDecl> getFunctions(){
@@ -572,12 +878,48 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         return new Identifier("v" + (tempCounter++));
     }
 
+    private Label newElseLabel(){
+        return new Label("else_" + (elseLabelCounter++));
+    }
+
+    private Label newLoopLabel(){
+        return new Label("loop_" + (loopLabelCounter++));
+    }
+
+    private Label newEndLabel(){
+        return new Label("end_" + (endLabelCounter++));
+    }
+
     private Identifier newParamTemp(){
         return new Identifier("param" + (paramTempCounter++));
     }
 
     private Identifier newTempCustom(String s){
         return new Identifier(s);
+    }
+
+    public void create_vtables(){
+        for(Map.Entry<String, ClassInfos> entry: classTable.classes.entrySet()){
+            String className = entry.getKey();
+
+            //fill vtable
+            Identifier vtable = newTempCustom("vmt_" + className);
+            int allocSize = classTable.getClassInfo(className).methods.size() * AllocationConstants.INTBYTES;
+            Identifier allocSizeId = newTemp();
+            instrs.add(new Move_Id_Integer(allocSizeId, allocSize));
+            instrs.add(new Alloc(vtable, allocSizeId));
+            int i = 0;
+            for(HashMap.Entry<String, MethodInfos> methodName : classTable.getClassInfo(className).methods.entrySet()){
+                Identifier methodID = newTemp();
+                instrs.add(new Move_Id_FuncName(methodID, new FunctionName(className + "_" + methodName.getKey())));
+                instrs.add(new Store(vtable, i * AllocationConstants.FOUR_OFFSET, methodID));
+                i++;
+            }
+
+            classTable.getClassInfo(className).vTableName = vtable;
+        }
+
+        System.err.println("====finished creating vTables====");
     }
 
     public static void main(String[] args) throws Exception {
