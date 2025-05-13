@@ -188,11 +188,11 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
 
         // instrs.addAll(tempInstrs);
         // Initialize fields from parent classes and current class
-        for (Map.Entry<String, Identifier> field : fieldMap.entrySet()) {
-            Identifier fieldId = newTemp();
-            instrs.add(new Move_Id_Integer(fieldId, AllocationConstants.ZERO));
-            localVarMap.put(field.getKey(), fieldId);
-        }
+        // for (Map.Entry<String, Identifier> field : fieldMap.entrySet()) {
+        //     Identifier fieldId = newTemp();
+        //     instrs.add(new Move_Id_Integer(fieldId, AllocationConstants.ZERO));
+        //     localVarMap.put(field.getKey(), fieldId);
+        // }
 
         // copy classes fields into var Map since those shouldn't have been deleted in the first place :(
         varMap.putAll(fieldMap);
@@ -287,22 +287,24 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
 
         varMap.put(varMap.get(lhs.toString()).toString(), rhs);
 
-        // if()
         if(localVarMap.containsKey(lhs.toString())){
             instrs.add(new Move_Id_Id(localVarMap.get(lhs.toString()), rhs));
         }
-        else if(formalParameterMap.containsKey(lhs.toString())){
-            instrs.add(new Move_Id_Id(formalParameterMap.get(lhs.toString()), rhs));
-        }
-        else{
-            int i =0;
-            for(Map.Entry<String, Identifier> entry : fieldMap.entrySet()){
-                if(entry.getKey().equals(lhs.toString())){
+        else if(fieldMap.containsKey(lhs.toString())){
+            int i = 0;
+            for(Map.Entry<String, Identifier> entry : fieldMap.entrySet()) {
+                if(entry.getKey().equals(lhs.toString())) {
                     break;
                 }
                 i++;
             }
             instrs.add(new Store(new Identifier("this"), i * AllocationConstants.FOUR_OFFSET + AllocationConstants.FOUR_OFFSET, rhs));
+        }
+        else if(formalParameterMap.containsKey(lhs.toString())){
+            instrs.add(new Move_Id_Id(formalParameterMap.get(lhs.toString()), rhs));
+        }
+        else{
+            instrs.add(new Move_Id_Id(varMap.get(lhs.toString()), rhs));
         }
 
         return null;
@@ -423,6 +425,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
             }
             instrs.add(new Load(classObjectAddress, new Identifier("this"), i * AllocationConstants.FOUR_OFFSET + AllocationConstants.FOUR_OFFSET));
         }
+        //TODO formal parma map?
         else{
             classObjectAddress = varMap.get(className.toString());
         }
@@ -485,12 +488,12 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
             ExpressionList expressionList = (ExpressionList) n.f4.node;
             Identifier expressionVar = expressionList.f0.accept(this);
             
-            parameters.add(varMap.get(expressionVar.toString()));
+            parameters.add(expressionVar);
             if(expressionList.f1.present()){
                 for(int i = 0; i < expressionList.f1.size(); i ++){
                     ExpressionRest expressionRest = (ExpressionRest) expressionList.f1.elementAt(i);
                     Identifier expressionRestVar = expressionRest.f1.accept(this);
-                    parameters.add(varMap.get(expressionRestVar.toString()));
+                    parameters.add(expressionRestVar);
                 }
             }
         }
@@ -790,11 +793,11 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         Label meetUp = newEndLabel(); //L_true
         
         // if first is false
-        instrs.add(new IfGoto(varMap.get(first.toString()), failed));
+        instrs.add(new IfGoto(getFromMapsLoad(first), failed));
 
         Identifier second = n.f2.accept(this);
 
-        instrs.add(new IfGoto(varMap.get(second.toString()), failed));
+        instrs.add(new IfGoto(getFromMapsLoad(second), failed));
 
         instrs.add(new Goto(passed));
         
@@ -855,7 +858,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     @Override
     public Identifier visit(Expression n){
         Identifier id = n.f0.accept(this);
-        return varMap.get(id.toString());
+        return getFromMapsLoad(id);
     }
 
     /**
@@ -868,6 +871,44 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     public Identifier visit(BracketExpression n){
         Identifier result = n.f1.accept(this);
         return result;
+    }
+
+    // @Override
+    // public Identifier visit(MinusExpression n){
+    //     Identifier lhs = n.f0.accept(this);
+    //     Identifier rhs = n.f2.accept(this);
+    //     Identifier result = newTemp();
+
+    //     instrs.add(new Add(result, getFromMapsLoad(.get(lhs.toString()), varMap.get(rhs.toString())));
+    //     varMap.put(result.toString(), result);
+    //     return result;
+    // }
+
+    public Identifier getFromMapsLoad(Identifier i){
+        String s = i.toString();
+        if(localVarMap.containsKey(s)){
+            return localVarMap.get(s);
+        }
+        else if(fieldMap.containsKey(s)){
+            int index = 0;
+            for(Map.Entry<String, Identifier> entry : fieldMap.entrySet()) {
+                if(entry.getKey().equals(s)) {
+                    break;
+                }
+                index++;
+            }
+            Identifier result = newTemp();
+            instrs.add(new Move_Id_Integer(result, AllocationConstants.ZERO));
+            instrs.add(new Load(result, new Identifier("this"), index * AllocationConstants.FOUR_OFFSET + AllocationConstants.FOUR_OFFSET));
+
+            return result;
+        }
+        else if(formalParameterMap.containsKey(s)){
+            return (formalParameterMap.get(s));
+        }
+        else{
+            return varMap.get(s);
+        }
     }
 
     public List<FunctionDecl> getFunctions(){

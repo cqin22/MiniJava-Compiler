@@ -18,7 +18,6 @@ class BT {
         }
         else{   
             System.out.println(8);
-
         }
 
         return false;
