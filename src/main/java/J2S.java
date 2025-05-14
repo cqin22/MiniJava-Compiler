@@ -285,7 +285,15 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         
         Identifier rhs = n.f2.accept(this);
 
-        varMap.put(varMap.get(lhs.toString()).toString(), rhs);
+        // if(typeMap.get(lhs.toString()) == TypeConstants.ARRAYTYPE){
+            
+        // }
+
+        if (!localVarMap.containsKey(lhs.toString())
+            && !fieldMap.containsKey(lhs.toString())
+            && !formalParameterMap.containsKey(lhs.toString())) {
+            varMap.put(lhs.toString(), rhs);
+        }
 
         if(localVarMap.containsKey(lhs.toString())){
             instrs.add(new Move_Id_Id(localVarMap.get(lhs.toString()), rhs));
@@ -309,6 +317,78 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
 
         return null;
     }
+
+    /**
+     * Grammar production:
+     * f0 -> Identifier()
+     * f1 -> "["
+     * f2 -> Expression()
+     * f3 -> "]"
+     * f4 -> "="
+     * f5 -> Expression()
+     * f6 -> ";"
+     */
+    @Override
+    public Identifier visit(ArrayAssignmentStatement n) {
+        /* evaluate operands */
+        Identifier arrayId   = n.f0.accept(this);
+        Identifier indexExpr = n.f2.accept(this);
+        Identifier value     = n.f5.accept(this);
+    
+        Identifier base   = getFromMapsLoad(arrayId);
+        Identifier length = newTemp();
+        instrs.add(new Load(length, base, AllocationConstants.ZERO)); // len
+    
+        /* ---------- bounds check ---------- */
+        Label ok   = newEndLabel();
+        Label exit = newEndLabel();
+    
+        Identifier zero = newTemp();
+        instrs.add(new Move_Id_Integer(zero, AllocationConstants.ZERO));
+    
+
+        Identifier index = indexExpr;
+        // idx < 0  ?  ->  error
+        Identifier isNeg = newTemp();                           // 1 iff idx < 0
+        instrs.add(new LessThan(isNeg, zero, indexExpr));
+        instrs.add(new IfGoto(isNeg, ok));
+        Identifier newIndex = newTemp();
+        Identifier one = newTemp();
+        instrs.add(new Move_Id_Integer(one, AllocationConstants.ONE));
+        instrs.add(new Add(newIndex, index, one));
+
+        // idx >= length ?
+        Identifier inRange = newTemp();
+        instrs.add(new LessThan(inRange, length, newIndex));
+        instrs.add(new IfGoto(inRange, ok));         // jump when inRange == 0
+        instrs.add(new ErrorMessage("\"array index out of bounds\""));
+        instrs.add(new Goto(exit));
+        instrs.add(new LabelInstr(ok));
+        /* ---------- end bounds check ---------- */
+    
+        /* compute element address and store */
+        Identifier offIdx   = newTemp();
+        Identifier offBytes = newTemp();
+        Identifier addr     = newTemp();
+    
+        instrs.add(new Move_Id_Id(offIdx, indexExpr));
+        // Identifier one = newTemp();
+        instrs.add(new Move_Id_Integer(one, AllocationConstants.ONE));
+        instrs.add(new Add(offIdx, offIdx, one));                 // idx+1
+    
+        instrs.add(new Move_Id_Id(offBytes, offIdx));
+        Identifier four = newTemp();
+        instrs.add(new Move_Id_Integer(four, AllocationConstants.FOUR_OFFSET));
+        instrs.add(new Multiply(offBytes, offBytes, four));
+    
+        instrs.add(new Move_Id_Id(addr, base));
+        instrs.add(new Add(addr, addr, offBytes));
+    
+        instrs.add(new Store(addr, AllocationConstants.ZERO, value));
+        instrs.add(new LabelInstr(exit));
+        return null;
+    }
+    
 
     /**
      * Grammar production:
@@ -539,21 +619,32 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
     @Override
     public Identifier visit(ArrayAllocationExpression n){
         Identifier length = n.f3.accept(this);
-        int allocationSize = AllocationConstants.FOUR_OFFSET * numMap.get(length)+ AllocationConstants.FOUR_OFFSET;
 
-        Identifier newVar = newTemp();
-        instrs.add(new Move_Id_Integer(newVar, allocationSize));
-        varMap.put(newVar.toString(), newVar);
-        
+        // Compute allocationSize = (length + 1) * 4
+        Identifier lengthPlusOne = newTemp();
+        instrs.add(new Move_Id_Id(lengthPlusOne, length));
+        Identifier one = newTemp();
+        instrs.add(new Move_Id_Integer(one, AllocationConstants.ONE));
+        instrs.add(new Add(lengthPlusOne, lengthPlusOne, one));
+    
+        Identifier sizeBytes = newTemp();
+        instrs.add(new Move_Id_Id(sizeBytes, lengthPlusOne));
+        Identifier four = newTemp();
+        instrs.add(new Move_Id_Integer(four, AllocationConstants.FOUR_OFFSET));
+        instrs.add(new Multiply(sizeBytes, sizeBytes, four));
+    
+        // Allocate memory
         Identifier newArrayId = newTemp();
+        // instrs.add(new Move_Id_Integer(sizeBytes, 100));
+        instrs.add(new Alloc(newArrayId, sizeBytes));
         varMap.put(newArrayId.toString(), newArrayId);
-
-        instrs.add(new Alloc(newArrayId, newVar));
-
+    
+        // Store length at index 0
         instrs.add(new Store(newArrayId, AllocationConstants.ZERO, length));
+    
 
-        arrayLengthMap.put(newArrayId.toString(), numMap.get(length));
-
+        arrayLengthMap.put(newArrayId.toString(), -1); // or skip entirely
+    
         return newArrayId;
     }
 
@@ -566,21 +657,101 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
      */
     @Override
     public Identifier visit(ArrayLookup n){
-        Identifier arrayId = n.f0.accept(this);
-        Identifier indexId = n.f2.accept(this);
-        int index = numMap.get(indexId);
-
-        Identifier loaded = newTemp();
-        if(index < 0 || index >= arrayLengthMap.get(varMap.get(varMap.get(arrayId.toString()).toString()).toString())){
-            instrs.add(new ErrorMessage("\"array index out of bounds\""));  // Add to IR
-            errorExists = true;
-        } 
-
-        instrs.add(new Load(loaded, varMap.get(arrayId.toString()), AllocationConstants.FOUR_OFFSET * index + AllocationConstants.FOUR_OFFSET));
+        Identifier arrayId = n.f0.accept(this);        
+        Identifier indexExpr = n.f2.accept(this);    
         
+        Identifier arrayBase = getFromMapsLoad(arrayId);
+        Identifier length = newTemp();
+        instrs.add(new Load(length, arrayBase, AllocationConstants.ZERO));
+
+        // // Check if index is negative
+        Label validIndex = newEndLabel();
+        Label error = newEndLabel();
+        Label exit = newEndLabel();
+        
+        // // ---------- bounds-check ----------
+
+        // idx < 0  ?  ->  error
+        Identifier isNeg = newTemp();         
+        Identifier zero  = newTemp();
+                          // 1 iff idx < 0
+
+
+        // idx < length ?  ->  ok           (otherwise error)
+        Identifier isLtLen = newTemp();                         // 1 iff idx < len
+        Identifier index = getFromMapsLoad(indexExpr);
+        Identifier newIndex = newTemp();
+        Identifier one = newTemp();
+
+        instrs.add(new Move_Id_Integer(one, AllocationConstants.ONE));
+        instrs.add(new Move_Id_Integer(zero, AllocationConstants.ZERO));
+
+        instrs.add(new Add(newIndex, index, one));
+
+        instrs.add(new LessThan(isNeg, zero, newIndex));
+        instrs.add(new IfGoto(isNeg, error));
+
+        instrs.add(new LessThan(isLtLen, length, newIndex));
+        instrs.add(new IfGoto(isLtLen, validIndex));                    // jump when true
+        instrs.add(new Goto(error));                              // idx ≥ len
+
+        // --- error branch ---
+        instrs.add(new LabelInstr(error));
+        instrs.add(new ErrorMessage("\"array index out of bounds\""));
+        instrs.add(new Goto(exit));
+
+        // --- in-range branch ---
+        instrs.add(new LabelInstr(validIndex));
+        // // ---------- end bounds-check ----------
+
+
+        Identifier offsetIndex = newTemp();            // index + 1
+        Identifier offsetBytes = newTemp();            // (index + 1) * 4
+        Identifier effectiveAddr = newTemp();          // base + offset
+        Identifier loaded = newTemp();                 // result of load
+        
+        // offsetIndex = indexExpr + 1
+        instrs.add(new Move_Id_Id(offsetIndex, getFromMapsLoad(indexExpr)));
+        // Identifier one = newTemp();
+        instrs.add(new Move_Id_Integer(one, AllocationConstants.ONE));
+        instrs.add(new Add(offsetIndex, offsetIndex, one));
+        
+        // offsetBytes = offsetIndex * 4
+        instrs.add(new Move_Id_Id(offsetBytes, offsetIndex));
+        Identifier four = newTemp();
+        instrs.add(new Move_Id_Integer(four, AllocationConstants.FOUR_OFFSET));
+        instrs.add(new Multiply(offsetBytes, offsetBytes, four));
+        
+        // effectiveAddr = arrayBase + offsetBytes
+        instrs.add(new Move_Id_Id(effectiveAddr, arrayBase));
+        instrs.add(new Add(effectiveAddr, effectiveAddr, offsetBytes));
+        
+        // loaded = *effectiveAddr
+        instrs.add(new Load(loaded, effectiveAddr, AllocationConstants.ZERO));
+        
+        instrs.add(new LabelInstr(exit));
+
         varMap.put(loaded.toString(), loaded);
-        
         return loaded;
+    }
+
+    /**
+        * Grammar production:
+        * f0 -> PrimaryExpression()
+        * f1 -> "."
+        * f2 -> "length"
+        */
+    @Override
+    public Identifier visit(ArrayLength n){
+        Identifier arrayId = n.f0.accept(this);
+        Identifier arrayBase = getFromMapsLoad(arrayId);
+
+        // Load array length from first position
+        Identifier lengthTemp = newTemp();
+        instrs.add(new Load(lengthTemp, arrayBase, AllocationConstants.ZERO));
+
+        varMap.put(lengthTemp.toString(), lengthTemp);
+        return lengthTemp;
     }
 
     /**
@@ -662,7 +833,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         Identifier rhs = n.f2.accept(this);
         Identifier result = newTemp();
 
-        instrs.add(new Add(result, varMap.get(lhs.toString()), varMap.get(rhs.toString())));
+        instrs.add(new Add(result, getFromMapsLoad(lhs), getFromMapsLoad(rhs)));
         varMap.put(result.toString(), result);
         return result;
     }
@@ -679,6 +850,22 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         return newVar;
     }
 
+    /**
+         * Grammar production:
+         * f0 -> PrimaryExpression()
+         * f1 -> "*"
+         * f2 -> PrimaryExpression()
+         */
+    @Override
+    public Identifier visit(TimesExpression n){
+        Identifier lhs = n.f0.accept(this);
+        Identifier rhs = n.f2.accept(this);
+        Identifier result = newTemp();
+
+        instrs.add(new Multiply(result, getFromMapsLoad(lhs), getFromMapsLoad(rhs)));
+        varMap.put(result.toString(), result);
+        return result;
+    }
     /**
      * Grammar production:
      * f0 -> "true"
@@ -768,6 +955,13 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         }
         else{
             rhsId = varMap.get(rhs.toString());
+        }
+
+        if(rhsId == null){
+            rhsId = rhs;
+        }
+        if(lhsId == null){
+            lhsId = lhs;
         }
 
         Identifier result = newTemp();
@@ -873,16 +1067,16 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         return result;
     }
 
-    // @Override
-    // public Identifier visit(MinusExpression n){
-    //     Identifier lhs = n.f0.accept(this);
-    //     Identifier rhs = n.f2.accept(this);
-    //     Identifier result = newTemp();
+    @Override
+    public Identifier visit(MinusExpression n){
+        Identifier lhs = n.f0.accept(this);
+        Identifier rhs = n.f2.accept(this);
+        Identifier result = newTemp();
 
-    //     instrs.add(new Add(result, getFromMapsLoad(.get(lhs.toString()), varMap.get(rhs.toString())));
-    //     varMap.put(result.toString(), result);
-    //     return result;
-    // }
+        instrs.add(new Subtract(result, getFromMapsLoad(lhs), getFromMapsLoad(rhs)));
+        varMap.put(result.toString(), result);
+        return result;
+    }
 
     public Identifier getFromMapsLoad(Identifier i){
         String s = i.toString();

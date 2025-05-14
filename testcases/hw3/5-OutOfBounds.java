@@ -9,6 +9,6 @@ class A {
 		int[] a;
 		a = new int[20];
 		System.out.println(a[10]);
-		return a[40];
+		return a[20];
 	}
 }

@@ -1,1747 +1,426 @@
 func main()
-v0 = 4
-vmt_BT = alloc(v0)
-v1 = @BT_Start
-[vmt_BT + 0] = v1
-v2 = 0
-vmt_BinaryTree = alloc(v2)
-v3 = 80
-vmt_Tree = alloc(v3)
-v4 = @Tree_Init
-[vmt_Tree + 0] = v4
-v5 = @Tree_SetRight
-[vmt_Tree + 4] = v5
-v6 = @Tree_SetLeft
-[vmt_Tree + 8] = v6
-v7 = @Tree_GetRight
-[vmt_Tree + 12] = v7
-v8 = @Tree_GetLeft
-[vmt_Tree + 16] = v8
-v9 = @Tree_GetKey
-[vmt_Tree + 20] = v9
-v10 = @Tree_SetKey
-[vmt_Tree + 24] = v10
-v11 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v11
-v12 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v12
-v13 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v13
-v14 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v14
-v15 = @Tree_Compare
-[vmt_Tree + 44] = v15
-v16 = @Tree_Insert
-[vmt_Tree + 48] = v16
-v17 = @Tree_Delete
-[vmt_Tree + 52] = v17
-v18 = @Tree_Remove
-[vmt_Tree + 56] = v18
-v19 = @Tree_RemoveRight
-[vmt_Tree + 60] = v19
-v20 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v20
-v21 = @Tree_Search
-[vmt_Tree + 68] = v21
-v22 = @Tree_Print
-[vmt_Tree + 72] = v22
-v23 = @Tree_RecPrint
-[vmt_Tree + 76] = v23
-v25 = 4
-v24 = alloc(v25)
-[v24 + 0] = vmt_BT
-v30 = 4
-v29 = alloc(v30)
-[v29 + 0] = vmt_BT
-v28 = [v24 + 0]
-v26 = [v28 + 0]
-v27 = call v26(v24)
-print(v27)
-v31 = 0
-      return v31
+v0 = 16
+vmt_BBS = alloc(v0)
+v1 = @BBS_Start
+[vmt_BBS + 0] = v1
+v2 = @BBS_Sort
+[vmt_BBS + 4] = v2
+v3 = @BBS_Print
+[vmt_BBS + 8] = v3
+v4 = @BBS_Init
+[vmt_BBS + 12] = v4
+v5 = 0
+vmt_BubbleSort = alloc(v5)
+v7 = 12
+v6 = alloc(v7)
+v8 = 0
+[v6 + 4] = v8
+v9 = 0
+[v6 + 8] = v9
+[v6 + 0] = vmt_BBS
+v10 = 10
+v15 = 12
+v14 = alloc(v15)
+v16 = 0
+[v14 + 4] = v16
+v17 = 0
+[v14 + 8] = v17
+[v14 + 0] = vmt_BBS
+v13 = [v6 + 0]
+v11 = [v13 + 0]
+v18 = 10
+v12 = call v11(v6 v18)
+print(v12)
+v19 = 0
+      return v19
 
-func BT_Start(this)
-v32 = 4
-vmt_BT = alloc(v32)
-v33 = @BT_Start
-[vmt_BT + 0] = v33
-v34 = 0
-vmt_BinaryTree = alloc(v34)
-v35 = 80
-vmt_Tree = alloc(v35)
-v36 = @Tree_Init
-[vmt_Tree + 0] = v36
-v37 = @Tree_SetRight
-[vmt_Tree + 4] = v37
-v38 = @Tree_SetLeft
-[vmt_Tree + 8] = v38
-v39 = @Tree_GetRight
-[vmt_Tree + 12] = v39
-v40 = @Tree_GetLeft
-[vmt_Tree + 16] = v40
-v41 = @Tree_GetKey
-[vmt_Tree + 20] = v41
-v42 = @Tree_SetKey
-[vmt_Tree + 24] = v42
-v43 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v43
-v44 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v44
-v45 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v45
-v46 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v46
-v47 = @Tree_Compare
-[vmt_Tree + 44] = v47
-v48 = @Tree_Insert
-[vmt_Tree + 48] = v48
-v49 = @Tree_Delete
-[vmt_Tree + 52] = v49
-v50 = @Tree_Remove
-[vmt_Tree + 56] = v50
-v51 = @Tree_RemoveRight
-[vmt_Tree + 60] = v51
-v52 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v52
-v53 = @Tree_Search
-[vmt_Tree + 68] = v53
-v54 = @Tree_Print
-[vmt_Tree + 72] = v54
-v55 = @Tree_RecPrint
-[vmt_Tree + 76] = v55
+func BBS_Start(this param0)
+v24 = 16
+vmt_BBS = alloc(v24)
+v25 = @BBS_Start
+[vmt_BBS + 0] = v25
+v26 = @BBS_Sort
+[vmt_BBS + 4] = v26
+v27 = @BBS_Print
+[vmt_BBS + 8] = v27
+v28 = @BBS_Init
+[vmt_BBS + 12] = v28
+v29 = 0
+vmt_BubbleSort = alloc(v29)
+v30 = 0
+v30 = 0
+v33 = [this + 0]
+v31 = [v33 + 12]
+v32 = call v31(this param0)
+v30 = v32
+v36 = [this + 0]
+v34 = [v36 + 8]
+v35 = call v34(this)
+v30 = v35
+v37 = 99999
+print(v37)
+v40 = [this + 0]
+v38 = [v40 + 4]
+v39 = call v38(this)
+v30 = v39
+v43 = [this + 0]
+v41 = [v43 + 8]
+v42 = call v41(this)
+v30 = v42
+v44 = 0
+      return v44
+
+func BBS_Sort(this)
+v45 = 16
+vmt_BBS = alloc(v45)
+v46 = @BBS_Start
+[vmt_BBS + 0] = v46
+v47 = @BBS_Sort
+[vmt_BBS + 4] = v47
+v48 = @BBS_Print
+[vmt_BBS + 8] = v48
+v49 = @BBS_Init
+[vmt_BBS + 12] = v49
+v50 = 0
+vmt_BubbleSort = alloc(v50)
+v51 = 0
+v52 = 0
+v53 = 0
+v54 = 0
+v55 = 0
 v56 = 0
 v57 = 0
 v58 = 0
+v59 = 0
+v51 = 0
+v52 = 0
+v53 = 0
+v54 = 0
+v55 = 0
 v56 = 0
 v57 = 0
 v58 = 0
-v60 = 28
-v59 = alloc(v60)
-v61 = 0
-[v59 + 4] = v61
+v59 = 0
+v60 = 1
 v62 = 0
-[v59 + 8] = v62
+v62 = [this + 8]
+v61 = v62 - v60
+v52 = v61
 v63 = 0
-[v59 + 12] = v63
-v64 = 0
-[v59 + 16] = v64
-v65 = 0
-[v59 + 20] = v65
-v66 = 0
-[v59 + 24] = v66
-[v59 + 0] = vmt_Tree
-v56 = v59
-v67 = 16
-v70 = [v56 + 0]
-v68 = [v70 + 0]
-v71 = 16
-v69 = call v68(v56 v71)
-v57 = v69
-v74 = [v56 + 0]
-v72 = [v74 + 72]
-v73 = call v72(v56)
-v57 = v73
-v75 = 100000000
-print(v75)
-v76 = 8
-v79 = [v56 + 0]
-v77 = [v79 + 48]
-v80 = 8
-v78 = call v77(v56 v80)
-v57 = v78
-v83 = [v56 + 0]
-v81 = [v83 + 72]
-v82 = call v81(v56)
-v57 = v82
-v84 = 0
-      return v84
-
-func Tree_Init(this param0)
-v97 = 4
-vmt_BT = alloc(v97)
-v98 = @BT_Start
-[vmt_BT + 0] = v98
-v99 = 0
-vmt_BinaryTree = alloc(v99)
-v100 = 80
-vmt_Tree = alloc(v100)
-v101 = @Tree_Init
-[vmt_Tree + 0] = v101
-v102 = @Tree_SetRight
-[vmt_Tree + 4] = v102
-v103 = @Tree_SetLeft
-[vmt_Tree + 8] = v103
-v104 = @Tree_GetRight
-[vmt_Tree + 12] = v104
-v105 = @Tree_GetLeft
-[vmt_Tree + 16] = v105
-v106 = @Tree_GetKey
-[vmt_Tree + 20] = v106
-v107 = @Tree_SetKey
-[vmt_Tree + 24] = v107
-v108 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v108
-v109 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v109
-v110 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v110
-v111 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v111
-v112 = @Tree_Compare
-[vmt_Tree + 44] = v112
-v113 = @Tree_Insert
-[vmt_Tree + 48] = v113
-v114 = @Tree_Delete
-[vmt_Tree + 52] = v114
-v115 = @Tree_Remove
-[vmt_Tree + 56] = v115
-v116 = @Tree_RemoveRight
-[vmt_Tree + 60] = v116
-v117 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v117
-v118 = @Tree_Search
-[vmt_Tree + 68] = v118
-v119 = @Tree_Print
-[vmt_Tree + 72] = v119
-v120 = @Tree_RecPrint
-[vmt_Tree + 76] = v120
-[this + 12] = param0
-v121 = 0
-[this + 16] = v121
-v122 = 0
-[this + 20] = v122
-v123 = 1
-      return v123
-
-func Tree_SetRight(this param1)
-v124 = 4
-vmt_BT = alloc(v124)
-v125 = @BT_Start
-[vmt_BT + 0] = v125
-v126 = 0
-vmt_BinaryTree = alloc(v126)
-v127 = 80
-vmt_Tree = alloc(v127)
-v128 = @Tree_Init
-[vmt_Tree + 0] = v128
-v129 = @Tree_SetRight
-[vmt_Tree + 4] = v129
-v130 = @Tree_SetLeft
-[vmt_Tree + 8] = v130
-v131 = @Tree_GetRight
-[vmt_Tree + 12] = v131
-v132 = @Tree_GetLeft
-[vmt_Tree + 16] = v132
-v133 = @Tree_GetKey
-[vmt_Tree + 20] = v133
-v134 = @Tree_SetKey
-[vmt_Tree + 24] = v134
-v135 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v135
-v136 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v136
-v137 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v137
-v138 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v138
-v139 = @Tree_Compare
-[vmt_Tree + 44] = v139
-v140 = @Tree_Insert
-[vmt_Tree + 48] = v140
-v141 = @Tree_Delete
-[vmt_Tree + 52] = v141
-v142 = @Tree_Remove
-[vmt_Tree + 56] = v142
-v143 = @Tree_RemoveRight
-[vmt_Tree + 60] = v143
-v144 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v144
-v145 = @Tree_Search
-[vmt_Tree + 68] = v145
-v146 = @Tree_Print
-[vmt_Tree + 72] = v146
-v147 = @Tree_RecPrint
-[vmt_Tree + 76] = v147
-[this + 8] = param1
-v148 = 1
-      return v148
-
-func Tree_SetLeft(this param2)
-v149 = 4
-vmt_BT = alloc(v149)
-v150 = @BT_Start
-[vmt_BT + 0] = v150
-v151 = 0
-vmt_BinaryTree = alloc(v151)
-v152 = 80
-vmt_Tree = alloc(v152)
-v153 = @Tree_Init
-[vmt_Tree + 0] = v153
-v154 = @Tree_SetRight
-[vmt_Tree + 4] = v154
-v155 = @Tree_SetLeft
-[vmt_Tree + 8] = v155
-v156 = @Tree_GetRight
-[vmt_Tree + 12] = v156
-v157 = @Tree_GetLeft
-[vmt_Tree + 16] = v157
-v158 = @Tree_GetKey
-[vmt_Tree + 20] = v158
-v159 = @Tree_SetKey
-[vmt_Tree + 24] = v159
-v160 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v160
-v161 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v161
-v162 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v162
-v163 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v163
-v164 = @Tree_Compare
-[vmt_Tree + 44] = v164
-v165 = @Tree_Insert
-[vmt_Tree + 48] = v165
-v166 = @Tree_Delete
-[vmt_Tree + 52] = v166
-v167 = @Tree_Remove
-[vmt_Tree + 56] = v167
-v168 = @Tree_RemoveRight
-[vmt_Tree + 60] = v168
-v169 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v169
-v170 = @Tree_Search
-[vmt_Tree + 68] = v170
-v171 = @Tree_Print
-[vmt_Tree + 72] = v171
-v172 = @Tree_RecPrint
-[vmt_Tree + 76] = v172
-[this + 4] = param2
-v173 = 1
-      return v173
-
-func Tree_GetRight(this)
-v174 = 4
-vmt_BT = alloc(v174)
-v175 = @BT_Start
-[vmt_BT + 0] = v175
-v176 = 0
-vmt_BinaryTree = alloc(v176)
-v177 = 80
-vmt_Tree = alloc(v177)
-v178 = @Tree_Init
-[vmt_Tree + 0] = v178
-v179 = @Tree_SetRight
-[vmt_Tree + 4] = v179
-v180 = @Tree_SetLeft
-[vmt_Tree + 8] = v180
-v181 = @Tree_GetRight
-[vmt_Tree + 12] = v181
-v182 = @Tree_GetLeft
-[vmt_Tree + 16] = v182
-v183 = @Tree_GetKey
-[vmt_Tree + 20] = v183
-v184 = @Tree_SetKey
-[vmt_Tree + 24] = v184
-v185 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v185
-v186 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v186
-v187 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v187
-v188 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v188
-v189 = @Tree_Compare
-[vmt_Tree + 44] = v189
-v190 = @Tree_Insert
-[vmt_Tree + 48] = v190
-v191 = @Tree_Delete
-[vmt_Tree + 52] = v191
-v192 = @Tree_Remove
-[vmt_Tree + 56] = v192
-v193 = @Tree_RemoveRight
-[vmt_Tree + 60] = v193
-v194 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v194
-v195 = @Tree_Search
-[vmt_Tree + 68] = v195
-v196 = @Tree_Print
-[vmt_Tree + 72] = v196
-v197 = @Tree_RecPrint
-[vmt_Tree + 76] = v197
-v198 = 0
-v198 = [this + 8]
-      return v198
-
-func Tree_GetLeft(this)
-v199 = 4
-vmt_BT = alloc(v199)
-v200 = @BT_Start
-[vmt_BT + 0] = v200
-v201 = 0
-vmt_BinaryTree = alloc(v201)
-v202 = 80
-vmt_Tree = alloc(v202)
-v203 = @Tree_Init
-[vmt_Tree + 0] = v203
-v204 = @Tree_SetRight
-[vmt_Tree + 4] = v204
-v205 = @Tree_SetLeft
-[vmt_Tree + 8] = v205
-v206 = @Tree_GetRight
-[vmt_Tree + 12] = v206
-v207 = @Tree_GetLeft
-[vmt_Tree + 16] = v207
-v208 = @Tree_GetKey
-[vmt_Tree + 20] = v208
-v209 = @Tree_SetKey
-[vmt_Tree + 24] = v209
-v210 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v210
-v211 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v211
-v212 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v212
-v213 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v213
-v214 = @Tree_Compare
-[vmt_Tree + 44] = v214
-v215 = @Tree_Insert
-[vmt_Tree + 48] = v215
-v216 = @Tree_Delete
-[vmt_Tree + 52] = v216
-v217 = @Tree_Remove
-[vmt_Tree + 56] = v217
-v218 = @Tree_RemoveRight
-[vmt_Tree + 60] = v218
-v219 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v219
-v220 = @Tree_Search
-[vmt_Tree + 68] = v220
-v221 = @Tree_Print
-[vmt_Tree + 72] = v221
-v222 = @Tree_RecPrint
-[vmt_Tree + 76] = v222
-v223 = 0
-v223 = [this + 4]
-      return v223
-
-func Tree_GetKey(this)
-v224 = 4
-vmt_BT = alloc(v224)
-v225 = @BT_Start
-[vmt_BT + 0] = v225
-v226 = 0
-vmt_BinaryTree = alloc(v226)
-v227 = 80
-vmt_Tree = alloc(v227)
-v228 = @Tree_Init
-[vmt_Tree + 0] = v228
-v229 = @Tree_SetRight
-[vmt_Tree + 4] = v229
-v230 = @Tree_SetLeft
-[vmt_Tree + 8] = v230
-v231 = @Tree_GetRight
-[vmt_Tree + 12] = v231
-v232 = @Tree_GetLeft
-[vmt_Tree + 16] = v232
-v233 = @Tree_GetKey
-[vmt_Tree + 20] = v233
-v234 = @Tree_SetKey
-[vmt_Tree + 24] = v234
-v235 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v235
-v236 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v236
-v237 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v237
-v238 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v238
-v239 = @Tree_Compare
-[vmt_Tree + 44] = v239
-v240 = @Tree_Insert
-[vmt_Tree + 48] = v240
-v241 = @Tree_Delete
-[vmt_Tree + 52] = v241
-v242 = @Tree_Remove
-[vmt_Tree + 56] = v242
-v243 = @Tree_RemoveRight
-[vmt_Tree + 60] = v243
-v244 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v244
-v245 = @Tree_Search
-[vmt_Tree + 68] = v245
-v246 = @Tree_Print
-[vmt_Tree + 72] = v246
-v247 = @Tree_RecPrint
-[vmt_Tree + 76] = v247
-v248 = 0
-v248 = [this + 12]
-      return v248
-
-func Tree_SetKey(this param3)
-v249 = 4
-vmt_BT = alloc(v249)
-v250 = @BT_Start
-[vmt_BT + 0] = v250
-v251 = 0
-vmt_BinaryTree = alloc(v251)
-v252 = 80
-vmt_Tree = alloc(v252)
-v253 = @Tree_Init
-[vmt_Tree + 0] = v253
-v254 = @Tree_SetRight
-[vmt_Tree + 4] = v254
-v255 = @Tree_SetLeft
-[vmt_Tree + 8] = v255
-v256 = @Tree_GetRight
-[vmt_Tree + 12] = v256
-v257 = @Tree_GetLeft
-[vmt_Tree + 16] = v257
-v258 = @Tree_GetKey
-[vmt_Tree + 20] = v258
-v259 = @Tree_SetKey
-[vmt_Tree + 24] = v259
-v260 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v260
-v261 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v261
-v262 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v262
-v263 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v263
-v264 = @Tree_Compare
-[vmt_Tree + 44] = v264
-v265 = @Tree_Insert
-[vmt_Tree + 48] = v265
-v266 = @Tree_Delete
-[vmt_Tree + 52] = v266
-v267 = @Tree_Remove
-[vmt_Tree + 56] = v267
-v268 = @Tree_RemoveRight
-[vmt_Tree + 60] = v268
-v269 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v269
-v270 = @Tree_Search
-[vmt_Tree + 68] = v270
-v271 = @Tree_Print
-[vmt_Tree + 72] = v271
-v272 = @Tree_RecPrint
-[vmt_Tree + 76] = v272
-[this + 12] = param3
-v273 = 1
-      return v273
-
-func Tree_GetHas_Right(this)
-v274 = 4
-vmt_BT = alloc(v274)
-v275 = @BT_Start
-[vmt_BT + 0] = v275
-v276 = 0
-vmt_BinaryTree = alloc(v276)
-v277 = 80
-vmt_Tree = alloc(v277)
-v278 = @Tree_Init
-[vmt_Tree + 0] = v278
-v279 = @Tree_SetRight
-[vmt_Tree + 4] = v279
-v280 = @Tree_SetLeft
-[vmt_Tree + 8] = v280
-v281 = @Tree_GetRight
-[vmt_Tree + 12] = v281
-v282 = @Tree_GetLeft
-[vmt_Tree + 16] = v282
-v283 = @Tree_GetKey
-[vmt_Tree + 20] = v283
-v284 = @Tree_SetKey
-[vmt_Tree + 24] = v284
-v285 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v285
-v286 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v286
-v287 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v287
-v288 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v288
-v289 = @Tree_Compare
-[vmt_Tree + 44] = v289
-v290 = @Tree_Insert
-[vmt_Tree + 48] = v290
-v291 = @Tree_Delete
-[vmt_Tree + 52] = v291
-v292 = @Tree_Remove
-[vmt_Tree + 56] = v292
-v293 = @Tree_RemoveRight
-[vmt_Tree + 60] = v293
-v294 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v294
-v295 = @Tree_Search
-[vmt_Tree + 68] = v295
-v296 = @Tree_Print
-[vmt_Tree + 72] = v296
-v297 = @Tree_RecPrint
-[vmt_Tree + 76] = v297
-v298 = 0
-v298 = [this + 20]
-      return v298
-
-func Tree_GetHas_Left(this)
-v299 = 4
-vmt_BT = alloc(v299)
-v300 = @BT_Start
-[vmt_BT + 0] = v300
-v301 = 0
-vmt_BinaryTree = alloc(v301)
-v302 = 80
-vmt_Tree = alloc(v302)
-v303 = @Tree_Init
-[vmt_Tree + 0] = v303
-v304 = @Tree_SetRight
-[vmt_Tree + 4] = v304
-v305 = @Tree_SetLeft
-[vmt_Tree + 8] = v305
-v306 = @Tree_GetRight
-[vmt_Tree + 12] = v306
-v307 = @Tree_GetLeft
-[vmt_Tree + 16] = v307
-v308 = @Tree_GetKey
-[vmt_Tree + 20] = v308
-v309 = @Tree_SetKey
-[vmt_Tree + 24] = v309
-v310 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v310
-v311 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v311
-v312 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v312
-v313 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v313
-v314 = @Tree_Compare
-[vmt_Tree + 44] = v314
-v315 = @Tree_Insert
-[vmt_Tree + 48] = v315
-v316 = @Tree_Delete
-[vmt_Tree + 52] = v316
-v317 = @Tree_Remove
-[vmt_Tree + 56] = v317
-v318 = @Tree_RemoveRight
-[vmt_Tree + 60] = v318
-v319 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v319
-v320 = @Tree_Search
-[vmt_Tree + 68] = v320
-v321 = @Tree_Print
-[vmt_Tree + 72] = v321
-v322 = @Tree_RecPrint
-[vmt_Tree + 76] = v322
-v323 = 0
-v323 = [this + 16]
-      return v323
-
-func Tree_SetHas_Left(this param4)
-v324 = 4
-vmt_BT = alloc(v324)
-v325 = @BT_Start
-[vmt_BT + 0] = v325
-v326 = 0
-vmt_BinaryTree = alloc(v326)
-v327 = 80
-vmt_Tree = alloc(v327)
-v328 = @Tree_Init
-[vmt_Tree + 0] = v328
-v329 = @Tree_SetRight
-[vmt_Tree + 4] = v329
-v330 = @Tree_SetLeft
-[vmt_Tree + 8] = v330
-v331 = @Tree_GetRight
-[vmt_Tree + 12] = v331
-v332 = @Tree_GetLeft
-[vmt_Tree + 16] = v332
-v333 = @Tree_GetKey
-[vmt_Tree + 20] = v333
-v334 = @Tree_SetKey
-[vmt_Tree + 24] = v334
-v335 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v335
-v336 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v336
-v337 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v337
-v338 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v338
-v339 = @Tree_Compare
-[vmt_Tree + 44] = v339
-v340 = @Tree_Insert
-[vmt_Tree + 48] = v340
-v341 = @Tree_Delete
-[vmt_Tree + 52] = v341
-v342 = @Tree_Remove
-[vmt_Tree + 56] = v342
-v343 = @Tree_RemoveRight
-[vmt_Tree + 60] = v343
-v344 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v344
-v345 = @Tree_Search
-[vmt_Tree + 68] = v345
-v346 = @Tree_Print
-[vmt_Tree + 72] = v346
-v347 = @Tree_RecPrint
-[vmt_Tree + 76] = v347
-[this + 16] = param4
-v348 = 1
-      return v348
-
-func Tree_SetHas_Right(this param5)
-v349 = 4
-vmt_BT = alloc(v349)
-v350 = @BT_Start
-[vmt_BT + 0] = v350
-v351 = 0
-vmt_BinaryTree = alloc(v351)
-v352 = 80
-vmt_Tree = alloc(v352)
-v353 = @Tree_Init
-[vmt_Tree + 0] = v353
-v354 = @Tree_SetRight
-[vmt_Tree + 4] = v354
-v355 = @Tree_SetLeft
-[vmt_Tree + 8] = v355
-v356 = @Tree_GetRight
-[vmt_Tree + 12] = v356
-v357 = @Tree_GetLeft
-[vmt_Tree + 16] = v357
-v358 = @Tree_GetKey
-[vmt_Tree + 20] = v358
-v359 = @Tree_SetKey
-[vmt_Tree + 24] = v359
-v360 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v360
-v361 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v361
-v362 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v362
-v363 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v363
-v364 = @Tree_Compare
-[vmt_Tree + 44] = v364
-v365 = @Tree_Insert
-[vmt_Tree + 48] = v365
-v366 = @Tree_Delete
-[vmt_Tree + 52] = v366
-v367 = @Tree_Remove
-[vmt_Tree + 56] = v367
-v368 = @Tree_RemoveRight
-[vmt_Tree + 60] = v368
-v369 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v369
-v370 = @Tree_Search
-[vmt_Tree + 68] = v370
-v371 = @Tree_Print
-[vmt_Tree + 72] = v371
-v372 = @Tree_RecPrint
-[vmt_Tree + 76] = v372
-[this + 20] = param5
-v373 = 1
-      return v373
-
-func Tree_Compare(this param6 param7)
-v374 = 4
-vmt_BT = alloc(v374)
-v375 = @BT_Start
-[vmt_BT + 0] = v375
-v376 = 0
-vmt_BinaryTree = alloc(v376)
-v377 = 80
-vmt_Tree = alloc(v377)
-v378 = @Tree_Init
-[vmt_Tree + 0] = v378
-v379 = @Tree_SetRight
-[vmt_Tree + 4] = v379
-v380 = @Tree_SetLeft
-[vmt_Tree + 8] = v380
-v381 = @Tree_GetRight
-[vmt_Tree + 12] = v381
-v382 = @Tree_GetLeft
-[vmt_Tree + 16] = v382
-v383 = @Tree_GetKey
-[vmt_Tree + 20] = v383
-v384 = @Tree_SetKey
-[vmt_Tree + 24] = v384
-v385 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v385
-v386 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v386
-v387 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v387
-v388 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v388
-v389 = @Tree_Compare
-[vmt_Tree + 44] = v389
-v390 = @Tree_Insert
-[vmt_Tree + 48] = v390
-v391 = @Tree_Delete
-[vmt_Tree + 52] = v391
-v392 = @Tree_Remove
-[vmt_Tree + 56] = v392
-v393 = @Tree_RemoveRight
-[vmt_Tree + 60] = v393
-v394 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v394
-v395 = @Tree_Search
-[vmt_Tree + 68] = v395
-v396 = @Tree_Print
-[vmt_Tree + 72] = v396
-v397 = @Tree_RecPrint
-[vmt_Tree + 76] = v397
-v398 = 0
-v399 = 0
-v398 = 0
-v399 = 0
-v400 = 0
-v398 = v400
-v401 = 1
-v402 = param7 + v401
-v399 = v402
-v403 = param6 < param7
-if0 v403 goto else_0
-v404 = 0
-v398 = v404
-goto end_0
-else_0:
-v405 = param6 < v399
-if0 v405 goto end_1
-v406 = 0
-goto end_3
-end_1:
-v406 = 1
-goto end_3
-end_3:
-if0 v406 goto else_1
-v407 = 0
-v398 = v407
-goto end_4
-else_1:
-v408 = 1
-v398 = v408
-end_4:
-end_0:
-      return v398
-
-func Tree_Insert(this param8)
-v409 = 4
-vmt_BT = alloc(v409)
-v410 = @BT_Start
-[vmt_BT + 0] = v410
-v411 = 0
-vmt_BinaryTree = alloc(v411)
-v412 = 80
-vmt_Tree = alloc(v412)
-v413 = @Tree_Init
-[vmt_Tree + 0] = v413
-v414 = @Tree_SetRight
-[vmt_Tree + 4] = v414
-v415 = @Tree_SetLeft
-[vmt_Tree + 8] = v415
-v416 = @Tree_GetRight
-[vmt_Tree + 12] = v416
-v417 = @Tree_GetLeft
-[vmt_Tree + 16] = v417
-v418 = @Tree_GetKey
-[vmt_Tree + 20] = v418
-v419 = @Tree_SetKey
-[vmt_Tree + 24] = v419
-v420 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v420
-v421 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v421
-v422 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v422
-v423 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v423
-v424 = @Tree_Compare
-[vmt_Tree + 44] = v424
-v425 = @Tree_Insert
-[vmt_Tree + 48] = v425
-v426 = @Tree_Delete
-[vmt_Tree + 52] = v426
-v427 = @Tree_Remove
-[vmt_Tree + 56] = v427
-v428 = @Tree_RemoveRight
-[vmt_Tree + 60] = v428
-v429 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v429
-v430 = @Tree_Search
-[vmt_Tree + 68] = v430
-v431 = @Tree_Print
-[vmt_Tree + 72] = v431
-v432 = @Tree_RecPrint
-[vmt_Tree + 76] = v432
-v433 = 0
-v434 = 0
-v435 = 0
-v436 = 0
-v437 = 0
-v433 = 0
-v434 = 0
-v435 = 0
-v436 = 0
-v437 = 0
-v439 = 28
-v438 = alloc(v439)
-v440 = 0
-[v438 + 4] = v440
-v441 = 0
-[v438 + 8] = v441
-v442 = 0
-[v438 + 12] = v442
-v443 = 0
-[v438 + 16] = v443
-v444 = 0
-[v438 + 20] = v444
-v445 = 0
-[v438 + 24] = v445
-[v438 + 0] = vmt_Tree
-v433 = v438
-v448 = [v433 + 0]
-v446 = [v448 + 0]
-v447 = call v446(v433 param8)
-v434 = v447
-v437 = this
-v449 = 1
-v435 = v449
+v64 = 1
+v65 = v63 - v64
+v53 = v65
 loop_0:
-if0 v435 goto end_5
-v452 = [v437 + 0]
-v450 = [v452 + 20]
-v451 = call v450(v437)
-v436 = v451
-v453 = param8 < v436
-if0 v453 goto else_2
-v456 = [v437 + 0]
-v454 = [v456 + 32]
-v455 = call v454(v437)
-if0 v455 goto else_3
-v459 = [v437 + 0]
-v457 = [v459 + 16]
-v458 = call v457(v437)
-v437 = v458
-goto end_7
-else_3:
-v460 = 0
-v435 = v460
-v461 = 1
-v464 = [v437 + 0]
-v462 = [v464 + 36]
-v465 = 1
-v463 = call v462(v437 v465)
-v434 = v463
-v468 = [v437 + 0]
-v466 = [v468 + 8]
-v467 = call v466(v437 v433)
-v434 = v467
-end_7:
-goto end_6
-else_2:
-v471 = [v437 + 0]
-v469 = [v471 + 28]
-v470 = call v469(v437)
-if0 v470 goto else_4
-v474 = [v437 + 0]
-v472 = [v474 + 12]
-v473 = call v472(v437)
-v437 = v473
-goto end_8
-else_4:
-v475 = 0
-v435 = v475
-v476 = 1
-v479 = [v437 + 0]
-v477 = [v479 + 40]
-v480 = 1
-v478 = call v477(v437 v480)
-v434 = v478
-v483 = [v437 + 0]
-v481 = [v483 + 4]
-v482 = call v481(v437 v433)
-v434 = v482
-end_8:
-end_6:
-goto loop_0
-end_5:
-v484 = 1
-      return v484
-
-func Tree_Delete(this param9)
-v485 = 4
-vmt_BT = alloc(v485)
-v486 = @BT_Start
-[vmt_BT + 0] = v486
-v487 = 0
-vmt_BinaryTree = alloc(v487)
-v488 = 80
-vmt_Tree = alloc(v488)
-v489 = @Tree_Init
-[vmt_Tree + 0] = v489
-v490 = @Tree_SetRight
-[vmt_Tree + 4] = v490
-v491 = @Tree_SetLeft
-[vmt_Tree + 8] = v491
-v492 = @Tree_GetRight
-[vmt_Tree + 12] = v492
-v493 = @Tree_GetLeft
-[vmt_Tree + 16] = v493
-v494 = @Tree_GetKey
-[vmt_Tree + 20] = v494
-v495 = @Tree_SetKey
-[vmt_Tree + 24] = v495
-v496 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v496
-v497 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v497
-v498 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v498
-v499 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v499
-v500 = @Tree_Compare
-[vmt_Tree + 44] = v500
-v501 = @Tree_Insert
-[vmt_Tree + 48] = v501
-v502 = @Tree_Delete
-[vmt_Tree + 52] = v502
-v503 = @Tree_Remove
-[vmt_Tree + 56] = v503
-v504 = @Tree_RemoveRight
-[vmt_Tree + 60] = v504
-v505 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v505
-v506 = @Tree_Search
-[vmt_Tree + 68] = v506
-v507 = @Tree_Print
-[vmt_Tree + 72] = v507
-v508 = @Tree_RecPrint
-[vmt_Tree + 76] = v508
-v509 = 0
-v510 = 0
-v511 = 0
-v512 = 0
-v513 = 0
-v514 = 0
-v515 = 0
-v509 = 0
-v510 = 0
-v511 = 0
-v512 = 0
-v513 = 0
-v514 = 0
-v515 = 0
-v509 = this
-v510 = this
-v516 = 1
-v511 = v516
-v517 = 0
-v512 = v517
-v518 = 1
-v513 = v518
+v66 = v53 < v52
+if0 v66 goto end_0
+v67 = 1
+v58 = v67
 loop_1:
-if0 v511 goto end_9
-v521 = [v509 + 0]
-v519 = [v521 + 20]
-v520 = call v519(v509)
-v514 = v520
-v522 = param9 < v514
-if0 v522 goto else_5
-v525 = [v509 + 0]
-v523 = [v525 + 32]
-v524 = call v523(v509)
-if0 v524 goto else_6
-v510 = v509
-v528 = [v509 + 0]
-v526 = [v528 + 16]
-v527 = call v526(v509)
-v509 = v527
-goto end_11
-else_6:
-v529 = 0
-v511 = v529
+v68 = 1
+v69 = v52 + v68
+v70 = v58 < v69
+if0 v70 goto end_1
+v71 = 1
+v72 = v58 - v71
+v57 = v72
+v73 = 0
+v73 = [this + 4]
+v74 = [v73 + 0]
+v75 = v57
+v79 = 1
+v75 = v75 + v79
+v76 = v75
+v80 = 4
+v76 = v76 * v80
+v77 = v73
+v77 = v77 + v76
+v78 = [v77 + 0]
+end_4:
+v54 = v78
+v81 = 0
+v81 = [this + 4]
+v82 = [v81 + 0]
+v83 = v58
+v87 = 1
+v83 = v83 + v87
+v84 = v83
+v88 = 4
+v84 = v84 * v88
+v85 = v81
+v85 = v85 + v84
+v86 = [v85 + 0]
+end_7:
+v55 = v86
+v89 = v55 < v54
+if0 v89 goto else_0
+v90 = 1
+v91 = v58 - v90
+v56 = v91
+v92 = 0
+v92 = [this + 4]
+v93 = [v92 + 0]
+v94 = v56
+v98 = 1
+v94 = v94 + v98
+v95 = v94
+v99 = 4
+v95 = v95 * v99
+v96 = v92
+v96 = v96 + v95
+v97 = [v96 + 0]
 end_11:
-goto end_10
-else_5:
-v530 = v514 < param9
-if0 v530 goto else_7
-v533 = [v509 + 0]
-v531 = [v533 + 28]
-v532 = call v531(v509)
-if0 v532 goto else_8
-v510 = v509
-v536 = [v509 + 0]
-v534 = [v536 + 12]
-v535 = call v534(v509)
-v509 = v535
-goto end_13
-else_8:
-v537 = 0
-v511 = v537
-end_13:
-goto end_12
-else_7:
-if0 v513 goto else_9
-v540 = [v509 + 0]
-v538 = [v540 + 28]
-v539 = call v538(v509)
-if0 v539 goto end_15
-v541 = 0
-goto end_17
-end_15:
-v541 = 1
-goto end_17
-end_17:
-if0 v541 goto end_18
-v545 = [v509 + 0]
-v543 = [v545 + 32]
-v544 = call v543(v509)
-if0 v544 goto end_21
-v546 = 0
-goto end_23
-end_21:
-v546 = 1
-goto end_23
-end_23:
-if0 v546 goto end_18
-goto end_19
-end_18:
-v542 = 0
-goto end_20
-end_19:
-v542 = 1
-end_20:
-if0 v542 goto else_10
-v547 = 1
-v515 = v547
-goto end_24
-else_10:
-v550 = [this + 0]
-v548 = [v550 + 56]
-v549 = call v548(this v510 v509)
-v515 = v549
-end_24:
-goto end_14
-else_9:
-v553 = [this + 0]
-v551 = [v553 + 56]
-v552 = call v551(this v510 v509)
-v515 = v552
+v59 = v97
+v100 = 0
+v100 = [this + 4]
+v101 = [v100 + 0]
+v102 = v58
+v106 = 1
+v102 = v102 + v106
+v103 = v102
+v107 = 4
+v103 = v103 * v107
+v104 = v100
+v104 = v104 + v103
+v105 = [v104 + 0]
 end_14:
-v554 = 1
-v512 = v554
-v555 = 0
-v511 = v555
-end_12:
-end_10:
-v556 = 0
-v513 = v556
+v108 = 0
+v108 = [this + 4]
+v109 = v56
+v112 = 1
+v109 = v109 + v112
+v110 = v109
+v113 = 4
+v110 = v110 * v113
+v111 = v108
+v111 = v111 + v110
+[v111 + 0] = v105
+v114 = 0
+v114 = [this + 4]
+v115 = v58
+v118 = 1
+v115 = v115 + v118
+v116 = v115
+v119 = 4
+v116 = v116 * v119
+v117 = v114
+v117 = v117 + v116
+[v117 + 0] = v59
+goto end_8
+else_0:
+v120 = 0
+v51 = v120
+end_8:
+v121 = 1
+v122 = v58 + v121
+v58 = v122
 goto loop_1
-end_9:
-      return v512
+end_1:
+v123 = 1
+v124 = v52 - v123
+v52 = v124
+goto loop_0
+end_0:
+v125 = 0
+      return v125
 
-func Tree_Remove(this param10 param11)
-v557 = 4
-vmt_BT = alloc(v557)
-v558 = @BT_Start
-[vmt_BT + 0] = v558
-v559 = 0
-vmt_BinaryTree = alloc(v559)
-v560 = 80
-vmt_Tree = alloc(v560)
-v561 = @Tree_Init
-[vmt_Tree + 0] = v561
-v562 = @Tree_SetRight
-[vmt_Tree + 4] = v562
-v563 = @Tree_SetLeft
-[vmt_Tree + 8] = v563
-v564 = @Tree_GetRight
-[vmt_Tree + 12] = v564
-v565 = @Tree_GetLeft
-[vmt_Tree + 16] = v565
-v566 = @Tree_GetKey
-[vmt_Tree + 20] = v566
-v567 = @Tree_SetKey
-[vmt_Tree + 24] = v567
-v568 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v568
-v569 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v569
-v570 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v570
-v571 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v571
-v572 = @Tree_Compare
-[vmt_Tree + 44] = v572
-v573 = @Tree_Insert
-[vmt_Tree + 48] = v573
-v574 = @Tree_Delete
-[vmt_Tree + 52] = v574
-v575 = @Tree_Remove
-[vmt_Tree + 56] = v575
-v576 = @Tree_RemoveRight
-[vmt_Tree + 60] = v576
-v577 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v577
-v578 = @Tree_Search
-[vmt_Tree + 68] = v578
-v579 = @Tree_Print
-[vmt_Tree + 72] = v579
-v580 = @Tree_RecPrint
-[vmt_Tree + 76] = v580
-v581 = 0
-v582 = 0
-v583 = 0
-v581 = 0
-v582 = 0
-v583 = 0
-v586 = [param11 + 0]
-v584 = [v586 + 32]
-v585 = call v584(param11)
-if0 v585 goto else_11
-v589 = [this + 0]
-v587 = [v589 + 64]
-v588 = call v587(this param10 param11)
-v581 = v588
-goto end_25
-else_11:
-v592 = [param11 + 0]
-v590 = [v592 + 28]
-v591 = call v590(param11)
-if0 v591 goto else_12
-v595 = [this + 0]
-v593 = [v595 + 60]
-v594 = call v593(this param10 param11)
-v581 = v594
-goto end_26
-else_12:
-v598 = [param11 + 0]
-v596 = [v598 + 20]
-v597 = call v596(param11)
-v582 = v597
-v601 = [param10 + 0]
-v599 = [v601 + 16]
-v600 = call v599(param10)
-v607 = [param10 + 0]
-v605 = [v607 + 16]
-v606 = call v605(param10)
-v604 = [v600 + 0]
-v602 = [v604 + 20]
-v603 = call v602(v600)
-v583 = v603
-v610 = [this + 0]
-v608 = [v610 + 44]
-v609 = call v608(this v582 v583)
-if0 v609 goto else_13
-v611 = 0
-v611 = [this + 24]
-v614 = [param10 + 0]
-v612 = [v614 + 8]
-v615 = 0
-v615 = [this + 24]
-v613 = call v612(param10 v615)
-v581 = v613
-v616 = 0
-v619 = [param10 + 0]
-v617 = [v619 + 36]
-v620 = 0
-v618 = call v617(param10 v620)
-v581 = v618
-goto end_27
-else_13:
-v621 = 0
-v621 = [this + 24]
-v624 = [param10 + 0]
-v622 = [v624 + 4]
-v625 = 0
-v625 = [this + 24]
-v623 = call v622(param10 v625)
-v581 = v623
-v626 = 0
-v629 = [param10 + 0]
-v627 = [v629 + 40]
-v630 = 0
-v628 = call v627(param10 v630)
-v581 = v628
-end_27:
-end_26:
-end_25:
-v631 = 1
-      return v631
-
-func Tree_RemoveRight(this param12 param13)
-v632 = 4
-vmt_BT = alloc(v632)
-v633 = @BT_Start
-[vmt_BT + 0] = v633
-v634 = 0
-vmt_BinaryTree = alloc(v634)
-v635 = 80
-vmt_Tree = alloc(v635)
-v636 = @Tree_Init
-[vmt_Tree + 0] = v636
-v637 = @Tree_SetRight
-[vmt_Tree + 4] = v637
-v638 = @Tree_SetLeft
-[vmt_Tree + 8] = v638
-v639 = @Tree_GetRight
-[vmt_Tree + 12] = v639
-v640 = @Tree_GetLeft
-[vmt_Tree + 16] = v640
-v641 = @Tree_GetKey
-[vmt_Tree + 20] = v641
-v642 = @Tree_SetKey
-[vmt_Tree + 24] = v642
-v643 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v643
-v644 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v644
-v645 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v645
-v646 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v646
-v647 = @Tree_Compare
-[vmt_Tree + 44] = v647
-v648 = @Tree_Insert
-[vmt_Tree + 48] = v648
-v649 = @Tree_Delete
-[vmt_Tree + 52] = v649
-v650 = @Tree_Remove
-[vmt_Tree + 56] = v650
-v651 = @Tree_RemoveRight
-[vmt_Tree + 60] = v651
-v652 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v652
-v653 = @Tree_Search
-[vmt_Tree + 68] = v653
-v654 = @Tree_Print
-[vmt_Tree + 72] = v654
-v655 = @Tree_RecPrint
-[vmt_Tree + 76] = v655
-v656 = 0
-v656 = 0
+func BBS_Print(this)
+v126 = 16
+vmt_BBS = alloc(v126)
+v127 = @BBS_Start
+[vmt_BBS + 0] = v127
+v128 = @BBS_Sort
+[vmt_BBS + 4] = v128
+v129 = @BBS_Print
+[vmt_BBS + 8] = v129
+v130 = @BBS_Init
+[vmt_BBS + 12] = v130
+v131 = 0
+vmt_BubbleSort = alloc(v131)
+v132 = 0
+v132 = 0
+v133 = 0
+v132 = v133
 loop_2:
-v659 = [param13 + 0]
-v657 = [v659 + 28]
-v658 = call v657(param13)
-if0 v658 goto end_28
-v662 = [param13 + 0]
-v660 = [v662 + 12]
-v661 = call v660(param13)
-v668 = [param13 + 0]
-v666 = [v668 + 12]
-v667 = call v666(param13)
-v665 = [v661 + 0]
-v663 = [v665 + 20]
-v664 = call v663(v661)
-v671 = [param13 + 0]
-v669 = [v671 + 24]
-v674 = [param13 + 0]
-v672 = [v674 + 12]
-v673 = call v672(param13)
-v680 = [param13 + 0]
-v678 = [v680 + 12]
-v679 = call v678(param13)
-v677 = [v673 + 0]
-v675 = [v677 + 20]
-v676 = call v675(v673)
-v670 = call v669(param13 v676)
-v656 = v670
-param12 = param13
-v683 = [param13 + 0]
-v681 = [v683 + 12]
-v682 = call v681(param13)
-param13 = v682
+v134 = 0
+v134 = [this + 8]
+v135 = v132 < v134
+if0 v135 goto end_15
+v136 = 0
+v136 = [this + 4]
+v137 = [v136 + 0]
+v138 = v132
+v142 = 1
+v138 = v138 + v142
+v139 = v138
+v143 = 4
+v139 = v139 * v143
+v140 = v136
+v140 = v140 + v139
+v141 = [v140 + 0]
+end_18:
+print(v141)
+v144 = 1
+v145 = v132 + v144
+v132 = v145
 goto loop_2
-end_28:
-v684 = 0
-v684 = [this + 24]
-v687 = [param12 + 0]
-v685 = [v687 + 4]
-v688 = 0
-v688 = [this + 24]
-v686 = call v685(param12 v688)
-v656 = v686
-v689 = 0
-v692 = [param12 + 0]
-v690 = [v692 + 40]
-v693 = 0
-v691 = call v690(param12 v693)
-v656 = v691
-v694 = 1
-      return v694
+end_15:
+v146 = 0
+      return v146
 
-func Tree_RemoveLeft(this param14 param15)
-v695 = 4
-vmt_BT = alloc(v695)
-v696 = @BT_Start
-[vmt_BT + 0] = v696
-v697 = 0
-vmt_BinaryTree = alloc(v697)
-v698 = 80
-vmt_Tree = alloc(v698)
-v699 = @Tree_Init
-[vmt_Tree + 0] = v699
-v700 = @Tree_SetRight
-[vmt_Tree + 4] = v700
-v701 = @Tree_SetLeft
-[vmt_Tree + 8] = v701
-v702 = @Tree_GetRight
-[vmt_Tree + 12] = v702
-v703 = @Tree_GetLeft
-[vmt_Tree + 16] = v703
-v704 = @Tree_GetKey
-[vmt_Tree + 20] = v704
-v705 = @Tree_SetKey
-[vmt_Tree + 24] = v705
-v706 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v706
-v707 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v707
-v708 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v708
-v709 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v709
-v710 = @Tree_Compare
-[vmt_Tree + 44] = v710
-v711 = @Tree_Insert
-[vmt_Tree + 48] = v711
-v712 = @Tree_Delete
-[vmt_Tree + 52] = v712
-v713 = @Tree_Remove
-[vmt_Tree + 56] = v713
-v714 = @Tree_RemoveRight
-[vmt_Tree + 60] = v714
-v715 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v715
-v716 = @Tree_Search
-[vmt_Tree + 68] = v716
-v717 = @Tree_Print
-[vmt_Tree + 72] = v717
-v718 = @Tree_RecPrint
-[vmt_Tree + 76] = v718
-v719 = 0
-v719 = 0
-loop_3:
-v722 = [param15 + 0]
-v720 = [v722 + 32]
-v721 = call v720(param15)
-if0 v721 goto end_29
-v725 = [param15 + 0]
-v723 = [v725 + 16]
-v724 = call v723(param15)
-v731 = [param15 + 0]
-v729 = [v731 + 16]
-v730 = call v729(param15)
-v728 = [v724 + 0]
-v726 = [v728 + 20]
-v727 = call v726(v724)
-v734 = [param15 + 0]
-v732 = [v734 + 24]
-v737 = [param15 + 0]
-v735 = [v737 + 16]
-v736 = call v735(param15)
-v743 = [param15 + 0]
-v741 = [v743 + 16]
-v742 = call v741(param15)
-v740 = [v736 + 0]
-v738 = [v740 + 20]
-v739 = call v738(v736)
-v733 = call v732(param15 v739)
-v719 = v733
-param14 = param15
-v746 = [param15 + 0]
-v744 = [v746 + 16]
-v745 = call v744(param15)
-param15 = v745
-goto loop_3
-end_29:
-v747 = 0
-v747 = [this + 24]
-v750 = [param14 + 0]
-v748 = [v750 + 8]
-v751 = 0
-v751 = [this + 24]
-v749 = call v748(param14 v751)
-v719 = v749
-v752 = 0
-v755 = [param14 + 0]
-v753 = [v755 + 36]
-v756 = 0
-v754 = call v753(param14 v756)
-v719 = v754
-v757 = 1
-      return v757
-
-func Tree_Search(this param16)
-v758 = 4
-vmt_BT = alloc(v758)
-v759 = @BT_Start
-[vmt_BT + 0] = v759
-v760 = 0
-vmt_BinaryTree = alloc(v760)
-v761 = 80
-vmt_Tree = alloc(v761)
-v762 = @Tree_Init
-[vmt_Tree + 0] = v762
-v763 = @Tree_SetRight
-[vmt_Tree + 4] = v763
-v764 = @Tree_SetLeft
-[vmt_Tree + 8] = v764
-v765 = @Tree_GetRight
-[vmt_Tree + 12] = v765
-v766 = @Tree_GetLeft
-[vmt_Tree + 16] = v766
-v767 = @Tree_GetKey
-[vmt_Tree + 20] = v767
-v768 = @Tree_SetKey
-[vmt_Tree + 24] = v768
-v769 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v769
-v770 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v770
-v771 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v771
-v772 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v772
-v773 = @Tree_Compare
-[vmt_Tree + 44] = v773
-v774 = @Tree_Insert
-[vmt_Tree + 48] = v774
-v775 = @Tree_Delete
-[vmt_Tree + 52] = v775
-v776 = @Tree_Remove
-[vmt_Tree + 56] = v776
-v777 = @Tree_RemoveRight
-[vmt_Tree + 60] = v777
-v778 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v778
-v779 = @Tree_Search
-[vmt_Tree + 68] = v779
-v780 = @Tree_Print
-[vmt_Tree + 72] = v780
-v781 = @Tree_RecPrint
-[vmt_Tree + 76] = v781
-v782 = 0
-v783 = 0
-v784 = 0
-v785 = 0
-v782 = 0
-v783 = 0
-v784 = 0
-v785 = 0
-v784 = this
-v786 = 1
-v782 = v786
-v787 = 0
-v783 = v787
-loop_4:
-if0 v782 goto end_30
-v790 = [v784 + 0]
-v788 = [v790 + 20]
-v789 = call v788(v784)
-v785 = v789
-v791 = param16 < v785
-if0 v791 goto else_14
-v794 = [v784 + 0]
-v792 = [v794 + 32]
-v793 = call v792(v784)
-if0 v793 goto else_15
-v797 = [v784 + 0]
-v795 = [v797 + 16]
-v796 = call v795(v784)
-v784 = v796
-goto end_32
-else_15:
-v798 = 0
-v782 = v798
-end_32:
-goto end_31
-else_14:
-v799 = v785 < param16
-if0 v799 goto else_16
-v802 = [v784 + 0]
-v800 = [v802 + 28]
-v801 = call v800(v784)
-if0 v801 goto else_17
-v805 = [v784 + 0]
-v803 = [v805 + 12]
-v804 = call v803(v784)
-v784 = v804
-goto end_34
-else_17:
-v806 = 0
-v782 = v806
-end_34:
-goto end_33
-else_16:
-v807 = 1
-v783 = v807
-v808 = 0
-v782 = v808
-end_33:
-end_31:
-goto loop_4
-end_30:
-      return v783
-
-func Tree_Print(this)
-v809 = 4
-vmt_BT = alloc(v809)
-v810 = @BT_Start
-[vmt_BT + 0] = v810
-v811 = 0
-vmt_BinaryTree = alloc(v811)
-v812 = 80
-vmt_Tree = alloc(v812)
-v813 = @Tree_Init
-[vmt_Tree + 0] = v813
-v814 = @Tree_SetRight
-[vmt_Tree + 4] = v814
-v815 = @Tree_SetLeft
-[vmt_Tree + 8] = v815
-v816 = @Tree_GetRight
-[vmt_Tree + 12] = v816
-v817 = @Tree_GetLeft
-[vmt_Tree + 16] = v817
-v818 = @Tree_GetKey
-[vmt_Tree + 20] = v818
-v819 = @Tree_SetKey
-[vmt_Tree + 24] = v819
-v820 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v820
-v821 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v821
-v822 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v822
-v823 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v823
-v824 = @Tree_Compare
-[vmt_Tree + 44] = v824
-v825 = @Tree_Insert
-[vmt_Tree + 48] = v825
-v826 = @Tree_Delete
-[vmt_Tree + 52] = v826
-v827 = @Tree_Remove
-[vmt_Tree + 56] = v827
-v828 = @Tree_RemoveRight
-[vmt_Tree + 60] = v828
-v829 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v829
-v830 = @Tree_Search
-[vmt_Tree + 68] = v830
-v831 = @Tree_Print
-[vmt_Tree + 72] = v831
-v832 = @Tree_RecPrint
-[vmt_Tree + 76] = v832
-v833 = 0
-v834 = 0
-v833 = 0
-v834 = 0
-v833 = this
-v837 = [this + 0]
-v835 = [v837 + 76]
-v836 = call v835(this v833)
-v834 = v836
-v838 = 1
-      return v838
-
-func Tree_RecPrint(this param17)
-v839 = 4
-vmt_BT = alloc(v839)
-v840 = @BT_Start
-[vmt_BT + 0] = v840
-v841 = 0
-vmt_BinaryTree = alloc(v841)
-v842 = 80
-vmt_Tree = alloc(v842)
-v843 = @Tree_Init
-[vmt_Tree + 0] = v843
-v844 = @Tree_SetRight
-[vmt_Tree + 4] = v844
-v845 = @Tree_SetLeft
-[vmt_Tree + 8] = v845
-v846 = @Tree_GetRight
-[vmt_Tree + 12] = v846
-v847 = @Tree_GetLeft
-[vmt_Tree + 16] = v847
-v848 = @Tree_GetKey
-[vmt_Tree + 20] = v848
-v849 = @Tree_SetKey
-[vmt_Tree + 24] = v849
-v850 = @Tree_GetHas_Right
-[vmt_Tree + 28] = v850
-v851 = @Tree_GetHas_Left
-[vmt_Tree + 32] = v851
-v852 = @Tree_SetHas_Left
-[vmt_Tree + 36] = v852
-v853 = @Tree_SetHas_Right
-[vmt_Tree + 40] = v853
-v854 = @Tree_Compare
-[vmt_Tree + 44] = v854
-v855 = @Tree_Insert
-[vmt_Tree + 48] = v855
-v856 = @Tree_Delete
-[vmt_Tree + 52] = v856
-v857 = @Tree_Remove
-[vmt_Tree + 56] = v857
-v858 = @Tree_RemoveRight
-[vmt_Tree + 60] = v858
-v859 = @Tree_RemoveLeft
-[vmt_Tree + 64] = v859
-v860 = @Tree_Search
-[vmt_Tree + 68] = v860
-v861 = @Tree_Print
-[vmt_Tree + 72] = v861
-v862 = @Tree_RecPrint
-[vmt_Tree + 76] = v862
-v863 = 0
-v863 = 0
-v866 = [param17 + 0]
-v864 = [v866 + 32]
-v865 = call v864(param17)
-if0 v865 goto else_18
-v869 = [param17 + 0]
-v867 = [v869 + 16]
-v868 = call v867(param17)
-v872 = [this + 0]
-v870 = [v872 + 76]
-v875 = [param17 + 0]
-v873 = [v875 + 16]
-v874 = call v873(param17)
-v871 = call v870(this v874)
-v863 = v871
-goto end_35
-else_18:
-v876 = 1
-v863 = v876
-end_35:
-v879 = [param17 + 0]
-v877 = [v879 + 20]
-v878 = call v877(param17)
-print(v878)
-v882 = [param17 + 0]
-v880 = [v882 + 28]
-v881 = call v880(param17)
-if0 v881 goto else_19
-v885 = [param17 + 0]
-v883 = [v885 + 12]
-v884 = call v883(param17)
-v888 = [this + 0]
-v886 = [v888 + 76]
-v891 = [param17 + 0]
-v889 = [v891 + 12]
-v890 = call v889(param17)
-v887 = call v886(this v890)
-v863 = v887
-goto end_36
-else_19:
-v892 = 1
-v863 = v892
-end_36:
-v893 = 1
-      return v893
+func BBS_Init(this param1)
+v147 = 16
+vmt_BBS = alloc(v147)
+v148 = @BBS_Start
+[vmt_BBS + 0] = v148
+v149 = @BBS_Sort
+[vmt_BBS + 4] = v149
+v150 = @BBS_Print
+[vmt_BBS + 8] = v150
+v151 = @BBS_Init
+[vmt_BBS + 12] = v151
+v152 = 0
+vmt_BubbleSort = alloc(v152)
+[this + 8] = param1
+v153 = param1
+v154 = 1
+v153 = v153 + v154
+v155 = v153
+v156 = 4
+v155 = v155 * v156
+v157 = alloc(v155)
+[v157 + 0] = param1
+[this + 4] = v157
+v158 = 0
+v159 = 20
+v160 = 0
+v160 = [this + 4]
+v161 = v158
+v164 = 1
+v161 = v161 + v164
+v162 = v161
+v165 = 4
+v162 = v162 * v165
+v163 = v160
+v163 = v163 + v162
+[v163 + 0] = v159
+v166 = 1
+v167 = 7
+v168 = 0
+v168 = [this + 4]
+v169 = v166
+v172 = 1
+v169 = v169 + v172
+v170 = v169
+v173 = 4
+v170 = v170 * v173
+v171 = v168
+v171 = v171 + v170
+[v171 + 0] = v167
+v174 = 2
+v175 = 12
+v176 = 0
+v176 = [this + 4]
+v177 = v174
+v180 = 1
+v177 = v177 + v180
+v178 = v177
+v181 = 4
+v178 = v178 * v181
+v179 = v176
+v179 = v179 + v178
+[v179 + 0] = v175
+v182 = 3
+v183 = 18
+v184 = 0
+v184 = [this + 4]
+v185 = v182
+v188 = 1
+v185 = v185 + v188
+v186 = v185
+v189 = 4
+v186 = v186 * v189
+v187 = v184
+v187 = v187 + v186
+[v187 + 0] = v183
+v190 = 4
+v191 = 2
+v192 = 0
+v192 = [this + 4]
+v193 = v190
+v196 = 1
+v193 = v193 + v196
+v194 = v193
+v197 = 4
+v194 = v194 * v197
+v195 = v192
+v195 = v195 + v194
+[v195 + 0] = v191
+v198 = 5
+v199 = 11
+v200 = 0
+v200 = [this + 4]
+v201 = v198
+v204 = 1
+v201 = v201 + v204
+v202 = v201
+v205 = 4
+v202 = v202 * v205
+v203 = v200
+v203 = v203 + v202
+[v203 + 0] = v199
+v206 = 6
+v207 = 6
+v208 = 0
+v208 = [this + 4]
+v209 = v206
+v212 = 1
+v209 = v209 + v212
+v210 = v209
+v213 = 4
+v210 = v210 * v213
+v211 = v208
+v211 = v211 + v210
+[v211 + 0] = v207
+v214 = 7
+v215 = 9
+v216 = 0
+v216 = [this + 4]
+v217 = v214
+v220 = 1
+v217 = v217 + v220
+v218 = v217
+v221 = 4
+v218 = v218 * v221
+v219 = v216
+v219 = v219 + v218
+[v219 + 0] = v215
+v222 = 8
+v223 = 19
+v224 = 0
+v224 = [this + 4]
+v225 = v222
+v228 = 1
+v225 = v225 + v228
+v226 = v225
+v229 = 4
+v226 = v226 * v229
+v227 = v224
+v227 = v227 + v226
+[v227 + 0] = v223
+v230 = 9
+v231 = 5
+v232 = 0
+v232 = [this + 4]
+v233 = v230
+v236 = 1
+v233 = v233 + v236
+v234 = v233
+v237 = 4
+v234 = v234 * v237
+v235 = v232
+v235 = v235 + v234
+[v235 + 0] = v231
+v238 = 0
+      return v238
 
 
