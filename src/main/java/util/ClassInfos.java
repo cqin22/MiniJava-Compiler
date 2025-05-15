@@ -11,8 +11,9 @@ public class ClassInfos{
     public LinkedHashMap<String, MethodInfos> methods;
     public ArrayList<String> variables = new ArrayList<>();
     public SymbolTable symbolTable;
-    public String parentClass;
     public String className;
+    public String parentClass = null;
+
     public Identifier vTableName;
     
     public ClassInfos(){

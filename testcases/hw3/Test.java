@@ -1,6 +1,6 @@
 class Test {
     public static void main(String[] a){
-        System.out.println(new BT().Start());
+        System.out.println(new BT_child().Start());
         }
 }
 
@@ -23,10 +23,12 @@ class BT {
         return false;
     }
 
+}
+
+class BT_child extends BT{
     public int End(){
         return 9;
     }
-
 }
 
 class A {

@@ -196,6 +196,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
 
         // copy classes fields into var Map since those shouldn't have been deleted in the first place :(
         varMap.putAll(fieldMap);
+        varMap.putAll(formalParameterMap);
         varMap.putAll(localVarMap);
 
         String methodName = n.f2.f0.toString();
@@ -756,6 +757,48 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
 
     /**
      * Grammar production:
+     * f0 -> "class"
+     * f1 -> Identifier()
+     * f2 -> "extends"
+     * f3 -> Identifier()
+     * f4 -> "{"
+     * f5 -> ( VarDeclaration() )*
+     * f6 -> ( MethodDeclaration() )*
+     * f7 -> "}"
+     */
+
+    @Override
+    public Identifier visit(ClassExtendsDeclaration n){
+        String className = n.f1.f0.toString();
+        currentClass = className;
+
+        String superClassName = n.f3.f0.toString();
+
+        n.f1.accept(this);
+
+        // add fields from super class first
+        ClassInfos superClassInfo = classTable.getClassInfo(superClassName);
+        for (String field : superClassInfo.variables) {
+            Identifier fieldId = newTemp();
+            fieldMap.put(field, fieldId);
+        }
+
+        // then add fields from current class
+        for(int i = 0; i < n.f5.size(); i++){
+            VarDeclaration field = (VarDeclaration) n.f5.elementAt(i);
+            Identifier fieldId = newTemp();
+            fieldMap.put(field.f1.f0.toString(), fieldId);
+        }
+
+        n.f5.accept(this);
+        n.f6.accept(this);
+
+        fieldMap.clear();
+        return null;
+    }
+
+    /**
+     * Grammar production:
      * f0 -> Type()
      * f1 -> Identifier()
      * f2 -> ";"
@@ -1008,7 +1051,6 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         return result;
     }
 
-
     /**
      * Grammar production:
      * f0 -> "!"
@@ -1083,6 +1125,9 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         if(localVarMap.containsKey(s)){
             return localVarMap.get(s);
         }
+        else if(formalParameterMap.containsKey(s)){
+            return (formalParameterMap.get(s));
+        }
         else if(fieldMap.containsKey(s)){
             int index = 0;
             for(Map.Entry<String, Identifier> entry : fieldMap.entrySet()) {
@@ -1096,9 +1141,6 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
             instrs.add(new Load(result, new Identifier("this"), index * AllocationConstants.FOUR_OFFSET + AllocationConstants.FOUR_OFFSET));
 
             return result;
-        }
-        else if(formalParameterMap.containsKey(s)){
-            return (formalParameterMap.get(s));
         }
         else{
             return varMap.get(s);
@@ -1137,20 +1179,43 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         for(Map.Entry<String, ClassInfos> entry: classTable.classes.entrySet()){
             String className = entry.getKey();
 
+            // create stack of parents classes. top of the stack is the highest class
+            Stack<String> parents = new Stack<>();
+            String tempClassName = className;
+            parents.push(tempClassName);
+            while(classTable.getClassInfo(tempClassName).parentClass != null){
+                parents.push(classTable.getClassInfo(tempClassName).parentClass);
+                tempClassName = classTable.getClassInfo(tempClassName).parentClass;
+            }
+
             //fill vtable
+
             Identifier vtable = newTempCustom("vmt_" + className);
-            int allocSize = classTable.getClassInfo(className).methods.size() * AllocationConstants.INTBYTES;
+            int allocSize = classTable.getClassInfo(className).methods.size() * AllocationConstants.INTBYTES + 100; // TODO: remove
             Identifier allocSizeId = newTemp();
             instrs.add(new Move_Id_Integer(allocSizeId, allocSize));
             instrs.add(new Alloc(vtable, allocSizeId));
-            int i = 0;
-            for(HashMap.Entry<String, MethodInfos> methodName : classTable.getClassInfo(className).methods.entrySet()){
-                Identifier methodID = newTemp();
-                instrs.add(new Move_Id_FuncName(methodID, new FunctionName(className + "_" + methodName.getKey())));
-                instrs.add(new Store(vtable, i * AllocationConstants.FOUR_OFFSET, methodID));
-                i++;
+
+            // create parent methods, until theres no more
+            while(!parents.empty()){
+                String parent = parents.pop();
+
+                int i = 0;
+
+                for(HashMap.Entry<String, MethodInfos> methodName : classTable.getClassInfo(parent).methods.entrySet()){
+                    Identifier methodID = newTemp();
+                    classTable.getClassInfo(className).addMethod(methodName.getKey(), methodName.getValue().returnType);
+                    instrs.add(new Move_Id_FuncName(methodID, new FunctionName(className + "_" + methodName.getKey())));
+                    instrs.add(new Store(vtable, i * AllocationConstants.FOUR_OFFSET, methodID));
+                    i++;
+                }
+
+                // add those higher level classes to class info's methods
+                
+                
             }
 
+            // set vtable name
             classTable.getClassInfo(className).vTableName = vtable;
         }
 
