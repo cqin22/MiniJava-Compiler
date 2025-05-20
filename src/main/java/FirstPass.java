@@ -120,6 +120,9 @@ public class FirstPass extends GJVoidDepthFirst<ClassTable> {
         c.addMethodToClass(method.f2.f0.toString(), method.f1, className);
     }
 
+    // add parent methods
+    
+
     n.f0.accept(this, c);
     n.f1.accept(this, c);
     n.f2.accept(this, c);
@@ -130,6 +133,23 @@ public class FirstPass extends GJVoidDepthFirst<ClassTable> {
     n.f7.accept(this, c);
   }
 
+
+  /**
+   * Grammar production:
+   * f0 -> "public"
+   * f1 -> Type()
+   * f2 -> Identifier()
+   * f3 -> "("
+   * f4 -> ( FormalParameterList() )?
+   * f5 -> ")"
+   * f6 -> "{"
+   * f7 -> ( VarDeclaration() )*
+   * f8 -> ( Statement() )*
+   * f9 -> "return"
+   * f10 -> Expression()
+   * f11 -> ";"
+   * f12 -> "}"
+   */
   @Override
   public void visit(MethodDeclaration n, ClassTable c){
     // all the methods are added at this 
@@ -137,10 +157,14 @@ public class FirstPass extends GJVoidDepthFirst<ClassTable> {
     String methodName = n.f2.f0.toString();
     currentMethod = methodName;
 
-    FormalParameterList formalParameterList;
     if(n.f4.present()){
-      formalParameterList = (FormalParameterList) n.f4.node;
-      c.getClassInfo(currentClass).getMethodInfo(methodName).formalParameterList = formalParameterList;
+
+      FormalParameterList formalParameterList = (FormalParameterList) n.f4.node;
+
+      MethodInfos methodInfos = c.getClassInfo(currentClass).getMethodInfo(methodName);
+      methodInfos.formalParameterList = formalParameterList;
+
+
     }
 
     n.f4.accept(this, c);

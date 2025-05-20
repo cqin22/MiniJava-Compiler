@@ -146,7 +146,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
             VarDeclaration field = (VarDeclaration) n.f3.elementAt(i); 
             Identifier fieldId = newTemp();
 
-            // tempInstrs.add(new Move_Id_Integer(fieldId, AllocationConstants.ZERO));
+            tempInstrs.add(new Move_Id_Integer(fieldId, AllocationConstants.ZERO));
             fieldMap.put(field.f1.f0.toString(), fieldId);
         }
 
@@ -186,7 +186,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         localVarMap.clear();
         create_vtables();
 
-        // instrs.addAll(tempInstrs);
+        instrs.addAll(tempInstrs);
         // Initialize fields from parent classes and current class
         // for (Map.Entry<String, Identifier> field : fieldMap.entrySet()) {
         //     Identifier fieldId = newTemp();
@@ -495,6 +495,9 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         if(localVarMap.containsKey(className.toString())){
             classObjectAddress = localVarMap.get(className.toString()); //todo what if tha varmap has two classes
         }
+        else if(formalParameterMap.containsKey(className.toString())){
+            classObjectAddress = formalParameterMap.get(className.toString()); //todo what if tha varmap has two classes
+        }
         else if(fieldMap.containsKey(className.toString())){
             classObjectAddress = newTemp();
             int i =0;
@@ -509,6 +512,10 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         //TODO formal parma map?
         else{
             classObjectAddress = varMap.get(className.toString());
+        }
+
+        if(classObjectAddress == null){
+            instrs.add(new ErrorMessage("\"null pointer\""));
         }
 
         // TODO: new A.run() vs a.run()???
@@ -528,6 +535,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         n.f5.accept(this);
 
         String methodName = n.f2.f0.toString();
+        String parentClassWithMethod = null;
 
         Identifier loadedCall = newTemp();
         // determine which offset the method is
@@ -537,32 +545,61 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
             className = new Identifier(currentClass);
         }
         
+        boolean found = false;
         for(String key: classTable.getClassInfo(className.toString()).methods.keySet()){
             if(key.equals(methodName)){
+                found = true;
                 break;
             }
             index++;
         }
 
-        Identifier returnResult = newTemp();
+        FunctionName parentFunction = null;
 
+        if(!found){
+            ClassInfos classInfos = classTable.getClassInfo(className.toString());
 
-        String vTable = classTable.getClassInfo(className.toString()).vTableName.toString();
-        Identifier vTableId = newTemp();
-        // instrs.add(new Move_Id_Id(vTableId, new Identifier(vTable))); no need because dynamic now
+            // find parent class name with the right method
+            String tempParentClass = classInfos.parentClass;
+            while(tempParentClass != null){
+                ClassInfos parentClassInfos = classTable.getClassInfo(tempParentClass);
+                boolean parentMethodFound = false;
+                for(String key: parentClassInfos.methods.keySet()){
+                    if(key.equals(methodName)){
+                        parentClassWithMethod = parentClassInfos.className;
+                        parentMethodFound = true;
+                        break;
+                    }
+                }
+                if(parentMethodFound){
+                    break;
+                }
+                tempParentClass = classTable.getClassInfo(tempParentClass).parentClass;
+            }
 
-        // if "this" is the caller
-        if(n.f0.accept(this).toString().equals("this")){
-            classObjectAddress = n.f0.accept(this);
+            parentFunction = new FunctionName(parentClassWithMethod + "_" + methodName);
         }
 
-        instrs.add(new Load(vTableId, classObjectAddress, AllocationConstants.ZERO));
-        instrs.add(new Load(loadedCall, vTableId, index * AllocationConstants.FOUR_OFFSET));
-
+        else{
+            String vTable = classTable.getClassInfo(className.toString()).vTableName.toString();
+            Identifier vTableId = newTemp();
+            // instrs.add(new Move_Id_Id(vTableId, new Identifier(vTable))); no need because dynamic now
+    
+            // if "this" is the caller
+            if(n.f0.accept(this).toString().equals("this")){
+                classObjectAddress = n.f0.accept(this);
+            }
+    
+            instrs.add(new Load(vTableId, classObjectAddress, AllocationConstants.ZERO));
+            instrs.add(new Load(loadedCall, vTableId, index * AllocationConstants.FOUR_OFFSET));
+        }
+    
         ArrayList<Identifier> parameters = new ArrayList<>();
         if (classObjectAddress != null) {
             parameters.add(classObjectAddress);
         }
+
+        Identifier returnResult = newTemp();
 
         //add parameters
         if(n.f4.present()){
@@ -579,20 +616,36 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
             }
         }
 
-        instrs.add(new Call(returnResult, loadedCall, parameters));
+        if(found){
+            instrs.add(new Call(returnResult, loadedCall, parameters));
+        }
+        else{
+            Identifier functionId = newTemp();
+            instrs.add(new Move_Id_FuncName(functionId, parentFunction));
+            instrs.add(new Call(returnResult, functionId, parameters));
+        }
 
         varMap.put(returnResult.toString(), returnResult);
 
         minijava.syntaxtree.Identifier id;
-        if(classTable.getClassInfo(className.toString()).methods.get(methodName).returnType.f0.which == TypeConstants.IDENTIFIER){
-            id = (minijava.syntaxtree.Identifier) classTable.getClassInfo(className.toString()).methods.get(methodName).returnType.f0.choice;
-            String retType = id.f0.toString();
-            if (classTable.classExists(retType)) {
-                id_to_class.put(returnResult.toString(), retType); 
+        if(found){
+            if(classTable.getClassInfo(className.toString()).methods.get(methodName).returnType.f0.which == TypeConstants.IDENTIFIER){
+                id = (minijava.syntaxtree.Identifier) classTable.getClassInfo(className.toString()).methods.get(methodName).returnType.f0.choice;
+                String retType = id.f0.toString();
+                if (classTable.classExists(retType)) {
+                    id_to_class.put(returnResult.toString(), retType); 
+                }
             }
         }
-
-
+        else{
+            if(classTable.getClassInfo(parentClassWithMethod).methods.get(methodName).returnType.f0.which == TypeConstants.IDENTIFIER){
+                id = (minijava.syntaxtree.Identifier) classTable.getClassInfo(parentClassWithMethod).methods.get(methodName).returnType.f0.choice;
+                String retType = id.f0.toString();
+                if (classTable.classExists(retType)) {
+                    id_to_class.put(returnResult.toString(), retType); 
+                }
+            }
+        }
 
         return returnResult;
     }
@@ -845,7 +898,7 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         int numberOfVTable = 1;
         String className = n.f1.f0.toString();
         ClassInfos classInfos = classTable.getClassInfo(className);
-        int allocationSize = (classInfos.getNumberOfFields() + numberOfVTable) * AllocationConstants.INTBYTES; // number of fields + vtable
+        int allocationSize = (classInfos.getNumberOfFields() + numberOfVTable) * AllocationConstants.INTBYTES + 500; // number of fields + vtable
         Identifier allocationSizeTemp = newTemp();
         instrs.add(new Move_Id_Integer(allocationSizeTemp, allocationSize));
         instrs.add(new Alloc(classObjectAddress, allocationSizeTemp));
@@ -980,25 +1033,9 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         
         Identifier rhsId;
 
-        if(localVarMap.containsKey(lhs.toString())){
-            lhsId = localVarMap.get(lhs.toString());
-        }
-        else if(fieldMap.containsKey(lhs.toString())){
-            lhsId = fieldMap.get(lhs.toString());
-        }
-        else{
-            lhsId = varMap.get(lhs.toString());
-        }
+        lhsId = getFromMapsLoad(lhs);
 
-        if(localVarMap.containsKey(rhs.toString())){
-            rhsId = localVarMap.get(rhs.toString());
-        }
-        else if(fieldMap.containsKey(rhs.toString())){
-            rhsId = fieldMap.get(rhs.toString());
-        }
-        else{
-            rhsId = varMap.get(rhs.toString());
-        }
+        rhsId = getFromMapsLoad(rhs);
 
         if(rhsId == null){
             rhsId = rhs;
@@ -1179,43 +1216,20 @@ public class J2S extends GJNoArguDepthFirst<Identifier>{
         for(Map.Entry<String, ClassInfos> entry: classTable.classes.entrySet()){
             String className = entry.getKey();
 
-            // create stack of parents classes. top of the stack is the highest class
-            Stack<String> parents = new Stack<>();
-            String tempClassName = className;
-            parents.push(tempClassName);
-            while(classTable.getClassInfo(tempClassName).parentClass != null){
-                parents.push(classTable.getClassInfo(tempClassName).parentClass);
-                tempClassName = classTable.getClassInfo(tempClassName).parentClass;
-            }
-
             //fill vtable
-
             Identifier vtable = newTempCustom("vmt_" + className);
-            int allocSize = classTable.getClassInfo(className).methods.size() * AllocationConstants.INTBYTES + 100; // TODO: remove
+            int allocSize = classTable.getClassInfo(className).methods.size() * AllocationConstants.INTBYTES + 100;
             Identifier allocSizeId = newTemp();
             instrs.add(new Move_Id_Integer(allocSizeId, allocSize));
             instrs.add(new Alloc(vtable, allocSizeId));
-
-            // create parent methods, until theres no more
-            while(!parents.empty()){
-                String parent = parents.pop();
-
-                int i = 0;
-
-                for(HashMap.Entry<String, MethodInfos> methodName : classTable.getClassInfo(parent).methods.entrySet()){
-                    Identifier methodID = newTemp();
-                    classTable.getClassInfo(className).addMethod(methodName.getKey(), methodName.getValue().returnType);
-                    instrs.add(new Move_Id_FuncName(methodID, new FunctionName(className + "_" + methodName.getKey())));
-                    instrs.add(new Store(vtable, i * AllocationConstants.FOUR_OFFSET, methodID));
-                    i++;
-                }
-
-                // add those higher level classes to class info's methods
-                
-                
+            int i = 0;
+            for(HashMap.Entry<String, MethodInfos> methodName : classTable.getClassInfo(className).methods.entrySet()){
+                Identifier methodID = newTemp();
+                instrs.add(new Move_Id_FuncName(methodID, new FunctionName(className + "_" + methodName.getKey())));
+                instrs.add(new Store(vtable, i * AllocationConstants.FOUR_OFFSET, methodID));
+                i++;
             }
 
-            // set vtable name
             classTable.getClassInfo(className).vTableName = vtable;
         }
 
