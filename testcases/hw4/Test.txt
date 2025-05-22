@@ -1,0 +1,646 @@
+Function a:
+  Instruction a:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction b:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction c:
+    Def: {a}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction d:
+    Def: {b}
+    Use: {a}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction e:
+    Def: {c}
+    Use: {b}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction f:
+    Def: {d}
+    Use: {b, c}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction 6:
+    Def: {}
+    Use: {d}
+    In: {}
+    Out: {}
+    GoesTo: a
+  Instruction 7:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction 8:
+    Def: {e}
+    Use: {c, d}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction 9:
+    Def: {f}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction ba:
+    Def: {a}
+    Use: {e, f}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction bb:
+    Def: {}
+    Use: {a}
+    In: {}
+    Out: {}
+    GoesTo: 6
+  Instruction bc:
+    Def: {}
+    Use: {e}
+    In: {}
+    Out: {}
+    GoesTo: -b
+jumpednodein:  {}
+jumpednodein:  {d}
+Function a:
+  Instruction a:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction b:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction c:
+    Def: {a}
+    Use: {}
+    In: {}
+    Out: {a}
+    GoesTo: -b
+  Instruction d:
+    Def: {b}
+    Use: {a}
+    In: {a}
+    Out: {b}
+    GoesTo: -b
+  Instruction e:
+    Def: {c}
+    Use: {b}
+    In: {b}
+    Out: {b, c}
+    GoesTo: -b
+  Instruction f:
+    Def: {d}
+    Use: {b, c}
+    In: {b, c}
+    Out: {d}
+    GoesTo: -b
+  Instruction 6:
+    Def: {}
+    Use: {d}
+    In: {d}
+    Out: {}
+    GoesTo: a
+  Instruction 7:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 8:
+    Def: {e}
+    Use: {c, d}
+    In: {c, d}
+    Out: {}
+    GoesTo: -b
+  Instruction 9:
+    Def: {f}
+    Use: {}
+    In: {}
+    Out: {e, f}
+    GoesTo: -b
+  Instruction ba:
+    Def: {a}
+    Use: {e, f}
+    In: {e, f}
+    Out: {a}
+    GoesTo: -b
+  Instruction bb:
+    Def: {}
+    Use: {a}
+    In: {a}
+    Out: {d, e}
+    GoesTo: 6
+  Instruction bc:
+    Def: {}
+    Use: {e}
+    In: {e}
+    Out: {}
+    GoesTo: -b
+jumpednodein:  {}
+jumpednodein:  {d}
+Function a:
+  Instruction a:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction b:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction c:
+    Def: {a}
+    Use: {}
+    In: {}
+    Out: {a}
+    GoesTo: -b
+  Instruction d:
+    Def: {b}
+    Use: {a}
+    In: {a}
+    Out: {b}
+    GoesTo: -b
+  Instruction e:
+    Def: {c}
+    Use: {b}
+    In: {b}
+    Out: {b, c}
+    GoesTo: -b
+  Instruction f:
+    Def: {d}
+    Use: {b, c}
+    In: {b, c}
+    Out: {d}
+    GoesTo: -b
+  Instruction 6:
+    Def: {}
+    Use: {d}
+    In: {d}
+    Out: {c, d}
+    GoesTo: a
+  Instruction 7:
+    Def: {}
+    Use: {}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 8:
+    Def: {e}
+    Use: {c, d}
+    In: {c, d}
+    Out: {e}
+    GoesTo: -b
+  Instruction 9:
+    Def: {f}
+    Use: {}
+    In: {e}
+    Out: {e, f}
+    GoesTo: -b
+  Instruction ba:
+    Def: {a}
+    Use: {e, f}
+    In: {e, f}
+    Out: {a, d, e}
+    GoesTo: -b
+  Instruction bb:
+    Def: {}
+    Use: {a}
+    In: {a, d, e}
+    Out: {d, e}
+    GoesTo: 6
+  Instruction bc:
+    Def: {}
+    Use: {e}
+    In: {e}
+    Out: {}
+    GoesTo: -b
+jumpednodein:  {}
+jumpednodein:  {c, d}
+Function a:
+  Instruction a:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction b:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction c:
+    Def: {a}
+    Use: {}
+    In: {}
+    Out: {a}
+    GoesTo: -b
+  Instruction d:
+    Def: {b}
+    Use: {a}
+    In: {a}
+    Out: {b}
+    GoesTo: -b
+  Instruction e:
+    Def: {c}
+    Use: {b}
+    In: {b}
+    Out: {b, c}
+    GoesTo: -b
+  Instruction f:
+    Def: {d}
+    Use: {b, c}
+    In: {b, c}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 6:
+    Def: {}
+    Use: {d}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: a
+  Instruction 7:
+    Def: {}
+    Use: {}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 8:
+    Def: {e}
+    Use: {c, d}
+    In: {c, d}
+    Out: {e}
+    GoesTo: -b
+  Instruction 9:
+    Def: {f}
+    Use: {}
+    In: {e}
+    Out: {d, e, f}
+    GoesTo: -b
+  Instruction ba:
+    Def: {a}
+    Use: {e, f}
+    In: {d, e, f}
+    Out: {a, d, e}
+    GoesTo: -b
+  Instruction bb:
+    Def: {}
+    Use: {a}
+    In: {a, d, e}
+    Out: {c, d, e}
+    GoesTo: 6
+  Instruction bc:
+    Def: {}
+    Use: {e}
+    In: {e}
+    Out: {}
+    GoesTo: -b
+jumpednodein:  {}
+jumpednodein:  {c, d}
+Function a:
+  Instruction a:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction b:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction c:
+    Def: {a}
+    Use: {}
+    In: {}
+    Out: {a}
+    GoesTo: -b
+  Instruction d:
+    Def: {b}
+    Use: {a}
+    In: {a}
+    Out: {b}
+    GoesTo: -b
+  Instruction e:
+    Def: {c}
+    Use: {b}
+    In: {b}
+    Out: {b, c}
+    GoesTo: -b
+  Instruction f:
+    Def: {d}
+    Use: {b, c}
+    In: {b, c}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 6:
+    Def: {}
+    Use: {d}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: a
+  Instruction 7:
+    Def: {}
+    Use: {}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 8:
+    Def: {e}
+    Use: {c, d}
+    In: {c, d}
+    Out: {d, e}
+    GoesTo: -b
+  Instruction 9:
+    Def: {f}
+    Use: {}
+    In: {d, e}
+    Out: {d, e, f}
+    GoesTo: -b
+  Instruction ba:
+    Def: {a}
+    Use: {e, f}
+    In: {d, e, f}
+    Out: {a, c, d, e}
+    GoesTo: -b
+  Instruction bb:
+    Def: {}
+    Use: {a}
+    In: {a, c, d, e}
+    Out: {c, d, e}
+    GoesTo: 6
+  Instruction bc:
+    Def: {}
+    Use: {e}
+    In: {e}
+    Out: {}
+    GoesTo: -b
+jumpednodein:  {}
+jumpednodein:  {c, d}
+Function a:
+  Instruction a:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction b:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction c:
+    Def: {a}
+    Use: {}
+    In: {}
+    Out: {a}
+    GoesTo: -b
+  Instruction d:
+    Def: {b}
+    Use: {a}
+    In: {a}
+    Out: {b}
+    GoesTo: -b
+  Instruction e:
+    Def: {c}
+    Use: {b}
+    In: {b}
+    Out: {b, c}
+    GoesTo: -b
+  Instruction f:
+    Def: {d}
+    Use: {b, c}
+    In: {b, c}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 6:
+    Def: {}
+    Use: {d}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: a
+  Instruction 7:
+    Def: {}
+    Use: {}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 8:
+    Def: {e}
+    Use: {c, d}
+    In: {c, d}
+    Out: {d, e}
+    GoesTo: -b
+  Instruction 9:
+    Def: {f}
+    Use: {}
+    In: {d, e}
+    Out: {c, d, e, f}
+    GoesTo: -b
+  Instruction ba:
+    Def: {a}
+    Use: {e, f}
+    In: {c, d, e, f}
+    Out: {a, c, d, e}
+    GoesTo: -b
+  Instruction bb:
+    Def: {}
+    Use: {a}
+    In: {a, c, d, e}
+    Out: {c, d, e}
+    GoesTo: 6
+  Instruction bc:
+    Def: {}
+    Use: {e}
+    In: {e}
+    Out: {}
+    GoesTo: -b
+jumpednodein:  {}
+jumpednodein:  {c, d}
+Function a:
+  Instruction a:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction b:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction c:
+    Def: {a}
+    Use: {}
+    In: {}
+    Out: {a}
+    GoesTo: -b
+  Instruction d:
+    Def: {b}
+    Use: {a}
+    In: {a}
+    Out: {b}
+    GoesTo: -b
+  Instruction e:
+    Def: {c}
+    Use: {b}
+    In: {b}
+    Out: {b, c}
+    GoesTo: -b
+  Instruction f:
+    Def: {d}
+    Use: {b, c}
+    In: {b, c}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 6:
+    Def: {}
+    Use: {d}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: a
+  Instruction 7:
+    Def: {}
+    Use: {}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 8:
+    Def: {e}
+    Use: {c, d}
+    In: {c, d}
+    Out: {c, d, e}
+    GoesTo: -b
+  Instruction 9:
+    Def: {f}
+    Use: {}
+    In: {c, d, e}
+    Out: {c, d, e, f}
+    GoesTo: -b
+  Instruction ba:
+    Def: {a}
+    Use: {e, f}
+    In: {c, d, e, f}
+    Out: {a, c, d, e}
+    GoesTo: -b
+  Instruction bb:
+    Def: {}
+    Use: {a}
+    In: {a, c, d, e}
+    Out: {c, d, e}
+    GoesTo: 6
+  Instruction bc:
+    Def: {}
+    Use: {e}
+    In: {e}
+    Out: {}
+    GoesTo: -b
+jumpednodein:  {}
+jumpednodein:  {c, d}
+Function a:
+  Instruction a:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction b:
+    Def: {}
+    Use: {}
+    In: {}
+    Out: {}
+    GoesTo: -b
+  Instruction c:
+    Def: {a}
+    Use: {}
+    In: {}
+    Out: {a}
+    GoesTo: -b
+  Instruction d:
+    Def: {b}
+    Use: {a}
+    In: {a}
+    Out: {b}
+    GoesTo: -b
+  Instruction e:
+    Def: {c}
+    Use: {b}
+    In: {b}
+    Out: {b, c}
+    GoesTo: -b
+  Instruction f:
+    Def: {d}
+    Use: {b, c}
+    In: {b, c}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 6:
+    Def: {}
+    Use: {d}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: a
+  Instruction 7:
+    Def: {}
+    Use: {}
+    In: {c, d}
+    Out: {c, d}
+    GoesTo: -b
+  Instruction 8:
+    Def: {e}
+    Use: {c, d}
+    In: {c, d}
+    Out: {c, d, e}
+    GoesTo: -b
+  Instruction 9:
+    Def: {f}
+    Use: {}
+    In: {c, d, e}
+    Out: {c, d, e, f}
+    GoesTo: -b
+  Instruction ba:
+    Def: {a}
+    Use: {e, f}
+    In: {c, d, e, f}
+    Out: {a, c, d, e}
+    GoesTo: -b
+  Instruction bb:
+    Def: {}
+    Use: {a}
+    In: {a, c, d, e}
+    Out: {c, d, e}
+    GoesTo: 6
+  Instruction bc:
+    Def: {}
+    Use: {e}
+    In: {e}
+    Out: {}
+    GoesTo: -b

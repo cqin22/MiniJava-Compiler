@@ -19,10 +19,10 @@
     },
     {
       "type": "java",
-      "name": "J2S",
+      "name": "S2SV",
       "request": "launch",
-      "mainClass": "J2S",
-      "args": "< testcases/hw3/Test.java"
+      "mainClass": "S2SV",
+      "args": "< testcases/hw4/Test.sparrow"
     }
   ]
 }

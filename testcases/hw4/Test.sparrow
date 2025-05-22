@@ -1,0 +1,13 @@
+func Main()
+    label1: 
+        a = 0
+        b = a * a
+        c = b
+        d = b + c
+    if0 d goto label1
+    label2:
+        e = d * c
+        f = 1
+        a = e + f
+        if0 a goto label2
+        return e

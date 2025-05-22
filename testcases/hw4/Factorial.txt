@@ -1,0 +1,30 @@
+Exception in thread "main" java.lang.NullPointerException: Cannot read field "index" because "labelInstrsData" is null
+	at sparrowUtils.LAVisitor.visit(LAVisitor.java:207)
+	at sparrowUtils.LAVisitor.visit(LAVisitor.java:11)
+	at sparrow.IfGoto.accept(IfGoto.java:24)
+	at sparrowUtils.LAVisitor.visit(LAVisitor.java:63)
+	at sparrowUtils.LAVisitor.visit(LAVisitor.java:11)
+	at sparrow.Block.accept(Block.java:29)
+	at sparrowUtils.LAVisitor.visit(LAVisitor.java:48)
+	at sparrowUtils.LAVisitor.visit(LAVisitor.java:11)
+	at sparrow.FunctionDecl.accept(FunctionDecl.java:34)
+	at sparrowUtils.LAVisitor.visit(LAVisitor.java:30)
+	at sparrowUtils.LAVisitor.visit(LAVisitor.java:11)
+	at sparrow.Program.accept(Program.java:24)
+	at S2SV.createDefUse(S2SV.java:66)
+	at S2SV.runLivenessAnalysis(S2SV.java:44)
+	at S2SV.main(S2SV.java:152)
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':run'.
+> Process 'command '/opt/homebrew/Cellar/openjdk/23.0.2/libexec/openjdk.jdk/Contents/Home/bin/java'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 749ms
