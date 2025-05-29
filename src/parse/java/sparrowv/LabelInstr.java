@@ -10,7 +10,7 @@ public class LabelInstr extends Instruction {
   public Label label;
 
   public LabelInstr(Label label) {
-    this.label = label;
+    this.label = label; 
   }
 
   public void accept(Visitor v) {

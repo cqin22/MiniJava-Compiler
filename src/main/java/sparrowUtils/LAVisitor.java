@@ -11,9 +11,11 @@ import IR.token.*;
 public class LAVisitor implements ArgVisitor<InstrsData>
 {
     HashMap<String, Integer> regToBitMap = new HashMap<>();
+    ArrayList<HashMap<Integer, String>> bitToRegMaps = new ArrayList<>();
+
     int bitIndex = 0;
 
-    ArrayList<InstrsData> instrsDataList = new ArrayList<>();
+    ArrayList<InstrsData> instrsDataList;
     ArrayList<ArrayList<InstrsData>> functionList;
     HashMap<String, InstrsData> instrsMap;
     int instrsLineIndex = 0;
@@ -21,6 +23,18 @@ public class LAVisitor implements ArgVisitor<InstrsData>
     public LAVisitor(ArrayList<ArrayList<InstrsData>> fl, HashMap<String, InstrsData> im){
         functionList = fl;
         instrsMap = im;
+    }
+
+    public ArrayList<HashMap<Integer, String>> getBitToRegMaps() {
+        return bitToRegMaps;
+    }
+
+    public HashMap<Integer, String> reverseRegToBitMap() {
+        HashMap<Integer, String> reversedMap = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : regToBitMap.entrySet()) {
+            reversedMap.put(entry.getValue(), entry.getKey());
+        }
+        return reversedMap;
     }
 
     /*   List<FunctionDecl> funDecls; */
@@ -38,8 +52,13 @@ public class LAVisitor implements ArgVisitor<InstrsData>
      *   Block block; */
     @Override
     public void visit(FunctionDecl n, InstrsData x) {
-        instrsDataList.clear();
+        instrsDataList = new ArrayList<>();
+        regToBitMap.clear();
+        bitIndex = 0;
+        // TODO: instrsMap.clear();
+        instrsLineIndex = 0;
         InstrsData funcParam = new InstrsData();
+
 
         for (Identifier fp: n.formalParameters) {
             funcParam.def.set(defineBit(fp));
@@ -47,6 +66,9 @@ public class LAVisitor implements ArgVisitor<InstrsData>
 
         instrsDataList.add(funcParam);
         n.block.accept(this, null);
+
+        String funcName = n.functionName.toString();
+        bitToRegMaps.add(reverseRegToBitMap());
     }
 
     /*   FunctionDecl parent;
@@ -59,9 +81,10 @@ public class LAVisitor implements ArgVisitor<InstrsData>
         // perform LA on all instructions
         for (Instruction i: n.instructions) {
             InstrsData instrsData = new InstrsData();
-            instrsData.index = instrsLineIndex;
 
             i.accept(this, instrsData);
+
+            instrsData.index = instrsLineIndex;
 
             instrsDataList.add(instrsData);
             instrsLineIndex++;
@@ -69,6 +92,7 @@ public class LAVisitor implements ArgVisitor<InstrsData>
 
         // handle return instrs 
         InstrsData returnInstrs = new InstrsData();
+        returnInstrs.index = instrsLineIndex;
         returnInstrs.use.set(useBit(n.return_id));
         instrsDataList.add(returnInstrs);
         instrsLineIndex++;
@@ -195,7 +219,7 @@ public class LAVisitor implements ArgVisitor<InstrsData>
     @Override
     public void visit(Goto n, InstrsData instrsData) {
         InstrsData labelInstrsData = instrsMap.get(n.label.toString());
-        instrsData.goesTo = labelInstrsData.index;
+        instrsData.goesTo = labelInstrsData.index + 1; // off by 1
     }
 
     // TODO: create CFG or jump table
@@ -204,7 +228,7 @@ public class LAVisitor implements ArgVisitor<InstrsData>
     @Override
     public void visit(IfGoto n, InstrsData instrsData) {
         InstrsData labelInstrsData = instrsMap.get(n.label.toString());
-        instrsData.goesTo = labelInstrsData.index;
+        instrsData.goesTo = labelInstrsData.index + 1; // off by 1
         instrsData.use.set(useBit(n.condition));
     }
 

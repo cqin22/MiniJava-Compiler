@@ -10,6 +10,7 @@ import IR.token.*;
 
 public class FirstPassLAVisitor implements ArgVisitor<InstrsData> {
     HashMap<String, InstrsData> instrsMap;
+    int instrsIndex = 0;
 
     public FirstPassLAVisitor(HashMap<String, InstrsData> im) {
         instrsMap = im;
@@ -25,6 +26,10 @@ public class FirstPassLAVisitor implements ArgVisitor<InstrsData> {
 
     @Override
     public void visit(FunctionDecl n, InstrsData arg) {
+        instrsIndex = 0;
+        // for (Identifier fp: n.formalParameters) {
+        //     instrsIndex++;
+        // }
         n.block.accept(this, null);
     }
 
@@ -32,10 +37,13 @@ public class FirstPassLAVisitor implements ArgVisitor<InstrsData> {
     public void visit(Block n, InstrsData arg) {
         for (Instruction i: n.instructions) {
             InstrsData instrsData = new InstrsData();
-
+            instrsData.index = instrsIndex;
             i.accept(this, instrsData);
-
+            instrsIndex++;
         }
+
+        // return
+        instrsIndex++;
     }
 
     @Override

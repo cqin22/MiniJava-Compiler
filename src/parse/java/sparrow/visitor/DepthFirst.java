@@ -19,7 +19,7 @@ public class DepthFirst implements Visitor {
   public void visit(FunctionDecl n) {
     for (Identifier fp: n.formalParameters) {
         // ... fp ...
-    }
+    } 
     n.block.accept(this);
   }
 
