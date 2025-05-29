@@ -9,10 +9,11 @@ import java.util.*;
 import IR.token.*;
 
 public class FirstPassLAVisitor implements ArgVisitor<InstrsData> {
-    HashMap<String, InstrsData> instrsMap;
+    HashMap<String, HashMap<String, InstrsData>> instrsMap;
     int instrsIndex = 0;
+    String currentFunc;
 
-    public FirstPassLAVisitor(HashMap<String, InstrsData> im) {
+    public FirstPassLAVisitor(HashMap<String, HashMap<String, InstrsData>> im) {
         instrsMap = im;
     }
 
@@ -27,6 +28,7 @@ public class FirstPassLAVisitor implements ArgVisitor<InstrsData> {
     @Override
     public void visit(FunctionDecl n, InstrsData arg) {
         instrsIndex = 0;
+        currentFunc = n.functionName.toString();
         // for (Identifier fp: n.formalParameters) {
         //     instrsIndex++;
         // }
@@ -49,7 +51,8 @@ public class FirstPassLAVisitor implements ArgVisitor<InstrsData> {
     @Override
     public void visit(LabelInstr n, InstrsData instrsData) {
         instrsData.labelName = n.label.toString();
-        instrsMap.put(instrsData.labelName, instrsData);
+        instrsMap.putIfAbsent(currentFunc, new HashMap<>());
+        instrsMap.get(currentFunc).put(instrsData.labelName, instrsData);
     }
 
     @Override

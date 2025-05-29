@@ -22,7 +22,7 @@
       "name": "S2SV",
       "request": "launch",
       "mainClass": "S2SV",
-      "args": "< testcases/hw4/strech.sparrow"
+      "args": "< output.sparrow"
     }
   ]
 }

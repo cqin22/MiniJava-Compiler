@@ -19,7 +19,7 @@ public class Algorithms {
     public ArrayList<HashMap<Integer, String>> createDefUse(ArrayList<ArrayList<InstrsData>> functionList) {
         // maintain
         // define a vector of <instrs, def, use, in, and out bitvectors>
-        HashMap<String, InstrsData> instrsMap = new HashMap<>();
+        HashMap<String, HashMap<String, InstrsData>> instrsMap = new HashMap<>();
         FirstPassLAVisitor firstPassLAVisitor = new FirstPassLAVisitor(instrsMap);
         program.accept((ArgVisitor<InstrsData>) firstPassLAVisitor, null);
 
@@ -92,10 +92,13 @@ public class Algorithms {
                 InstrsData instrsData = instrsDataList.get(i);
                 BitSet tempOut = new BitSet();
 
-                // add jump node
-                if(instrsData.goesTo != -1){
-                    BitSet jumpedNodeIn = instrsDataList.get(instrsData.goesTo).in;
-                    tempOut.or(jumpedNodeIn);
+                if (instrsData.goesTo != -1) {
+                    if (instrsData.goesTo >= 0 && instrsData.goesTo < instrsDataList.size()) {
+                        BitSet jumpedNodeIn = instrsDataList.get(instrsData.goesTo).in;
+                        tempOut.or(jumpedNodeIn);
+                    } else {
+                        System.err.println("Invalid 'goesTo' index at instruction " + i + ": " + instrsData.goesTo);
+                    }
                 }
 
                 // return's out is neglected

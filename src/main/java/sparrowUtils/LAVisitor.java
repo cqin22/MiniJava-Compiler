@@ -17,10 +17,11 @@ public class LAVisitor implements ArgVisitor<InstrsData>
 
     ArrayList<InstrsData> instrsDataList;
     ArrayList<ArrayList<InstrsData>> functionList;
-    HashMap<String, InstrsData> instrsMap;
+    HashMap<String, HashMap<String, InstrsData>> instrsMap;
     int instrsLineIndex = 0;
+    String currentFunction;
 
-    public LAVisitor(ArrayList<ArrayList<InstrsData>> fl, HashMap<String, InstrsData> im){
+    public LAVisitor(ArrayList<ArrayList<InstrsData>> fl, HashMap<String, HashMap<String, InstrsData>> im){
         functionList = fl;
         instrsMap = im;
     }
@@ -59,6 +60,7 @@ public class LAVisitor implements ArgVisitor<InstrsData>
         instrsLineIndex = 0;
         InstrsData funcParam = new InstrsData();
 
+        currentFunction = n.functionName.toString();
 
         for (Identifier fp: n.formalParameters) {
             funcParam.def.set(defineBit(fp));
@@ -218,7 +220,7 @@ public class LAVisitor implements ArgVisitor<InstrsData>
     /*   Label label; */
     @Override
     public void visit(Goto n, InstrsData instrsData) {
-        InstrsData labelInstrsData = instrsMap.get(n.label.toString());
+        InstrsData labelInstrsData = instrsMap.get(currentFunction).get(n.label.toString());
         instrsData.goesTo = labelInstrsData.index + 1; // off by 1
     }
 
@@ -227,7 +229,7 @@ public class LAVisitor implements ArgVisitor<InstrsData>
      *   Label label; */
     @Override
     public void visit(IfGoto n, InstrsData instrsData) {
-        InstrsData labelInstrsData = instrsMap.get(n.label.toString());
+        InstrsData labelInstrsData = instrsMap.get(currentFunction).get(n.label.toString());
         instrsData.goesTo = labelInstrsData.index + 1; // off by 1
         instrsData.use.set(useBit(n.condition));
     }
