@@ -151,7 +151,9 @@ public class Algorithms {
 
             // Initialize intervalList with one Interval per bit index
             for (int k = 0; k < intervalListSize; k++) {
-                intervalList.add(new Interval());
+                Interval interval = new Interval();
+                interval.var = bitToRegMap.get(k); // <-- this is the key line to set the variable name
+                intervalList.add(interval);
             }
 
             // Scan each instruction
@@ -243,15 +245,15 @@ public class Algorithms {
     }
 
     public void printIntervalLists(ArrayList<ArrayList<Interval>> intervalLists) {
-        // System.err.println("Interval Lists:");
+        System.err.println("Interval Lists:");
         for (int i = 0; i < intervalLists.size(); i++) {
-            // System.err.println("Function " + i + ":");
+            System.err.println("Function " + i + ":");
             ArrayList<Interval> intervalList = intervalLists.get(i);
             for (int j = 0; j < intervalList.size(); j++) {
                 Interval interval = intervalList.get(j);
-                // System.err.println("  Interval " + j + ": Start = " + interval.startPoint + ", End = " + interval.endPoint + 
-                                // ", Register = " + interval.register + 
-                                //    ", Stack Count = " + interval.stackCount);
+                System.err.println("  Interval " + j + ": Start = " + interval.startPoint + ", End = " + interval.endPoint + 
+                                ", Register = " + interval.register + ", Var = " + interval.var + 
+                                   ", Stack Count = " + interval.stackCount);
             }
         }
     }

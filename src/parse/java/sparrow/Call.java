@@ -9,7 +9,7 @@ import sparrow.visitor.Visitor;
 import java.util.List;
 
 public class Call extends Instruction {
-  public Identifier lhs;
+  public Identifier lhs;  
   public Identifier callee;
   public List<Identifier> args;
 

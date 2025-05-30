@@ -14,8 +14,11 @@ import sparrow.*;
 public class S2SV {
     sparrow.Program program;
     Algorithms algorithms;
+    // create a list of Interval objects with all relevant information
     ArrayList<ArrayList<InstrsData>> functionList = new ArrayList<>();
     ArrayList<HashMap<Integer, String>> bitToRegMap;
+    ArrayList<ArrayList<Interval>> intervalLists;
+
     int stackCount;
 
     public S2SV(){
@@ -30,7 +33,9 @@ public class S2SV {
         runLivenessAnalysis();
         // algorithms.printFunctionList(functionList);
 
-        ArrayList<String> allocTable = new ArrayList<>(List.of("t0", "t1"));
+        ArrayList<String> allocTable = new ArrayList<>(List.of( 
+            "t0", "t1", "t2", "t3", "t4", "t5"
+        ));
         runLinearScanAlgorithm(allocTable);
 
         runTranslation();
@@ -46,7 +51,7 @@ public class S2SV {
     }
 
     public void runTranslation(){
-        TranslationVisitor translationVisitor = new TranslationVisitor();
+        TranslationVisitor translationVisitor = new TranslationVisitor(intervalLists);
         program.accept((ArgVisitor<InstrsData>) translationVisitor, null);
         List<sparrowv.FunctionDecl> functionDecl = translationVisitor.getFunctionDeclarations();
         sparrowv.Program sparrowProgram = new sparrowv.Program(functionDecl);
@@ -63,9 +68,8 @@ public class S2SV {
         int R = allocTable.size();
         ArrayList<String> staticAllocTable = new ArrayList<>(allocTable);
         Comparator<Interval> intervalComparator = (i1, i2) -> Integer.compare(i2.endPoint, i1.endPoint);
-    
-        // create a list of Interval objects with all relevant information
-        ArrayList<ArrayList<Interval>> intervalLists = algorithms.createIntervalLists(functionList, bitToRegMap);
+
+        intervalLists = algorithms.createIntervalLists(functionList, bitToRegMap);
     
         for (int i = 0; i < intervalLists.size(); i++) {
             // System.err.println("=== Allocating for Function " + i + " ===");

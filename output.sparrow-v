@@ -1,0 +1,1887 @@
+func main()
+x1_ = 4
+x0_ = alloc(x1_)
+x3_ = 4
+x2_ = alloc(x3_)
+[x0_ + 0] = x2_
+x4_ = @BT_Start
+[x2_ + 0] = x4_
+x5_ = 0
+if0 x0_ goto NullError
+x6_ = [x0_ + 0]
+x7_ = [x6_ + 0]
+x8_ = call x7_(x0_)
+print(x8_)
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x8_
+
+func BT_Start(this_)
+x10_ = 28
+x9_ = alloc(x10_)
+x12_ = 80
+x11_ = alloc(x12_)
+[x9_ + 0] = x11_
+x13_ = @Tree_Init
+[x11_ + 0] = x13_
+x14_ = @Tree_SetRight
+[x11_ + 4] = x14_
+x15_ = @Tree_SetLeft
+[x11_ + 8] = x15_
+x16_ = @Tree_GetRight
+[x11_ + 12] = x16_
+x17_ = @Tree_GetLeft
+[x11_ + 16] = x17_
+x18_ = @Tree_GetKey
+[x11_ + 20] = x18_
+x19_ = @Tree_SetKey
+[x11_ + 24] = x19_
+x20_ = @Tree_GetHas_Right
+[x11_ + 28] = x20_
+x21_ = @Tree_GetHas_Left
+[x11_ + 32] = x21_
+x22_ = @Tree_SetHas_Left
+[x11_ + 36] = x22_
+x23_ = @Tree_SetHas_Right
+[x11_ + 40] = x23_
+x24_ = @Tree_Compare
+[x11_ + 44] = x24_
+x25_ = @Tree_Insert
+[x11_ + 48] = x25_
+x26_ = @Tree_Delete
+[x11_ + 52] = x26_
+x27_ = @Tree_Remove
+[x11_ + 56] = x27_
+x28_ = @Tree_RemoveRight
+[x11_ + 60] = x28_
+x29_ = @Tree_RemoveLeft
+[x11_ + 64] = x29_
+x30_ = @Tree_Search
+[x11_ + 68] = x30_
+x31_ = @Tree_Print
+[x11_ + 72] = x31_
+x32_ = @Tree_RecPrint
+[x11_ + 76] = x32_
+x33_ = 0
+[x9_ + 4] = x33_
+[x9_ + 8] = x33_
+[x9_ + 12] = x33_
+[x9_ + 16] = x33_
+[x9_ + 20] = x33_
+[x9_ + 24] = x33_
+root_ = x9_
+if0 root_ goto NullError
+x34_ = 16
+x35_ = [root_ + 0]
+x36_ = [x35_ + 0]
+x37_ = call x36_(root_ x34_)
+ntb_ = x37_
+if0 root_ goto NullError
+x38_ = [root_ + 0]
+x39_ = [x38_ + 72]
+x40_ = call x39_(root_)
+ntb_ = x40_
+x41_ = 100000000
+print(x41_)
+if0 root_ goto NullError
+x42_ = 8
+x43_ = [root_ + 0]
+x44_ = [x43_ + 48]
+x45_ = call x44_(root_ x42_)
+ntb_ = x45_
+if0 root_ goto NullError
+x46_ = [root_ + 0]
+x47_ = [x46_ + 72]
+x48_ = call x47_(root_)
+ntb_ = x48_
+if0 root_ goto NullError
+x49_ = 24
+x50_ = [root_ + 0]
+x51_ = [x50_ + 48]
+x52_ = call x51_(root_ x49_)
+ntb_ = x52_
+if0 root_ goto NullError
+x53_ = 4
+x54_ = [root_ + 0]
+x55_ = [x54_ + 48]
+x56_ = call x55_(root_ x53_)
+ntb_ = x56_
+if0 root_ goto NullError
+x57_ = 12
+x58_ = [root_ + 0]
+x59_ = [x58_ + 48]
+x60_ = call x59_(root_ x57_)
+ntb_ = x60_
+if0 root_ goto NullError
+x61_ = 20
+x62_ = [root_ + 0]
+x63_ = [x62_ + 48]
+x64_ = call x63_(root_ x61_)
+ntb_ = x64_
+if0 root_ goto NullError
+x65_ = 28
+x66_ = [root_ + 0]
+x67_ = [x66_ + 48]
+x68_ = call x67_(root_ x65_)
+ntb_ = x68_
+if0 root_ goto NullError
+x69_ = 14
+x70_ = [root_ + 0]
+x71_ = [x70_ + 48]
+x72_ = call x71_(root_ x69_)
+ntb_ = x72_
+if0 root_ goto NullError
+x73_ = [root_ + 0]
+x74_ = [x73_ + 72]
+x75_ = call x74_(root_)
+ntb_ = x75_
+if0 root_ goto NullError
+x76_ = 24
+x77_ = [root_ + 0]
+x78_ = [x77_ + 68]
+x79_ = call x78_(root_ x76_)
+print(x79_)
+if0 root_ goto NullError
+x80_ = 12
+x81_ = [root_ + 0]
+x82_ = [x81_ + 68]
+x83_ = call x82_(root_ x80_)
+print(x83_)
+if0 root_ goto NullError
+x84_ = 16
+x85_ = [root_ + 0]
+x86_ = [x85_ + 68]
+x87_ = call x86_(root_ x84_)
+print(x87_)
+if0 root_ goto NullError
+x88_ = 50
+x89_ = [root_ + 0]
+x90_ = [x89_ + 68]
+x91_ = call x90_(root_ x88_)
+print(x91_)
+if0 root_ goto NullError
+x92_ = 12
+x93_ = [root_ + 0]
+x94_ = [x93_ + 68]
+x95_ = call x94_(root_ x92_)
+print(x95_)
+if0 root_ goto NullError
+x96_ = 12
+x97_ = [root_ + 0]
+x98_ = [x97_ + 52]
+x99_ = call x98_(root_ x96_)
+ntb_ = x99_
+if0 root_ goto NullError
+x100_ = [root_ + 0]
+x101_ = [x100_ + 72]
+x102_ = call x101_(root_)
+ntb_ = x102_
+if0 root_ goto NullError
+x103_ = 12
+x104_ = [root_ + 0]
+x105_ = [x104_ + 68]
+x106_ = call x105_(root_ x103_)
+print(x106_)
+x107_ = 0
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x107_
+
+func Tree_Init(this_ v_key_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+key_ = v_key_
+x108_ = 0
+has_left_ = x108_
+x109_ = 0
+has_right_ = x109_
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x110_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x110_
+
+func Tree_SetRight(this_ rn_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+right_ = rn_
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x111_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x111_
+
+func Tree_SetLeft(this_ ln_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+left_ = ln_
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x112_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x112_
+
+func Tree_GetRight(this_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return right_
+
+func Tree_GetLeft(this_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return left_
+
+func Tree_GetKey(this_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return key_
+
+func Tree_SetKey(this_ v_key_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+key_ = v_key_
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x113_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x113_
+
+func Tree_GetHas_Right(this_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return has_right_
+
+func Tree_GetHas_Left(this_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return has_left_
+
+func Tree_SetHas_Left(this_ val_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+has_left_ = val_
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x114_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x114_
+
+func Tree_SetHas_Right(this_ val_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+has_right_ = val_
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x115_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x115_
+
+func Tree_Compare(this_ num1_ num2_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+x116_ = 0
+ntb_ = x116_
+x117_ = 1
+x118_ = num2_ + x117_
+nti_ = x118_
+x119_ = num1_ < num2_
+if0 x119_ goto if0_else
+x120_ = 0
+ntb_ = x120_
+goto if0_end
+if0_else:
+x121_ = num1_ < nti_
+x122_ = 1
+x123_ = x121_ < x122_
+if0 x123_ goto if1_else
+x124_ = 0
+ntb_ = x124_
+goto if1_end
+if1_else:
+x125_ = 1
+ntb_ = x125_
+if1_end:
+if0_end:
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return ntb_
+
+func Tree_Insert(this_ v_key_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+x127_ = 28
+x126_ = alloc(x127_)
+x129_ = 80
+x128_ = alloc(x129_)
+[x126_ + 0] = x128_
+x130_ = @Tree_Init
+[x128_ + 0] = x130_
+x131_ = @Tree_SetRight
+[x128_ + 4] = x131_
+x132_ = @Tree_SetLeft
+[x128_ + 8] = x132_
+x133_ = @Tree_GetRight
+[x128_ + 12] = x133_
+x134_ = @Tree_GetLeft
+[x128_ + 16] = x134_
+x135_ = @Tree_GetKey
+[x128_ + 20] = x135_
+x136_ = @Tree_SetKey
+[x128_ + 24] = x136_
+x137_ = @Tree_GetHas_Right
+[x128_ + 28] = x137_
+x138_ = @Tree_GetHas_Left
+[x128_ + 32] = x138_
+x139_ = @Tree_SetHas_Left
+[x128_ + 36] = x139_
+x140_ = @Tree_SetHas_Right
+[x128_ + 40] = x140_
+x141_ = @Tree_Compare
+[x128_ + 44] = x141_
+x142_ = @Tree_Insert
+[x128_ + 48] = x142_
+x143_ = @Tree_Delete
+[x128_ + 52] = x143_
+x144_ = @Tree_Remove
+[x128_ + 56] = x144_
+x145_ = @Tree_RemoveRight
+[x128_ + 60] = x145_
+x146_ = @Tree_RemoveLeft
+[x128_ + 64] = x146_
+x147_ = @Tree_Search
+[x128_ + 68] = x147_
+x148_ = @Tree_Print
+[x128_ + 72] = x148_
+x149_ = @Tree_RecPrint
+[x128_ + 76] = x149_
+x150_ = 0
+[x126_ + 4] = x150_
+[x126_ + 8] = x150_
+[x126_ + 12] = x150_
+[x126_ + 16] = x150_
+[x126_ + 20] = x150_
+[x126_ + 24] = x150_
+new_node_ = x126_
+if0 new_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x151_ = [new_node_ + 0]
+x152_ = [x151_ + 0]
+x153_ = call x152_(new_node_ v_key_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x153_
+current_node_ = this_
+x154_ = 1
+cont_ = x154_
+loop0:
+if0 cont_ goto loop0_end
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x155_ = [current_node_ + 0]
+x156_ = [x155_ + 20]
+x157_ = call x156_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+key_aux_ = x157_
+x158_ = v_key_ < key_aux_
+if0 x158_ goto if0_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x159_ = [current_node_ + 0]
+x160_ = [x159_ + 32]
+x161_ = call x160_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x161_ goto if1_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x162_ = [current_node_ + 0]
+x163_ = [x162_ + 16]
+x164_ = call x163_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+current_node_ = x164_
+goto if1_end
+if1_else:
+x165_ = 0
+cont_ = x165_
+if0 current_node_ goto NullError
+x166_ = 1
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x167_ = [current_node_ + 0]
+x168_ = [x167_ + 36]
+x169_ = call x168_(current_node_ x166_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x169_
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x170_ = [current_node_ + 0]
+x171_ = [x170_ + 8]
+x172_ = call x171_(current_node_ new_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x172_
+if1_end:
+goto if0_end
+if0_else:
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x173_ = [current_node_ + 0]
+x174_ = [x173_ + 28]
+x175_ = call x174_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x175_ goto if2_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x176_ = [current_node_ + 0]
+x177_ = [x176_ + 12]
+x178_ = call x177_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+current_node_ = x178_
+goto if2_end
+if2_else:
+x179_ = 0
+cont_ = x179_
+if0 current_node_ goto NullError
+x180_ = 1
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x181_ = [current_node_ + 0]
+x182_ = [x181_ + 40]
+x183_ = call x182_(current_node_ x180_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x183_
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x184_ = [current_node_ + 0]
+x185_ = [x184_ + 4]
+x186_ = call x185_(current_node_ new_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x186_
+if2_end:
+if0_end:
+goto loop0
+loop0_end:
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x187_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x187_
+
+func Tree_Delete(this_ v_key_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+current_node_ = this_
+parent_node_ = this_
+x188_ = 1
+cont_ = x188_
+x189_ = 0
+found_ = x189_
+x190_ = 1
+is_root_ = x190_
+loop0:
+if0 cont_ goto loop0_end
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x191_ = [current_node_ + 0]
+x192_ = [x191_ + 20]
+x193_ = call x192_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+key_aux_ = x193_
+x194_ = v_key_ < key_aux_
+if0 x194_ goto if0_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x195_ = [current_node_ + 0]
+x196_ = [x195_ + 32]
+x197_ = call x196_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x197_ goto if1_else
+parent_node_ = current_node_
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x198_ = [current_node_ + 0]
+x199_ = [x198_ + 16]
+x200_ = call x199_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+current_node_ = x200_
+goto if1_end
+if1_else:
+x201_ = 0
+cont_ = x201_
+if1_end:
+goto if0_end
+if0_else:
+x202_ = key_aux_ < v_key_
+if0 x202_ goto if2_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x203_ = [current_node_ + 0]
+x204_ = [x203_ + 28]
+x205_ = call x204_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x205_ goto if3_else
+parent_node_ = current_node_
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x206_ = [current_node_ + 0]
+x207_ = [x206_ + 12]
+x208_ = call x207_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+current_node_ = x208_
+goto if3_end
+if3_else:
+x209_ = 0
+cont_ = x209_
+if3_end:
+goto if2_end
+if2_else:
+if0 is_root_ goto if4_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x210_ = [current_node_ + 0]
+x211_ = [x210_ + 28]
+x212_ = call x211_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+x213_ = 1
+x214_ = x212_ < x213_
+if0 x214_ goto and_fail_x214_
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x215_ = [current_node_ + 0]
+x216_ = [x215_ + 32]
+x217_ = call x216_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+x218_ = 1
+x219_ = x217_ < x218_
+if0 x219_ goto and_fail_x214_
+and_success_x214_:
+x220_ = 1
+goto and_end_x214_
+and_fail_x214_:
+x221_ = 0
+and_end_x214_:
+if0 x221_ goto if5_else
+x222_ = 1
+ntb_ = x222_
+goto if5_end
+if5_else:
+if0 this_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x223_ = [this_ + 0]
+x224_ = [x223_ + 56]
+x225_ = call x224_(this_ parent_node_ current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x225_
+if5_end:
+goto if4_end
+if4_else:
+if0 this_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x226_ = [this_ + 0]
+x227_ = [x226_ + 56]
+x228_ = call x227_(this_ parent_node_ current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x228_
+if4_end:
+x229_ = 1
+found_ = x229_
+x230_ = 0
+cont_ = x230_
+if2_end:
+if0_end:
+x231_ = 0
+is_root_ = x231_
+goto loop0
+loop0_end:
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return found_
+
+func Tree_Remove(this_ p_node_ c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 c_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x232_ = [c_node_ + 0]
+x233_ = [x232_ + 32]
+x234_ = call x233_(c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x234_ goto if0_else
+if0 this_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x235_ = [this_ + 0]
+x236_ = [x235_ + 64]
+x237_ = call x236_(this_ p_node_ c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x237_
+goto if0_end
+if0_else:
+if0 c_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x238_ = [c_node_ + 0]
+x239_ = [x238_ + 28]
+x240_ = call x239_(c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x240_ goto if1_else
+if0 this_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x241_ = [this_ + 0]
+x242_ = [x241_ + 60]
+x243_ = call x242_(this_ p_node_ c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x243_
+goto if1_end
+if1_else:
+if0 c_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x244_ = [c_node_ + 0]
+x245_ = [x244_ + 20]
+x246_ = call x245_(c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+auxkey1_ = x246_
+if0 p_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x247_ = [p_node_ + 0]
+x248_ = [x247_ + 16]
+x249_ = call x248_(p_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x249_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x250_ = [x249_ + 0]
+x251_ = [x250_ + 20]
+x252_ = call x251_(x249_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+auxkey2_ = x252_
+if0 this_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x253_ = [this_ + 0]
+x254_ = [x253_ + 44]
+x255_ = call x254_(this_ auxkey1_ auxkey2_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x255_ goto if2_else
+if0 p_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x256_ = [p_node_ + 0]
+x257_ = [x256_ + 8]
+x258_ = call x257_(p_node_ my_null_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x258_
+if0 p_node_ goto NullError
+x259_ = 0
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x260_ = [p_node_ + 0]
+x261_ = [x260_ + 36]
+x262_ = call x261_(p_node_ x259_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x262_
+goto if2_end
+if2_else:
+if0 p_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x263_ = [p_node_ + 0]
+x264_ = [x263_ + 4]
+x265_ = call x264_(p_node_ my_null_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x265_
+if0 p_node_ goto NullError
+x266_ = 0
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x267_ = [p_node_ + 0]
+x268_ = [x267_ + 40]
+x269_ = call x268_(p_node_ x266_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x269_
+if2_end:
+if1_end:
+if0_end:
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x270_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x270_
+
+func Tree_RemoveRight(this_ p_node_ c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+loop0:
+if0 c_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x271_ = [c_node_ + 0]
+x272_ = [x271_ + 28]
+x273_ = call x272_(c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x273_ goto loop0_end
+if0 c_node_ goto NullError
+if0 c_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x274_ = [c_node_ + 0]
+x275_ = [x274_ + 12]
+x276_ = call x275_(c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x276_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x277_ = [x276_ + 0]
+x278_ = [x277_ + 20]
+x279_ = call x278_(x276_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x280_ = [c_node_ + 0]
+x281_ = [x280_ + 24]
+x282_ = call x281_(c_node_ x279_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x282_
+p_node_ = c_node_
+if0 c_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x283_ = [c_node_ + 0]
+x284_ = [x283_ + 12]
+x285_ = call x284_(c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+c_node_ = x285_
+goto loop0
+loop0_end:
+if0 p_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x286_ = [p_node_ + 0]
+x287_ = [x286_ + 4]
+x288_ = call x287_(p_node_ my_null_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x288_
+if0 p_node_ goto NullError
+x289_ = 0
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x290_ = [p_node_ + 0]
+x291_ = [x290_ + 40]
+x292_ = call x291_(p_node_ x289_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x292_
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x293_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x293_
+
+func Tree_RemoveLeft(this_ p_node_ c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+loop0:
+if0 c_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x294_ = [c_node_ + 0]
+x295_ = [x294_ + 32]
+x296_ = call x295_(c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x296_ goto loop0_end
+if0 c_node_ goto NullError
+if0 c_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x297_ = [c_node_ + 0]
+x298_ = [x297_ + 16]
+x299_ = call x298_(c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x299_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x300_ = [x299_ + 0]
+x301_ = [x300_ + 20]
+x302_ = call x301_(x299_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x303_ = [c_node_ + 0]
+x304_ = [x303_ + 24]
+x305_ = call x304_(c_node_ x302_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x305_
+p_node_ = c_node_
+if0 c_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x306_ = [c_node_ + 0]
+x307_ = [x306_ + 16]
+x308_ = call x307_(c_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+c_node_ = x308_
+goto loop0
+loop0_end:
+if0 p_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x309_ = [p_node_ + 0]
+x310_ = [x309_ + 8]
+x311_ = call x310_(p_node_ my_null_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x311_
+if0 p_node_ goto NullError
+x312_ = 0
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x313_ = [p_node_ + 0]
+x314_ = [x313_ + 36]
+x315_ = call x314_(p_node_ x312_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x315_
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x316_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x316_
+
+func Tree_Search(this_ v_key_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+current_node_ = this_
+x317_ = 1
+cont_ = x317_
+x318_ = 0
+ifound_ = x318_
+loop0:
+if0 cont_ goto loop0_end
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x319_ = [current_node_ + 0]
+x320_ = [x319_ + 20]
+x321_ = call x320_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+key_aux_ = x321_
+x322_ = v_key_ < key_aux_
+if0 x322_ goto if0_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x323_ = [current_node_ + 0]
+x324_ = [x323_ + 32]
+x325_ = call x324_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x325_ goto if1_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x326_ = [current_node_ + 0]
+x327_ = [x326_ + 16]
+x328_ = call x327_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+current_node_ = x328_
+goto if1_end
+if1_else:
+x329_ = 0
+cont_ = x329_
+if1_end:
+goto if0_end
+if0_else:
+x330_ = key_aux_ < v_key_
+if0 x330_ goto if2_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x331_ = [current_node_ + 0]
+x332_ = [x331_ + 28]
+x333_ = call x332_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x333_ goto if3_else
+if0 current_node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x334_ = [current_node_ + 0]
+x335_ = [x334_ + 12]
+x336_ = call x335_(current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+current_node_ = x336_
+goto if3_end
+if3_else:
+x337_ = 0
+cont_ = x337_
+if3_end:
+goto if2_end
+if2_else:
+x338_ = 1
+ifound_ = x338_
+x339_ = 0
+cont_ = x339_
+if2_end:
+if0_end:
+goto loop0
+loop0_end:
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return ifound_
+
+func Tree_Print(this_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+current_node_ = this_
+if0 this_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x340_ = [this_ + 0]
+x341_ = [x340_ + 76]
+x342_ = call x341_(this_ current_node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x342_
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x343_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x343_
+
+func Tree_RecPrint(this_ node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x344_ = [node_ + 0]
+x345_ = [x344_ + 32]
+x346_ = call x345_(node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x346_ goto if0_else
+if0 this_ goto NullError
+if0 node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x347_ = [node_ + 0]
+x348_ = [x347_ + 16]
+x349_ = call x348_(node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x350_ = [this_ + 0]
+x351_ = [x350_ + 76]
+x352_ = call x351_(this_ x349_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x352_
+goto if0_end
+if0_else:
+x353_ = 1
+ntb_ = x353_
+if0_end:
+if0 node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x354_ = [node_ + 0]
+x355_ = [x354_ + 20]
+x356_ = call x355_(node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+print(x356_)
+if0 node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x357_ = [node_ + 0]
+x358_ = [x357_ + 28]
+x359_ = call x358_(node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+if0 x359_ goto if1_else
+if0 this_ goto NullError
+if0 node_ goto NullError
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x360_ = [node_ + 0]
+x361_ = [x360_ + 12]
+x362_ = call x361_(node_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x363_ = [this_ + 0]
+x364_ = [x363_ + 76]
+x365_ = call x364_(this_ x362_)
+my_null_ = [this_ + 24]
+has_right_ = [this_ + 20]
+has_left_ = [this_ + 16]
+key_ = [this_ + 12]
+right_ = [this_ + 8]
+left_ = [this_ + 4]
+ntb_ = x365_
+goto if1_end
+if1_else:
+x366_ = 1
+ntb_ = x366_
+if1_end:
+[this_ + 24] = my_null_
+[this_ + 20] = has_right_
+[this_ + 16] = has_left_
+[this_ + 12] = key_
+[this_ + 8] = right_
+[this_ + 4] = left_
+x367_ = 1
+goto End
+OutOfBoundsError:
+error("array index out of bounds")
+goto End
+NullError:
+error("null pointer")
+goto End
+End:
+      return x367_
+
