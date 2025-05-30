@@ -1,7 +1,5 @@
 package sparrowUtils;
 
-import java.beans.IntrospectionException;
-
 import sparrow.visitor.*;
 import sparrowv.*;
 import sparrow.*;
@@ -42,17 +40,16 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
     public List<sparrowv.FunctionDecl> getFunctionDeclarations() { return functionDecls; }
     Identifier return_id = new Identifier(null);
 
-    private Register getRegisterFromInterval(Identifier id) {
-        for (Interval interval : intervalLists.get(functionDecls.size())) {
-            if (interval.register != null && id.toString().equals(interval.var)) {
-                return new Register(interval.register);
-            }
-        }
-        return null;
-    }
 
-    private void loadRegister(Identifier id, boolean tzero) {
-        Register t = tzero ? t0 : t1;
+    private void loadRegister(Identifier id, Boolean tzero) {
+        Register t;
+        if(tzero){
+           t = new Register("t0");
+        }
+        else
+        {
+            t = new Register("t1");
+        }
         for (Interval interval : intervalLists.get(functionDecls.size())) {
             if (interval.register != null && id.toString().equals(interval.var)) {
                 instrs.add(new Move_Reg_Reg(t, new Register(interval.register)));
@@ -60,10 +57,18 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
             }
         }
         instrs.add(new Move_Reg_Id(t, id));
+
     }
 
-    private void storeRegister(Identifier id, boolean tzero) {
-        Register t = tzero ? t0 : t1;
+    private void storeRegister(Identifier id, Boolean tzero) {
+        Register t;
+        if(tzero){
+           t = new Register("t0");
+        }
+        else
+        {
+            t = new Register("t1");
+        }
         for (Interval interval : intervalLists.get(functionDecls.size())) {
             if (interval.register != null && id.toString().equals(interval.var)) {
                 instrs.add(new Move_Reg_Reg(new Register(interval.register), t));
@@ -83,43 +88,14 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
     @Override
     public void visit(FunctionDecl n, InstrsData instrsData) {
         instrs.clear();
-
-        ArrayList<String> allocTable = new ArrayList<>(List.of(
-            "a4", "a5", "a6", "a7",
-            "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
-            "t2", "t3", "t4", "t5"
-        ));
-
-        // Prologue: Save registers to the stack
-        for (String reg : allocTable) {
-            instrs.add(new sparrowv.Move_Id_Reg(new Identifier("save_" + reg), new Register(reg)));
-        }
         
         for (Identifier fp : n.formalParameters) {
-            Register reg = getRegisterFromInterval(fp);
-            if(reg == null){
-                loadRegister(fp, false);
-                storeRegister(fp, false);
-            }
-            else{
-                instrs.add(new sparrowv.Move_Reg_Id(reg, fp));
-            }
+            Identifier tempId = new Identifier("temp_" + fp.toString());
+            loadRegister(fp, false);
+            storeRegister(tempId, false);
         }
 
         n.block.accept(this, instrsData);
-        Register return_reg = getRegisterFromInterval(return_id);
-        if(return_reg != null){
-            instrs.add(new sparrowv.Move_Id_Reg(return_id, return_reg));
-        }
-        // TODO:else
-        else{
-            loadRegister(return_id, true);
-            instrs.add(new sparrowv.Move_Id_Reg(return_id, t0));
-        }
-        // Epilogue: Restore registers from the stack
-        for (int i = allocTable.size() - 1; i >= 0; i--) {
-            instrs.add(new sparrowv.Move_Reg_Id(new Register(allocTable.get(i)), new Identifier("save_" + allocTable.get(i))));
-        }
         sparrowv.Block block = new sparrowv.Block(new ArrayList<>(instrs), return_id);
         functionDecls.add(new sparrowv.FunctionDecl(n.functionName, n.formalParameters, block));
     }
@@ -165,7 +141,7 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
     }
 
     @Override public void visit(Load n, InstrsData instrsData) {
-        loadRegister(n.base, true);
+        loadRegister(n.base, false);
         instrs.add(new sparrowv.Load(t1, t0, n.offset));
         storeRegister(n.lhs, false);
     }
@@ -174,11 +150,11 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
         loadRegister(n.base, true);
         loadRegister(n.rhs, false);
         instrs.add(new sparrowv.Store(t0, n.offset, t1));
+        storeRegister(n.rhs, false);
     }
-
     @Override public void visit(Move_Id_Id n, InstrsData instrsData) {
-        loadRegister(n.rhs, false);
-        storeRegister(n.lhs, false);
+        loadRegister(n.lhs, false);
+        storeRegister(n.rhs, false);
     }
 
     @Override public void visit(Move_Id_FuncName n, InstrsData instrsData) {
@@ -192,13 +168,13 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
     }
 
     @Override public void visit(Alloc n, InstrsData instrsData) {
-        loadRegister(n.size, true);
+        loadRegister(n.size, false);
         instrs.add(new sparrowv.Alloc(t1, t0));
-        storeRegister(n.lhs, false);
+        storeRegister(n.lhs, true);
     }
 
     @Override public void visit(Print n, InstrsData instrsData) {
-        loadRegister(n.content, true);
+        loadRegister(n.content, false);
         instrs.add(new sparrowv.Print(t0));
     }
 
@@ -211,26 +187,25 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
     }
 
     @Override public void visit(IfGoto n, InstrsData instrsData) {
-        loadRegister(n.condition, true);
+        loadRegister(n.condition, false);
         instrs.add(new sparrowv.IfGoto(t0, n.label));
     }
-
 
     @Override
     public void visit(Call n, InstrsData instrsData) {
         List<Identifier> newArgs = new ArrayList<>();
 
         for (Identifier id : n.args) {
-            loadRegister(id, true);
+            loadRegister(id, false);
             Identifier tmp = new Identifier("temp_" + id.toString());
             instrs.add(new sparrowv.Move_Id_Reg(tmp, t0));
             newArgs.add(tmp);
         }
 
         loadRegister(n.callee, false);
-        // loadRegister(n.lhs, true);
+        loadRegister(n.lhs, true);
 
         instrs.add(new sparrowv.Call(t0, t1, newArgs));
-        storeRegister(n.lhs, true);
+        // tempStore(n.lhs, lhs);
     }
 }

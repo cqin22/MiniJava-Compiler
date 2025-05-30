@@ -33,8 +33,10 @@ public class S2SV {
         runLivenessAnalysis();
         // algorithms.printFunctionList(functionList);
 
-        ArrayList<String> allocTable = new ArrayList<>(List.of( 
-            "t0", "t1", "t2", "t3", "t4", "t5"
+        ArrayList<String> allocTable = new ArrayList<>(List.of(
+            "a4", "a5", "a6", "a7",
+            "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
+            "t2", "t3", "t4", "t5"
         ));
         runLinearScanAlgorithm(allocTable);
 
