@@ -38,11 +38,11 @@ public class S2SV {
             "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11"
         ));
 
-        ArrayList<String> funcTable = new ArrayList<>(List.of(
-            "a2", "a3", "a4", "a5", "a6", "a7"
-        ));
+        // ArrayList<String> funcTable = new ArrayList<>(List.of(
+        //     "a2", "a3", "a4", "a5", "a6", "a7"
+        // ));
 
-        runLinearScanAlgorithm(allocTable, funcTable);
+        runLinearScanAlgorithm(allocTable);
 
         runTranslation();
     }
@@ -70,10 +70,9 @@ public class S2SV {
     // startpoint = map of startpoint given interval
     // location = map interval to stack slot -- how to calculate this?
     // register = map interval to register
-    public void runLinearScanAlgorithm(ArrayList<String> allocTable, ArrayList<String> funcTable) {
+    public void runLinearScanAlgorithm(ArrayList<String> allocTable) {
         int R = allocTable.size();
         ArrayList<String> staticAllocTable = new ArrayList<>(allocTable);
-        ArrayList<String> staticFuncTable = new ArrayList<>(funcTable);
         Comparator<Interval> intervalComparator = (i1, i2) -> Integer.compare(i2.endPoint, i1.endPoint);
 
         intervalLists = algorithms.createIntervalLists(functionList, bitToRegMap);
@@ -85,7 +84,6 @@ public class S2SV {
             PriorityQueue<Interval> maxHeapInterval = new PriorityQueue<>(intervalComparator);
             stackCount = 0;
             allocTable = new ArrayList<>(staticAllocTable);
-            funcTable = new ArrayList<>(staticFuncTable);
 
 
             for (int j = 0; j < intervalList.size(); j++) {
@@ -101,7 +99,7 @@ public class S2SV {
                 }
                 // System.err.println();
     
-                expireOldIntervals(interval, maxHeapInterval, allocTable, funcTable);
+                expireOldIntervals(interval, maxHeapInterval, allocTable);
     
                 // System.err.println("maxHeapInterval.size(): " + maxHeapInterval.size());
                 if (maxHeapInterval.size() == R) {
@@ -109,17 +107,7 @@ public class S2SV {
                     spillAtInterval(interval, maxHeapInterval);
                 } else {
                     String reg;
-                    if(interval.funcParam){
-                        if(funcTable.isEmpty()){
-                            spillAtInterval(interval, maxHeapInterval);
-                        }
-                        else{
-                            reg = funcTable.remove(0);
-                        }
-                    }
-                    else{
-                        reg = allocTable.remove(0);
-                    }
+                    reg = allocTable.remove(0);
                     interval.register = reg;
                     maxHeapInterval.add(interval);
 
@@ -132,7 +120,7 @@ public class S2SV {
         algorithms.printIntervalLists(intervalLists);
     }
 
-    public void expireOldIntervals(Interval i, PriorityQueue<Interval> maxHeapInterval, ArrayList<String> allocTable, ArrayList<String> funcTable){
+    public void expireOldIntervals(Interval i, PriorityQueue<Interval> maxHeapInterval, ArrayList<String> allocTable){
         // System.err.println(">> Expiring old intervals for interval [" + i.startPoint + ", " + i.endPoint + "]");
         List<Interval> intervalsToExpire = new ArrayList<>(maxHeapInterval);
         for (int j = intervalsToExpire.size() - 1; j >= 0; j--) {
@@ -147,12 +135,7 @@ public class S2SV {
             // System.err.println("   >> Expiring interval [" + interval.startPoint + ", " + interval.endPoint + "]");
             maxHeapInterval.remove(interval);
 
-            if(interval.funcParam){
-                funcTable.add(interval.register);
-            }
-            else{
-                allocTable.add(interval.register);
-            }
+            allocTable.add(interval.register);
             // System.err.println("   >> Register '" + interval.register + "' returned to available pool.");
         }
     }

@@ -100,17 +100,29 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
         //     instrs.add(new sparrowv.Move_Id_Reg(new Identifier("save_" + interval.register), new Register(interval.register)));
         //     }
         // }
+
+        ArrayList<String> funcTable = new ArrayList<>(List.of(
+            "a2", "a3", "a4", "a5", "a6", "a7"
+        ));
         
-        // for (Identifier fp : n.formalParameters) {
-        //     Register reg = getRegisterFromInterval(fp);
-        //     if(reg == null){
-        //         loadRegister(fp, false);
-        //         storeRegister(fp, false);
-        //     }
-        //     else{
-        //         instrs.add(new sparrowv.Move_Reg_Id(reg, fp));
-        //     }
-        // }
+        for (int i = 0; i < 6 && i < n.formalParameters.size(); i++) {
+            Identifier fp = n.formalParameters.get(i);
+            Register reg = getRegisterFromInterval(fp);
+            if(reg == null){
+                instrs.add(new sparrowv.Move_Id_Reg(fp, new Register(funcTable.remove(0))));
+            }
+            else{
+                instrs.add(new sparrowv.Move_Reg_Reg(reg, new Register(funcTable.remove(0))));
+            }
+        }
+
+        for (int i = 6; i < n.formalParameters.size(); i++) {
+            Register reg = getRegisterFromInterval(n.formalParameters.get(i));
+            if(reg != null){
+                instrs.add(new sparrowv.Move_Reg_Id(reg, n.formalParameters.get(i)));
+            }
+        }
+
 
         n.block.accept(this, instrsData);
         Register return_reg = getRegisterFromInterval(return_id);
@@ -289,8 +301,6 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
                 instrs.add(new sparrowv.Move_Id_Reg(new Identifier("save_" + interval.register), new Register(interval.register)));
             }
         }
-
-        
 
         // Load callee and arguments
         loadRegister(n.callee, false);
