@@ -1,124 +1,93 @@
 func Main()
-save_a2 = a2
-save_a3 = a3
-save_a4 = a4
-save_a5 = a5
-save_a6 = a6
 t0 = 4
-a2 = t0
-t0 = a2
+t2 = t0
+t0 = t2
 t1 = alloc(t0)
-a3 = t1
-t0 = a2
+t3 = t1
+t0 = t2
 t1 = alloc(t0)
-a4 = t1
+t4 = t1
 t0 = @FacComputeFac
-a2 = t0
-t0 = a4
-t1 = a2
+t2 = t0
+t0 = t4
+t1 = t2
 [t0 + 0] = t1
-t1 = a4
-a2 = t1
-t0 = a3
-t1 = a2
+t1 = t4
+t2 = t1
+t0 = t3
+t1 = t2
 [t0 + 0] = t1
-t0 = a3
+t0 = t3
 if0 t0 goto null1
-t0 = a3
+t0 = t3
 t1 = [t0 + 0]
-a5 = t1
-t0 = a5
+t5 = t1
+t0 = t5
 t1 = [t0 + 0]
-a5 = t1
-t0 = 6
+t5 = t1
+t0 = 1
+t2 = t0
+t0 = t3
 a2 = t0
-t0 = a3
-temp_w0 = t0
-t0 = a2
-temp_v0 = t0
-save_a2 = a2
-save_a6 = a6
-t1 = a5
-t0 = call t1(temp_w0 temp_v0)
-a2 = save_a2
-a6 = save_a6
-a6 = t0
-t0 = a6
-print(t0)
+t0 = t2
+a3 = t0
+save_t2 = t2
+save_s1 = s1
+t1 = t5
+t0 = call t1()
+t2 = save_t2
+s1 = save_s1
+s1 = t0
+t0 = s1
 goto main_end
 null1:
 error("null pointer")
 main_end:
-v0 = a2
-a2 = save_a2
-a3 = save_a3
-a4 = save_a4
-a5 = save_a5
-a6 = save_a6
+v0 = t2
       return v0
 
-func FacComputeFac(this num)
-save_a2 = a2
-save_a3 = a3
-save_a4 = a4
-save_a5 = a5
-save_a6 = a6
-save_a7 = a7
-save_s1 = s1
-save_s2 = s2
-a2 = this
-a3 = num
+func FacComputeFac()
 t0 = 1
-a4 = t0
+t2 = t0
 t0 = a3
-t1 = a4
+t1 = t2
 t0 = t0 < t1
-a5 = t0
-t0 = a5
+t3 = t0
+t0 = t3
 if0 t0 goto if1_else
 t0 = 1
-a6 = t0
+t4 = t0
 goto if1_end
 if1_else:
 t0 = a2
 t1 = [t0 + 0]
-a7 = t1
-t0 = a7
+t5 = t1
+t0 = t5
 t1 = [t0 + 0]
-a7 = t1
+t5 = t1
 t0 = 1
-a4 = t0
+t2 = t0
 t0 = a3
-t1 = a4
+t1 = t2
 t0 = t0 - t1
 s1 = t0
 t0 = a2
-temp_this = t0
+a2 = t0
 t0 = s1
-temp_w2 = t0
+a3 = t0
 save_a3 = a3
-save_a6 = a6
+save_t4 = t4
 save_s2 = s2
-t1 = a7
-t0 = call t1(temp_this temp_w2)
+t1 = t5
+t0 = call t1()
+t4 = save_t4
 a3 = save_a3
-a6 = save_a6
 s2 = save_s2
 s2 = t0
 t0 = a3
 t1 = s2
 t0 = t0 * t1
-a6 = t0
+t4 = t0
 if1_end:
-num_aux = a6
-a2 = save_a2
-a3 = save_a3
-a4 = save_a4
-a5 = save_a5
-a6 = save_a6
-a7 = save_a7
-s1 = save_s1
-s2 = save_s2
+num_aux = t4
       return num_aux
-
-

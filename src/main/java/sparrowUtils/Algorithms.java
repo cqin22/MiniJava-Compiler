@@ -166,6 +166,7 @@ public class Algorithms {
                 int bitIndex = def.nextSetBit(0);
                 while (bitIndex >= 0) {
                     Interval interval = intervalList.get(bitIndex);
+                    interval.funcParam = instrsData.funcParam;
                     if (interval.startPoint == -1) {
                         interval.startPoint = j;
                     }

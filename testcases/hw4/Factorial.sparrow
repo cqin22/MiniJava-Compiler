@@ -9,7 +9,7 @@ func Main()
     if0 w0 goto null1
     w1 = [w0 + 0]
     w1 = [w1 + 0]
-    v0 = 6
+    v0 = 1
     w2 = call w1(w0 v0)
     print(w2)
     goto main_end

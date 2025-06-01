@@ -63,6 +63,7 @@ public class LAVisitor implements ArgVisitor<InstrsData>
         currentFunction = n.functionName.toString();
 
         for (Identifier fp: n.formalParameters) {
+            funcParam.funcParam = true;
             funcParam.def.set(defineBit(fp));
         }
 

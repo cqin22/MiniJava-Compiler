@@ -6,4 +6,5 @@ public class Interval {
     public String register;
     public String var;
     public int stackCount = -1;
+    public Boolean funcParam = false;
 }

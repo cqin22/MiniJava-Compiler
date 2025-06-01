@@ -94,12 +94,6 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
     public void visit(FunctionDecl n, InstrsData instrsData) {
         instrs.clear();
 
-        ArrayList<String> allocTable = new ArrayList<>(List.of(
-            "a4", "a5", "a6", "a7",
-            "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
-            "t2", "t3", "t4", "t5"
-        ));
-
         // // Prologue: Save registers to the stack
         // for (Interval interval : intervalLists.get(functionDecls.size())) {
         //     if (interval.register != null) {
@@ -107,16 +101,16 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
         //     }
         // }
         
-        for (Identifier fp : n.formalParameters) {
-            Register reg = getRegisterFromInterval(fp);
-            if(reg == null){
-                loadRegister(fp, false);
-                storeRegister(fp, false);
-            }
-            else{
-                instrs.add(new sparrowv.Move_Reg_Id(reg, fp));
-            }
-        }
+        // for (Identifier fp : n.formalParameters) {
+        //     Register reg = getRegisterFromInterval(fp);
+        //     if(reg == null){
+        //         loadRegister(fp, false);
+        //         storeRegister(fp, false);
+        //     }
+        //     else{
+        //         instrs.add(new sparrowv.Move_Reg_Id(reg, fp));
+        //     }
+        // }
 
         n.block.accept(this, instrsData);
         Register return_reg = getRegisterFromInterval(return_id);
@@ -136,8 +130,14 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
         //     }
         // }
 
+        List<Identifier> functionParams = new ArrayList<>();
+        for(int i = 0; i < n.formalParameters.size(); i++){
+            if(i > 5){
+                functionParams.add(n.formalParameters.get(i));
+            }
+        }
         sparrowv.Block block = new sparrowv.Block(new ArrayList<>(instrs), return_id);
-        functionDecls.add(new sparrowv.FunctionDecl(n.functionName, n.formalParameters, block));
+        functionDecls.add(new sparrowv.FunctionDecl(n.functionName, functionParams, block));
     }
 
     @Override
@@ -259,7 +259,21 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
 
         List<Identifier> newArgs = new ArrayList<>();
 
+        ArrayList<String> funcTable = new ArrayList<>(List.of(
+            "a2", "a3", "a4", "a5", "a6", "a7"
+        ));
+
+        int i = 0;
         for (Identifier id : n.args) {
+            if(i < 6){
+                String a = funcTable.remove(0);
+                loadRegister(id, true);
+
+                instrs.add(new Move_Reg_Reg(new Register(a), t0));
+
+                i++;
+                continue;
+            }
             loadRegister(id, true);
             Identifier tmp = new Identifier("temp_" + id.toString());
             instrs.add(new sparrowv.Move_Id_Reg(tmp, t0));
@@ -275,6 +289,8 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
                 instrs.add(new sparrowv.Move_Id_Reg(new Identifier("save_" + interval.register), new Register(interval.register)));
             }
         }
+
+        
 
         // Load callee and arguments
         loadRegister(n.callee, false);
