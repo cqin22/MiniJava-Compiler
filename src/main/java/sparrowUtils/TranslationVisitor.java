@@ -32,6 +32,8 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
     List<sparrowv.FunctionDecl> functionDecls = new ArrayList<>();
     public ArrayList<ArrayList<Interval>> intervalLists;
 
+    int instrsIndex = 0;
+
     public TranslationVisitor(ArrayList<ArrayList<Interval>> il){
         intervalLists = il;
     }
@@ -41,6 +43,7 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
 
     public List<sparrowv.FunctionDecl> getFunctionDeclarations() { return functionDecls; }
     Identifier return_id = new Identifier(null);
+    Map<String, Register> cachedInRegister = new HashMap<>();
 
 
     private int getEndPointFromIdentifier(Identifier id) {
@@ -93,6 +96,7 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
     @Override
     public void visit(FunctionDecl n, InstrsData instrsData) {
         instrs.clear();
+        instrsIndex = 0;
 
         // // Prologue: Save registers to the stack
         // for (Interval interval : intervalLists.get(functionDecls.size())) {
@@ -156,8 +160,10 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
     public void visit(Block n, InstrsData instrsData) {
         for (Instruction i : n.instructions) {
             i.accept(this, instrsData);
+            instrsIndex++;
         }
         return_id = n.return_id;
+        instrsIndex++;
     }
 
     @Override public void visit(LabelInstr n, InstrsData instrsData) {
@@ -292,16 +298,21 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
             newArgs.add(tmp);
         }
 
-        // Save live-out t registers before the call
-        int endpoint = getEndPointFromIdentifier(n.lhs);
+        int callIndex = instrsIndex; // ← this is the actual line of the Call instruction
+
         Set<String> liveOutRegisters = new HashSet<>();
         for (Interval interval : intervalLists.get(functionDecls.size())) {
-            if (interval.register != null && interval.endPoint >= endpoint) {
+            if (interval.register != null &&
+                interval.startPoint < callIndex && interval.endPoint > callIndex) {
+                // This register is live *across* the call instruction at callIndex
                 liveOutRegisters.add(interval.register);
-                instrs.add(new sparrowv.Move_Id_Reg(new Identifier("save_" + interval.register), new Register(interval.register)));
+                instrs.add(new sparrowv.Move_Id_Reg(
+                    new Identifier("save_" + interval.register),
+                    new Register(interval.register)
+                ));
             }
         }
-
+        
         // Load callee and arguments
         loadRegister(n.callee, false);
         instrs.add(new sparrowv.Call(t0, t1, newArgs));
