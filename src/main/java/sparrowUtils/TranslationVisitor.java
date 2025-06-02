@@ -38,8 +38,8 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
         intervalLists = il;
     }
 
-    private final Register t0 = new Register("t0");
-    private final Register t1 = new Register("t1");
+    private final Register t0 = new Register("a2");
+    private final Register t1 = new Register("a3");
 
     public List<sparrowv.FunctionDecl> getFunctionDeclarations() { return functionDecls; }
     Identifier return_id = new Identifier(null);
@@ -75,15 +75,41 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
         instrs.add(new Move_Reg_Id(t, id));
     }
 
-    private void storeRegister(Identifier id, boolean tzero) {
-        Register t = tzero ? t0 : t1;
+    private void loadRegisterCallee(Identifier id) {
+        Register t = new Register("t0");
         for (Interval interval : intervalLists.get(functionDecls.size())) {
             if (interval.register != null && id.toString().equals(interval.var)) {
+                instrs.add(new Move_Reg_Reg(t, new Register(interval.register)));
+                return;
+            }
+        }
+        instrs.add(new Move_Reg_Id(t, id));
+    }
+
+    private void storeRegisterCallee(Identifier id) {
+        Register t = new Register("t0");
+        for (Interval interval : intervalLists.get(functionDecls.size())) {
+            if (interval.register != null && id.toString().equals(interval.var) && isLiveAfter(instrsIndex, id.toString(), interval)) {
                 instrs.add(new Move_Reg_Reg(new Register(interval.register), t));
                 return;
             }
         }
         instrs.add(new Move_Id_Reg(id, t));
+    }
+
+    private void storeRegister(Identifier id, boolean tzero) {
+        Register t = tzero ? t0 : t1;
+        for (Interval interval : intervalLists.get(functionDecls.size())) {
+            if (interval.register != null && id.toString().equals(interval.var) && isLiveAfter(instrsIndex, id.toString(), interval)) {
+                instrs.add(new Move_Reg_Reg(new Register(interval.register), t));
+                return;
+            }
+        }
+        instrs.add(new Move_Id_Reg(id, t));
+    }
+
+    boolean isLiveAfter(int instrIndex, String var, Interval interval) {
+        return interval != null && interval.endPoint > instrIndex;
     }
 
     @Override
@@ -98,7 +124,7 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
         instrs.clear();
         instrsIndex = 0;
 
-        // // Prologue: Save registers to the stack
+        // // Prologue: save registers to the stack
         // for (Interval interval : intervalLists.get(functionDecls.size())) {
         //     if (interval.register != null) {
         //     instrs.add(new sparrowv.Move_Id_Reg(new Identifier("save_" + interval.register), new Register(interval.register)));
@@ -139,7 +165,7 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
             instrs.add(new sparrowv.Move_Id_Reg(return_id, t0));
         }
 
-        // // Epilogue: Restore registers from the stack
+        // // Epilogue: restore registers from the stack
         // for (Interval interval : intervalLists.get(functionDecls.size())) {
         //     if (interval.register != null) {
         //     instrs.add(new sparrowv.Move_Reg_Id(new Register(interval.register), new Identifier("save_" + interval.register)));
@@ -175,24 +201,20 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
         Register r2 = getRegisterFromInterval(n.arg2);
         Register dst = getRegisterFromInterval(n.lhs);
 
-        // load spilled arg1 → t0 (if needed)
         if (r1 == null) {
             loadRegister(n.arg1, true);   // t0
             r1 = t0;
         }
 
-        // load spilled arg2 → choose t1 if t0 already in use, else t0
         boolean t0Used = r1 == t0;
         if (r2 == null) {
-            loadRegister(n.arg2, !t0Used);           // t1 if t0Used else t0
+            loadRegister(n.arg2, !t0Used);           // 
             r2 = t0Used ? t1 : t0;
         }
 
         if (dst != null) {
-            // result already has a physical register
             instrs.add(new sparrowv.Add(dst, r1, r2));
         } else {
-            // compute into t0 and spill back
             instrs.add(new sparrowv.Add(t0, r1, r2));
             storeRegister(n.lhs, true);
         }
@@ -285,20 +307,35 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
         for (Identifier id : n.args) {
             if(i < 6){
                 String a = funcTable.remove(0);
-                loadRegister(id, true);
+                // loadRegister(id, true);
 
-                instrs.add(new Move_Reg_Reg(new Register(a), t0));
+                Register reg = getRegisterFromInterval(id);
+                if(reg != null){
+                    instrs.add(new Move_Reg_Reg(new Register(a), reg));
+                }
+                else{
+                    instrs.add(new Move_Reg_Id(new Register(a), id));
+                }
 
                 i++;
                 continue;
             }
-            loadRegister(id, true);
+
             Identifier tmp = new Identifier("temp_" + id.toString());
-            instrs.add(new sparrowv.Move_Id_Reg(tmp, t0));
+
+            Register reg = getRegisterFromInterval(id);
+            if(reg != null){
+                instrs.add(new sparrowv.Move_Id_Reg(tmp, reg));
+            }
+            else{
+                throw new RuntimeException("Unhandled case for argument: " + id.toString());
+            }
+
+            // loadRegister(id, true);
             newArgs.add(tmp);
         }
 
-        int callIndex = instrsIndex; // ← this is the actual line of the Call instruction
+        int callIndex = instrsIndex;
 
         Set<String> liveOutRegisters = new HashSet<>();
         for (Interval interval : intervalLists.get(functionDecls.size())) {
@@ -313,16 +350,13 @@ public class TranslationVisitor implements ArgVisitor<InstrsData> {
             }
         }
         
-        // Load callee and arguments
-        loadRegister(n.callee, false);
-        instrs.add(new sparrowv.Call(t0, t1, newArgs));
+        loadRegisterCallee(n.callee);
+        instrs.add(new sparrowv.Call(t0, new Register("t0"), newArgs));
 
-        // Restore live-out t registers after the call
         for (String reg : liveOutRegisters) {
             instrs.add(new sparrowv.Move_Reg_Id(new Register(reg), new Identifier("save_" + reg)));
         }
 
-        // Store the result of the call
         storeRegister(n.lhs, true);
     }
 }

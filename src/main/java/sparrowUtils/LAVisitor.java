@@ -240,6 +240,7 @@ public class LAVisitor implements ArgVisitor<InstrsData>
      *   List<Identifier> args; */
     @Override
     public void visit(Call n, InstrsData instrsData) {
+        instrsData.funcCall = true;
         instrsData.def.set(defineBit(n.lhs));
         instrsData.use.set(useBit(n.callee));
         for(int i = 0; i < n.args.size(); i++){

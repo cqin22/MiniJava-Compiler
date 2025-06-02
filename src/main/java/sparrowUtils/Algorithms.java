@@ -167,6 +167,7 @@ public class Algorithms {
                 while (bitIndex >= 0) {
                     Interval interval = intervalList.get(bitIndex);
                     interval.funcParam = instrsData.funcParam;
+                    interval.funcParam = instrsData.funcCall;
                     if (interval.startPoint == -1) {
                         interval.startPoint = j;
                     }

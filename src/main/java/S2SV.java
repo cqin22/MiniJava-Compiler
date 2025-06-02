@@ -34,7 +34,7 @@ public class S2SV {
         // algorithms.printFunctionList(functionList);
 
         ArrayList<String> allocTable = new ArrayList<>(List.of(
-            "t2", "t3", "t4", "t5",
+             "t1", "t2", "t3", "t4", "t5",
             "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11"
         ));
 
@@ -107,7 +107,12 @@ public class S2SV {
                     spillAtInterval(interval, maxHeapInterval);
                 } else {
                     String reg;
-                    reg = allocTable.remove(0);
+                    if(interval.funcCall){
+                        reg = allocTable.remove(allocTable.size() - 1);
+                    }
+                    else{
+                        reg = allocTable.remove(0);
+                    }
                     interval.register = reg;
                     maxHeapInterval.add(interval);
 
@@ -135,7 +140,12 @@ public class S2SV {
             // System.err.println("   >> Expiring interval [" + interval.startPoint + ", " + interval.endPoint + "]");
             maxHeapInterval.remove(interval);
 
-            allocTable.add(interval.register);
+            if(interval.funcCall){
+                allocTable.add(interval.register);
+            }
+            else{
+                allocTable.add(0, interval.register);
+            }
             // System.err.println("   >> Register '" + interval.register + "' returned to available pool.");
         }
     }

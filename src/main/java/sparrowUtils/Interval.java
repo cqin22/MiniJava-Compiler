@@ -7,4 +7,5 @@ public class Interval {
     public String var;
     public int stackCount = -1;
     public Boolean funcParam = false;
+    public Boolean funcCall = false;
 }
