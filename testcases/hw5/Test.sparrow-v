@@ -1,0 +1,7 @@
+func Main()
+t0 = 3
+t1 = 2
+t2 = t0 * t1
+num_aux = t2
+print(t2)
+return num_aux

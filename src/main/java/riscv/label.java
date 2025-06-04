@@ -1,15 +1,15 @@
 package riscv;
 
-import IR.syntaxtree.Label;
+import IR.token.Label;
 
-public class jal {
+public class label {
     public Label label;
 
-    public jal(Label label) {
+    public label(Label label) {
         this.label = label;
     }
 
     public String toString() {
-        return "jal " + label;
+        return label + ":";
     }
 }

@@ -4,9 +4,9 @@ import IR.token.Register;
 
 public class li {
     public Register lhs;
-    public Register rhs;
+    public int rhs;
 
-    public li(Register lhs, Register rhs){
+    public li(Register lhs, int rhs){
         this.lhs = lhs;
         this.rhs = rhs;
     }

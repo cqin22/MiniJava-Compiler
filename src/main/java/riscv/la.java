@@ -2,12 +2,14 @@ package riscv;
 
 import IR.token.Register;
 import IR.token.Label;
+import IR.token.FunctionName;
+
 
 public class la {
     public Register lhs;
-    public Label label;
+    public FunctionName label;
 
-    public la(Register lhs, Label label){
+    public la(Register lhs, FunctionName label){
         this.lhs = lhs;
         this.label = label;
     }

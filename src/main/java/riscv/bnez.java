@@ -1,6 +1,6 @@
 package riscv;
 
-import IR.syntaxtree.Label;
+import IR.token.Label;
 import IR.token.Register;
 
 public class bnez {

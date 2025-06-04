@@ -16,5 +16,5 @@ public class add {
 
     public String toString() {
         return "add " + lhs + ", " + arg1 + ", " + arg2;
-    }
+}
 }
