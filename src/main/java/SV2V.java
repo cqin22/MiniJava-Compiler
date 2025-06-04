@@ -29,6 +29,7 @@ public class SV2V implements Visitor {
     private final Label error = new Label("error");
     String currentFunction;
     ArrayList<Identifier> fp_list = new ArrayList<>();
+    String mainName;
 
     int stackCounter = -12;
 
@@ -51,9 +52,8 @@ public class SV2V implements Visitor {
         sb.append(".equiv @exit, 10\n");
         sb.append(".equiv @exit2, 17\n");
         sb.append("\n.text\n\n");
-        sb.append(".globl main\n");
-        sb.append("main:\n");
-        sb.append("  jal Main\n");
+        sb.append(".globl m\n");
+        sb.append("  jal ").append(mainName).append("\n");
         sb.append("  li a0, @exit\n");
         sb.append("  ecall\n\n");
         for (Object obj : riscvObjects) {
@@ -126,6 +126,9 @@ public class SV2V implements Visitor {
 
         currentFunction = n.functionName.toString();
         riscvObjects.add(new riscvObject(".globl " + n.functionName.toString()));
+        if(mainName == null){
+            mainName = n.functionName.toString();
+        }
         riscvObjects.add(new function(n.functionName));
         prologue();
 
