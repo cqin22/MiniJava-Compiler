@@ -30,6 +30,7 @@ public class SV2V implements Visitor {
     String currentFunction;
     ArrayList<Identifier> fp_list = new ArrayList<>();
     String mainName;
+    private int labelCounter = 0;
 
     int stackCounter;
     private List<Object> riscvObjects = new ArrayList<>();
@@ -167,11 +168,14 @@ public class SV2V implements Visitor {
 
     @Override
     public void visit(IfGoto n) {
-        Label skipLabel = new Label("No_Jump_" + currentFunction + n.label);
+        String skipLabelName = "No_Jump_" + currentFunction + "_" + n.label + "_" + labelCounter++;
+        Label skipLabel = new Label(skipLabelName);
+    
         riscvObjects.add(new riscv.bnez(n.condition, skipLabel));
         riscvObjects.add(new riscv.jal(currentFunction, n.label));
         riscvObjects.add(new riscv.label(skipLabel));
     }
+    
 
     @Override
     public void visit(Call n) {
