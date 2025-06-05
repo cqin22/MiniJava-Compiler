@@ -52,7 +52,7 @@ public class SV2V implements Visitor {
         sb.append(".equiv @exit, 10\n");
         sb.append(".equiv @exit2, 17\n");
         sb.append("\n.text\n\n");
-        sb.append(".globl m\n jal ").append(mainName).append("\n");
+        sb.append(".globl main\n jal Main\n");
         sb.append("  li a0, @exit\n  ecall\n\n");
         for (Object obj : riscvObjects) {
             sb.append(obj.toString()).append("\n");
@@ -95,10 +95,16 @@ public class SV2V implements Visitor {
         }
 
         currentFunction = n.functionName.toString();
-        if (mainName == null) mainName = currentFunction;
-
+        if (currentFunction.equals("main")){
+            currentFunction = "Main";
+        }
         riscvObjects.add(new riscvObject(".globl " + currentFunction));
-        riscvObjects.add(new function(n.functionName));
+        if(n.functionName.toString().equals("main")){
+            riscvObjects.add(new function(new FunctionName("Main")));
+        }
+        else{
+            riscvObjects.add(new function(n.functionName));
+        }
         prologue();
         n.block.accept(this);
     }
@@ -157,7 +163,11 @@ public class SV2V implements Visitor {
 
     @Override
     public void visit(ErrorMessage n) {
-        riscvObjects.add(new riscv.la(a0, new FunctionName("msg_nullptr")));
+        if (n.msg.equals("\"null pointer\"")) {
+            riscvObjects.add(new riscv.la(a0, new FunctionName("msg_nullptr")));
+        } else if (n.msg.equals("\"array index out of bounds\"")) {
+            riscvObjects.add(new riscv.la(a0, new FunctionName("msg_array_oob")));
+        }
         riscvObjects.add(new riscv.jal(error));
     }
 
@@ -192,9 +202,9 @@ public class SV2V implements Visitor {
         }
 
         riscvObjects.add(new riscv.jalr(new Register(n.callee.toString())));
-        // riscvObjects.add(new riscv.addi(sp, sp, totalSize));
+        riscvObjects.add(new riscv.addi(sp, sp, totalSize));
 
-        Register ret = new Register("a2");
+        Register ret = new Register("t0");
         riscvObjects.add(new riscv.mv(ret, a0));
         int destOffset = id_to_index.computeIfAbsent(n.lhs.toString(), k -> {
             int off = stackCounter;
